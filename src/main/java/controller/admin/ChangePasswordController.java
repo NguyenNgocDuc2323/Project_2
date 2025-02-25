@@ -1,5 +1,5 @@
 package controller.admin;
-import helper.DB_Helper.Account_DB_Helper;
+import helper.DB_Helper.Account;
 import helper.Navigator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -25,14 +25,14 @@ public class ChangePasswordController {
 
     public void setAccountId(int accountId) {
         this.accountId = accountId;
-        String email = Account_DB_Helper.getEmailByAccountId(accountId);
+        String email = Account.getEmailByAccountId(accountId);
         txt_email.setText(email);
     }
     private void fetchAccountIdFromEmail() {
         if (accountId == 0) {
             String email = txt_email.getText();
             if (email != null && !email.isEmpty()) {
-                accountId = Account_DB_Helper.getAccountIdByEmail(email);
+                accountId = Account.getAccountIdByEmail(email);
             }
         }
     }
@@ -55,7 +55,7 @@ public class ChangePasswordController {
             showAlert(Alert.AlertType.ERROR, "Change Password", "Passwords do not match.");
             return;
         }
-        boolean isResetSuccessful = Account_DB_Helper.resetPassword(accountId, password);
+        boolean isResetSuccessful = Account.resetPassword(accountId, password);
         if (isResetSuccessful) {
             showAlert(Alert.AlertType.INFORMATION, "Change Password", "Password Change Successfully.");
             try {

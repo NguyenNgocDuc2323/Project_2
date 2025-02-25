@@ -1,6 +1,6 @@
 package controller.admin;
 
-import helper.DB_Helper.Account_DB_Helper;
+import helper.DB_Helper.Account;
 import model.displayText.DisplayText;
 import helper.Navigator;
 import javafx.event.ActionEvent;
@@ -35,7 +35,7 @@ public class AddAccountController implements Initializable {
     void onSaveAccount() {
         String email = txt_email.getText();
         String password = txt_password.getText();
-        System.out.println("New Account_DB_Helper: " + email + " - " + password);
+        System.out.println("New Account: " + email + " - " + password);
         btn_add_new_acc.getScene().getWindow().hide();
     }
 
@@ -81,19 +81,19 @@ public class AddAccountController implements Initializable {
         int type = selectedType != null ? selectedType.getValue() : 0;
         DisplayText selectedLockStatus = txt_acc_lock_status.getValue();
         boolean lockStatus = selectedLockStatus != null && selectedLockStatus.getValue() == 1;
-        int accNumber = Account_DB_Helper.countAcc();
+        int accNumber = Account.countAcc();
         model.Account newAccount = new model.Account(accNumber + 1,email, password, type, lockStatus);
-        if (Account_DB_Helper.getAccountByEmailAndPassword(email,password) != null) {
+        if (Account.getAccountByEmailAndPassword(email,password) != null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");
             alert.setContentText("An account with this email already exists.");
             alert.showAndWait();
             return;
         }
-        Account_DB_Helper.addAccount(newAccount);
+        Account.addAccount(newAccount);
         try {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Add Account_DB_Helper Successfully!");
+            alert.setTitle("Add Account Successfully!");
             alert.setContentText("New account added successfully!");
             alert.showAndWait();
             Navigator.getInstance().gotoAdminHome();

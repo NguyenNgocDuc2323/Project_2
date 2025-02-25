@@ -83,7 +83,7 @@ public class AdminController implements Initializable {
             Navigator.getInstance().gotoAddNewAccount();
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Failed to navigate to Add New Account_DB_Helper screen.");
+            System.err.println("Failed to navigate to Add New Account screen.");
         }
     }
 
@@ -92,7 +92,7 @@ public class AdminController implements Initializable {
         Account account = tbl_account.getSelectionModel().getSelectedItem();
         if (account == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("No Account_DB_Helper Selected");
+            alert.setTitle("No Account Selected");
             alert.setContentText("Please select an account first");
             alert.show();
         } else {
@@ -104,7 +104,7 @@ public class AdminController implements Initializable {
                 account.setLocked(true);
                 Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
                 alert1.setTitle("Confirmation Dialog");
-                alert1.setContentText("Account_DB_Helper Locked");
+                alert1.setContentText("Account Locked");
                 alert1.show();
                 tbl_account.refresh();
             } else {
@@ -121,7 +121,7 @@ public class AdminController implements Initializable {
         Account account = tbl_account.getSelectionModel().getSelectedItem();
         if (account == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("No Account_DB_Helper Selected");
+            alert.setTitle("No Account Selected");
             alert.setContentText("Please select an account first");
             alert.show();
         }
@@ -134,7 +134,7 @@ public class AdminController implements Initializable {
                 account.setLocked(false);
                 Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
                 alert1.setTitle("Confirmation Dialog");
-                alert1.setContentText("Account_DB_Helper Unlocked");
+                alert1.setContentText("Account Unlocked");
                 alert1.show();
                 tbl_account.refresh();
             }

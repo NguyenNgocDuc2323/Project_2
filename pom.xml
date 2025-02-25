@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>Manage_Account</artifactId>
+    <artifactId>E_Project_2</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>Manage_Account</name>
+    <name>E_Project_2</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -60,8 +60,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.example.manage_account/com.example.manage_account.MainApplication
-                            </mainClass>
+                            <mainClass>com.example.e_project_2/com.example.e_project_2.MainApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
