@@ -5,8 +5,8 @@ module com.example.manage_account {
     requires java.desktop;
 
 
-    opens com.example.e_project_2 to javafx.fxml;
-    exports com.example.e_project_2;
+    opens com.example.manage_account to javafx.graphics;
+
     exports controller;
     opens controller to javafx.fxml;
     exports controller.admin;
