@@ -32,8 +32,8 @@
                             <children>
                                 <Pane prefHeight="722.0" prefWidth="668.0">
                                     <children>
-                                        <TextField layoutX="123.0" layoutY="200.0" prefHeight="45.0" prefWidth="331.0" promptText="emailexemplo@gmail.com" />
-                                        <TextField layoutX="123.0" layoutY="299.0" prefHeight="45.0" prefWidth="331.0" promptText="Enter 8 characters or more" />
+                                        <TextField fx:id="register_email" layoutX="123.0" layoutY="200.0" prefHeight="45.0" prefWidth="331.0" promptText="emailexemplo@gmail.com" />
+                                        <TextField fx:id="register_password" layoutX="123.0" layoutY="299.0" prefHeight="45.0" prefWidth="331.0" promptText="Enter 8 characters or more" />
                                         <Button layoutX="323.0" layoutY="509.0" mnemonicParsing="false" onAction="#goLogin" prefHeight="44.0" prefWidth="133.0" style="-fx-background-color: #8B4513;" text="%title.login" textFill="WHITE" />
                                         <Label layoutX="124.0" layoutY="152.0" prefHeight="27.0" prefWidth="97.0" text="%lb.email">
                                             <font>
@@ -49,7 +49,7 @@
                                             <styleClass>
                                                 <String fx:value="forgot-password-button" />
                                             </styleClass></Button>
-                                        <Button layoutX="122.0" layoutY="509.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="134.0" text="%title.register" textFill="WHITE">
+                                        <Button fx:id="btn_register" layoutX="122.0" layoutY="509.0" mnemonicParsing="false" onAction="#onRegister" prefHeight="44.0" prefWidth="134.0" text="%title.register" textFill="WHITE">
                                             <styleClass>
                                                 <String fx:value="register-button" />
                                             </styleClass></Button>
@@ -58,7 +58,7 @@
                                                 <Font size="24.0" />
                                             </font>
                                         </Label>
-                                        <TextField layoutX="123.0" layoutY="402.0" prefHeight="45.0" prefWidth="331.0" promptText="Re-enter password" styleClass="clickable" />
+                                        <TextField fx:id="register_repassword" layoutX="123.0" layoutY="402.0" prefHeight="45.0" prefWidth="331.0" promptText="Re-enter password" styleClass="clickable" />
                                         <Label layoutX="124.0" layoutY="364.0" prefHeight="27.0" prefWidth="184.0" styleClass="label" text="%lb.repassword">
                                             <font>
                                                 <Font size="18.0" />
