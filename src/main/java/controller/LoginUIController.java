@@ -130,4 +130,12 @@ public class LoginUIController implements Initializable {
             }
         });
     }
+    @FXML
+    void goRegister(ActionEvent event) {
+        try {
+            Navigator.getInstance().gotoRegister();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

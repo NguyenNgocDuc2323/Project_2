@@ -17,7 +17,7 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         try {
-            Locale vietnam = new Locale("us", "EN");
+            Locale vietnam = new Locale("vn", "VN");
             Translator.setLocale(vietnam);
             Navigator.getInstance().setState(stage);
             Navigator.getInstance().gotoLogin();
