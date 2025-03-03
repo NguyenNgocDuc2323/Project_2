@@ -27,7 +27,8 @@ public class Navigator {
     private FXMLLoader fxLoader;
 
     public static final String ADMIN_MENU = "/com/example/manage_account/AdminMenuUI.fxml";
-    public static final String LOGIN_SCENE = "/com/example/manage_account/Auth/LoginUI.fxml"; // login
+    public static final String LOGIN_SCENE = "/com/example/manage_account/Auth/LoginUI.fxml";
+    public static final String REGISTER_SCENE = "/com/example/manage_account/Auth/RegisterUI.fxml";
     public static final String ADMIN_HOME = "/com/example/manage_account/Admin/admin_dashboard.fxml";
     public static final String CALCULATE_HOME = "/com/example/manage_account/CalculateUI.fxml";
     public static final String RESET_PASSWORD = "/com/example/manage_account/Admin/reset_password.fxml";
@@ -65,7 +66,9 @@ public class Navigator {
     public void gotoStaffDashboard() throws IOException {
         gotoScene(Translator.translate("title.staffDashboard"), "/com/example/manage_account/Staff/staff_dashboard.fxml");
     }
-
+    public void gotoRegister() throws IOException {
+        gotoScene(Translator.translate("title.register"), REGISTER_SCENE);
+    }
     public void gotoScene(String title, String URL) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(URL), Translator.getResourceBundle());
         Parent root = loader.load();
