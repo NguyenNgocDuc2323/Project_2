@@ -15,8 +15,20 @@ public class Account {
     public static final int TYPE_STAFF = 2;
     public static final int TYPE_STUDENT = 3;
 
+
     public Account(int id,String email, String password, int type, boolean locked) {
         this.id = new SimpleIntegerProperty(id);
+        this.email = new SimpleStringProperty(email);
+        this.password = new SimpleStringProperty(password);
+        this.type = new SimpleIntegerProperty(type);
+        this.locked = new SimpleBooleanProperty(locked);
+        this.typeProperty = new SimpleStringProperty(getTypeAsString(type));
+        this.lockedProperty = new SimpleStringProperty(locked ? "Locked" : "Open");
+    }
+
+    // Constructor WITHOUT ID (for new registrations, where ID is auto-incremented)
+    public Account( String email, String password, int type, boolean locked) {
+        this.id = new SimpleIntegerProperty(0); // Set ID to 0 (or -1) as placeholder
         this.email = new SimpleStringProperty(email);
         this.password = new SimpleStringProperty(password);
         this.type = new SimpleIntegerProperty(type);
