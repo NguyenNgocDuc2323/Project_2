@@ -156,26 +156,53 @@
     </left>
 
     <!-- Main Content Area -->
+<!--    <center>-->
+<!--        <StackPane fx:id="contentArea" styleClass="content-area">-->
+<!--            &lt;!&ndash; Default welcome screen &ndash;&gt;-->
+<!--            <VBox alignment="CENTER" spacing="20">-->
+<!--                <ImageView fitWidth="120" fitHeight="120" preserveRatio="true">-->
+<!--                    <image>-->
+<!--                        <Image url="@../images/coffee-cup.png" />-->
+<!--                    </image>-->
+<!--                </ImageView>-->
+<!--                <Label text="Welcome to The 90s Brew" styleClass="welcome-title">-->
+<!--                    <font>-->
+<!--                        <Font size="32" name="System Bold" />-->
+<!--                    </font>-->
+<!--                </Label>-->
+<!--                <Label text="Select an option from the sidebar to get started" styleClass="welcome-subtitle">-->
+<!--                    <font>-->
+<!--                        <Font size="16" />-->
+<!--                    </font>-->
+<!--                </Label>-->
+<!--            </VBox>-->
+<!--        </StackPane>-->
+<!--    </center>-->
+
+    <!-- Main Content Area -->
     <center>
-        <StackPane fx:id="contentArea" styleClass="content-area">
-            <!-- Default welcome screen -->
-            <VBox alignment="CENTER" spacing="20">
-                <ImageView fitWidth="120" fitHeight="120" preserveRatio="true">
-                    <image>
-                        <Image url="@../images/coffee-cup.png" />
-                    </image>
-                </ImageView>
-                <Label text="Welcome to The 90s Brew" styleClass="welcome-title">
-                    <font>
-                        <Font size="32" name="System Bold" />
-                    </font>
-                </Label>
-                <Label text="Select an option from the sidebar to get started" styleClass="welcome-subtitle">
-                    <font>
-                        <Font size="16" />
-                    </font>
-                </Label>
-            </VBox>
-        </StackPane>
+        <ScrollPane fitToWidth="true" styleClass="content-scroll" hbarPolicy="NEVER">
+            <StackPane fx:id="contentArea" styleClass="content-area">
+                <!-- Coffee Items Grid -->
+                <VBox spacing="20">
+                    <HBox alignment="CENTER_LEFT" styleClass="section-header">
+                        <Label text="Today's Coffee Selection" styleClass="section-title">
+                            <font>
+                                <Font size="24" name="System Bold" />
+                            </font>
+                        </Label>
+                    </HBox>
+
+                    <FlowPane fx:id="coffeeItemsContainer" hgap="20" vgap="20">
+                        <!-- Coffee items will be added here programmatically -->
+                        <fx:include source="CoffeeItem.fxml" />
+                        <fx:include source="CoffeeItem.fxml" />
+                        <fx:include source="CoffeeItem.fxml" />
+                        <fx:include source="CoffeeItem.fxml" />
+
+                    </FlowPane>
+                </VBox>
+            </StackPane>
+        </ScrollPane>
     </center>
 </BorderPane>

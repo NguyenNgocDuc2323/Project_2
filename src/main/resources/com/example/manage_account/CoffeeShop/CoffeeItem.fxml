@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<?import java.net.URL?>
+<VBox styleClass="coffee-item" spacing="12" xmlns="http://javafx.com/javafx/19"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <stylesheets>
+        <URL value="@../styles/coffeeitem.css" />
+    </stylesheets>
+    <StackPane styleClass="coffee-card">
+        <VBox spacing="8">
+            <!-- Coffee Image with Rating -->
+            <StackPane styleClass="coffee-image-container">
+                <Rectangle width="200" height="140" fill="#f0e6d9"/>
+
+                <HBox styleClass="rating-badge" alignment="CENTER">
+                    <StackPane.alignment>TOP_RIGHT</StackPane.alignment>
+                    <padding>
+                        <Insets top="4" right="8" bottom="4" left="8" />
+                    </padding>
+                    <Label fx:id="ratingLabel" text="4.8" styleClass="rating-text" />
+                </HBox>
+
+                <Label fx:id="featuredBadge" text="FEATURED" styleClass="featured-badge">
+                    <StackPane.alignment>TOP_LEFT</StackPane.alignment>
+                    <padding>
+                        <Insets top="4" right="8" bottom="4" left="8" />
+                    </padding>
+                </Label>
+            </StackPane>
+
+            <!-- Coffee Details -->
+            <VBox spacing="5">
+                <padding>
+                    <Insets left="10" right="10" bottom="5" />
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label fx:id="coffeeName" text="Caramel Macchiato" styleClass="coffee-name">
+                        <font>
+                            <Font name="System Bold" size="16" />
+                        </font>
+                    </Label>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Label fx:id="coffeePrice" text="4.50" styleClass="coffee-price">
+                        <font>
+                            <Font size="16" />
+                        </font>
+                    </Label>
+                </HBox>
+
+                <Label fx:id="coffeeDescription" text="Freshly steamed milk with vanilla-flavored syrup"
+                       styleClass="coffee-description" wrapText="true" />
+
+                <HBox styleClass="coffee-tags" spacing="5">
+                    <Label text="Popular" styleClass="coffee-tag" />
+                    <Label text="Sweet" styleClass="coffee-tag" />
+                </HBox>
+
+                <Separator styleClass="coffee-separator" />
+
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="Size:" styleClass="option-label" />
+                    <HBox styleClass="size-options" spacing="5">
+                        <ToggleButton fx:id="sizeSmall" text="S" styleClass="size-toggle" selected="true" />
+                        <ToggleButton fx:id="sizeMedium" text="M" styleClass="size-toggle" />
+                        <ToggleButton fx:id="sizeLarge" text="L" styleClass="size-toggle" />
+                    </HBox>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER">
+                    <HBox spacing="5" alignment="CENTER" styleClass="quantity-control">
+                        <Button fx:id="decreaseBtn" text="-" styleClass="quantity-btn" />
+                        <TextField fx:id="quantityField" text="1" styleClass="quantity-field" prefWidth="40" />
+                        <Button fx:id="increaseBtn" text="+" styleClass="quantity-btn" />
+                    </HBox>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button fx:id="addToCartBtn" text="Add to Cart" styleClass="add-to-cart-btn" />
+                </HBox>
+            </VBox>
+        </VBox>
+    </StackPane>
+</VBox>
