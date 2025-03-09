@@ -9,7 +9,7 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.DashboardController"
-            stylesheets="@../styles/dashboard.css"
+            stylesheets="@../../../../assets/styles/dashboard.css"
             prefWidth="1200"
             prefHeight="800">
     <!-- Left Navigation Bar -->
