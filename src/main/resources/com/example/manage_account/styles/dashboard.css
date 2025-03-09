@@ -1,0 +1,178 @@
+/* Coffee Shop Dashboard Styles */
+
+/* Root styles */
+.root {
+    -fx-background-color: #f8f5f2; /* Creamy background */
+    -fx-font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* Side navigation */
+.side-nav {
+    -fx-background-color: #3c2a21; /* Rich espresso brown */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 8, 0, 0, 0);
+}
+
+.logo-container {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #57402c transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.logo-text {
+    -fx-text-fill: #e6ccac; /* Creamy latte color */
+    -fx-font-weight: bold;
+}
+
+/* Navigation buttons */
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #d4b996; /* Caramel tone */
+    -fx-alignment: CENTER_LEFT;
+    -fx-background-radius: 8px;
+    -fx-transition: background-color 0.3s, -fx-text-fill 0.3s;
+}
+
+.nav-button:hover {
+    -fx-background-color: #57402c; /* Mocha hover */
+    -fx-text-fill: #e6ccac;
+}
+
+.nav-button.active {
+    -fx-background-color: #b85c38; /* Cinnamon accent */
+    -fx-text-fill: #f8f5f2;
+}
+
+.nav-text {
+    -fx-text-fill: inherit;
+    -fx-font-size: 14px;
+}
+
+/* Cart badge */
+.cart-badge {
+    -fx-background-color: #b85c38;
+    -fx-background-radius: 50%;
+    -fx-min-width: 18px;
+    -fx-min-height: 18px;
+    -fx-max-width: 18px;
+    -fx-max-height: 18px;
+    -fx-alignment: center;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.2), 2, 0, 0, 1);
+}
+
+.badge-circle {
+    -fx-fill: #b85c38;
+}
+
+.badge-text {
+    -fx-text-fill: #f8f5f2;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+/* Toggle button */
+.toggle-button {
+    -fx-background-color: #57402c; /* Mocha brown */
+    -fx-background-radius: 50%;
+    -fx-min-width: 32px;
+    -fx-min-height: 32px;
+    -fx-max-width: 32px;
+    -fx-max-height: 32px;
+    -fx-alignment: center;
+    -fx-transition: -fx-background-color 0.2s;
+}
+
+.toggle-button:hover {
+    -fx-background-color: #684b33;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 0);
+}
+
+/* User info section */
+.user-info {
+    -fx-background-color: #4a3728; /* Rich dark roast */
+    -fx-border-color: #57402c transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);
+}
+
+.user-name {
+    -fx-text-fill: #e6ccac; /* Creamy latte color */
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.user-role {
+    -fx-text-fill: #d4b996; /* Caramel tone */
+    -fx-font-size: 12px;
+}
+
+.user-avatar {
+    -fx-background-radius: 50%;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 0);
+}
+
+.logout-button {
+    -fx-background-color: rgba(183, 92, 56, 0.2);
+    -fx-background-radius: 50%;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
+    -fx-max-width: 30px;
+    -fx-max-height: 30px;
+    -fx-transition: -fx-background-color 0.2s;
+}
+
+.logout-button:hover {
+    -fx-background-color: rgba(183, 92, 56, 0.4);
+}
+
+/* Content area */
+.content-area {
+    -fx-background-color: #f8f5f2; /* Creamy background */
+    -fx-padding: 25;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 0);
+}
+
+/* Welcome screen */
+.welcome-title {
+    -fx-text-fill: #3c2a21; /* Espresso color */
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 1, 0, 0, 1);
+}
+
+.welcome-subtitle {
+    -fx-text-fill: #6f5e53; /* Mocha text */
+}
+
+/* Button styles */
+.button {
+    -fx-background-radius: 8px;
+    -fx-transition: -fx-background-color 0.2s;
+}
+
+/* Custom elements */
+.coffee-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 0);
+    -fx-padding: 15;
+}
+
+.coffee-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 0);
+}
+
+.coffee-price {
+    -fx-text-fill: #b85c38; /* Cinnamon accent */
+    -fx-font-weight: bold;
+}
+
+.add-to-cart-btn {
+    -fx-background-color: #b85c38;
+    -fx-text-fill: #f8f5f2;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.add-to-cart-btn:hover {
+    -fx-background-color: #9c4e30;
+}
