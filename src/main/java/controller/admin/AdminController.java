@@ -40,6 +40,8 @@ public class AdminController implements Initializable {
     private TableView<Account> tbl_account;
 
     @FXML
+    private TableColumn<Account, String> tbl_name;
+    @FXML
     private TableColumn<Account, String> tbl_email;
 
     @FXML
@@ -59,6 +61,7 @@ public class AdminController implements Initializable {
         accountList = FXCollections.observableArrayList(AccountManager.getInstance().getAccounts());
         tbl_account.setItems(accountList);
         tbl_id.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
+        tbl_name.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         tbl_email.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
         tbl_password.setCellValueFactory(cellData -> cellData.getValue().passwordProperty());
         tbl_type.setCellValueFactory(cellData -> cellData.getValue().typeAsStringProperty());

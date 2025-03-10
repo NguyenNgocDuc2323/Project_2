@@ -7,58 +7,51 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginUIController">
+<AnchorPane id="AnchorPane" prefHeight="368.0" prefWidth="521.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginUIController">
    <children>
-      <BorderPane prefHeight="600.0" prefWidth="1024.0" styleClass="auth-main-background">
-         <left>
-            <Pane prefHeight="600.0" prefWidth="485.0" style="-fx-background-image: url('../resources/assets/images/coffee.jpg'); -fx-background-size: cover;" BorderPane.alignment="CENTER">
+      <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
+      <AnchorPane prefHeight="409.0" prefWidth="660.0" style="-fx-background-color: #e9dee6;">
+         <children>
+            <TextField fx:id="txt_email" layoutX="361.0" layoutY="134.0" prefHeight="27.0" prefWidth="231.0" promptText="Email" style="-fx-background-color: transparent; -fx-border-color: #b7712c; -fx-border-width: 0px 0px 2px 0px;" />
+            <Button fx:id="btn_login" layoutX="352.0" layoutY="279.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="249.0" style="-fx-background-color: #b7712c;" text="Login" textFill="WHITE" />
+            <PasswordField fx:id="txt_password" layoutX="361.0" layoutY="191.0" prefHeight="27.0" prefWidth="231.0" promptText="Password" style="-fx-background-color: transparent; -fx-border-color: #b7712c; -fx-border-width: 0px 0px 2px 0px;" />
+            <Label layoutX="388.0" layoutY="338.0" text="Create account">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Button fx:id="signupBtn" layoutX="481.0" layoutY="335.0" mnemonicParsing="false" onAction="#goRegister" style="-fx-background-color: transparent; -fx-cursor: hand;;" text="Sign Up" textFill="#b7712c">
+               <font>
+                  <Font size="13.0" />
+               </font></Button>
+            <AnchorPane prefHeight="409.0" prefWidth="309.0" style="-fx-background-color: #b7712c;">
                <children>
-                  <ImageView fitHeight="600.0" fitWidth="485.0" pickOnBounds="true" preserveRatio="true">
+                  <Label layoutX="86.0" layoutY="205.0" text="Welcome To" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold Italic" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="40.0" layoutY="240.0" prefHeight="35.0" prefWidth="231.0" text="MY COFFEE CHANEL" textAlignment="CENTER" textFill="WHITE" textOverrun="WORD_ELLIPSIS">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="156.0" fitWidth="176.0" layoutX="58.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../assets/images/coffee.jpg" />
+                        <Image url="@../../../../assets/images/logo_1.png" />
                      </image>
                   </ImageView>
-               </children></Pane>
-         </left>
-         <center>
-            <Pane prefHeight="678.0" prefWidth="483.0" BorderPane.alignment="CENTER">
-               <children>
-                  <StackPane layoutX="-1.0" prefHeight="728.0" prefWidth="676.0">
-                     <children>
-                        <Pane prefHeight="722.0" prefWidth="668.0">
-                           <children>
-                              <TextField fx:id="txt_email" layoutX="123.0" layoutY="200.0" prefHeight="45.0" prefWidth="331.0" promptText="emailexemplo@gmail.com" />
-                              <Button fx:id="btn_login" layoutX="326.0" layoutY="419.0" mnemonicParsing="false" onAction="#login" prefHeight="44.0" prefWidth="133.0" style="-fx-background-color: #8B4513;" text="%title.login" textFill="WHITE" />
-                              <Label layoutX="121.0" layoutY="164.0" prefHeight="27.0" prefWidth="190.0" text="%lb.email">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="121.0" layoutY="263.0" prefHeight="27.0" prefWidth="184.0" styleClass="label" text="%lb.password">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Button layoutX="344.0" layoutY="355.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="144.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" text="%lb.forgotPassword" />
-<!--                              Register-->
-                              <Button layoutX="124.0" layoutY="419.0" mnemonicParsing="false" onAction="#goRegister" prefHeight="46.0" prefWidth="139.0" style="-fx-background-color: #000055; -fx-border-color: transparent;" text="%title.register" textFill="WHITE" />
-                              <Label layoutX="121.0" layoutY="92.0" prefHeight="35.0" prefWidth="148.0" text="The 90s Brew ">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </Label>
-                              <PasswordField fx:id="txt_password" layoutX="123.0" layoutY="313.0" prefHeight="42.0" prefWidth="331.0" promptText="Enter 8 characters or more" />
-                           </children>
-                        </Pane>
-                     </children>
-                  </StackPane>
-               </children></Pane>
-         </center>
-      </BorderPane>
+               </children>
+            </AnchorPane>
+            <Label fx:id="errorMsg" layoutX="379.0" layoutY="262.0" prefHeight="17.0" prefWidth="240.0" textFill="#c66510" />
+            <Button fx:id="forgotBtn" layoutX="481.0" layoutY="237.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Forgot password?" textFill="#b7712c" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="361.0" layoutY="47.0" prefHeight="48.0" prefWidth="231.0" text="UH COFFEE SHOP">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
