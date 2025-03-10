@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.CoffeeShop.MenuViewController"
+      stylesheets="@../../../../assets/styles/dashboard.css">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" styleClass="section-header">
+        <Label text="Today's Coffee Selection" styleClass="section-title">
+            <font>
+                <Font size="24" name="System Bold" />
+            </font>
+        </Label>
+
+        <Region HBox.hgrow="ALWAYS" />
+
+        <ComboBox fx:id="categoryFilter" promptText="All Categories" />
+        <HBox.margin>
+            <Insets right="10" />
+        </HBox.margin>
+        <ComboBox fx:id="sortOptions" promptText="Sort by" />
+    </HBox>
+
+    <FlowPane fx:id="coffeeItemsContainer" hgap="20" vgap="20">
+        <!-- Coffee items will be added here programmatically -->
+    </FlowPane>
+</VBox>
