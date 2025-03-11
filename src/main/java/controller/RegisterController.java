@@ -69,7 +69,8 @@ public class RegisterController implements Initializable {
             return;
         }
 
-        model.Account newAccount = new model.Account(email, password, 2, false);
+        int accNumber = Account.countAcc();
+        model.Account newAccount = new model.Account(accNumber + 1,email, password, 2, false);
         Account.addAccount(newAccount);
 
         showSuccess("Registration successful! You can now log in.");

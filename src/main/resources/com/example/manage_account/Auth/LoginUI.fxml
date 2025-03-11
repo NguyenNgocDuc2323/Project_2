@@ -4,60 +4,93 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginUIController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="600.0" prefWidth="900.0" stylesheets="@../../../../assets/css/login-styles.css"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.LoginUIController">
    <children>
       <BorderPane prefHeight="600.0" prefWidth="1024.0" styleClass="auth-main-background">
          <left>
-            <Pane prefHeight="600.0" prefWidth="485.0" style="-fx-background-image: url('../resources/assets/images/coffee.jpg'); -fx-background-size: cover;" BorderPane.alignment="CENTER">
+            <Pane prefHeight="600.0" prefWidth="400.0" styleClass="image-panel" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="600.0" fitWidth="485.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="600.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../assets/images/coffee.jpg" />
+                        <Image url="@../../../../assets/images/login-coffee.jpg" />
                      </image>
+                     <effect>
+                        <DropShadow color="#0000004d" height="30.0" radius="14.5" width="30.0" />
+                     </effect>
                   </ImageView>
-               </children></Pane>
+                  <Label layoutX="30.0" layoutY="520.0" styleClass="image-quote" text="Start your day with a cup of possibilities">
+                     <font>
+                        <Font name="Calibri Italic" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
          </left>
          <center>
-            <Pane prefHeight="678.0" prefWidth="483.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="600.0" prefWidth="500.0" spacing="20.0" styleClass="form-panel" BorderPane.alignment="CENTER">
+               <padding>
+                  <Insets left="40.0" right="40.0" />
+               </padding>
                <children>
-                  <StackPane layoutX="-1.0" prefHeight="728.0" prefWidth="676.0">
-                     <children>
-                        <Pane prefHeight="722.0" prefWidth="668.0">
-                           <children>
-                              <TextField fx:id="txt_email" layoutX="123.0" layoutY="200.0" prefHeight="45.0" prefWidth="331.0" promptText="emailexemplo@gmail.com" />
-                              <Button fx:id="btn_login" layoutX="326.0" layoutY="419.0" mnemonicParsing="false" onAction="#login" prefHeight="44.0" prefWidth="133.0" style="-fx-background-color: #8B4513;" text="%title.login" textFill="WHITE" />
-                              <Label layoutX="121.0" layoutY="164.0" prefHeight="27.0" prefWidth="190.0" text="%lb.email">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="121.0" layoutY="263.0" prefHeight="27.0" prefWidth="184.0" styleClass="label" text="%lb.password">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Button layoutX="344.0" layoutY="355.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="144.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" text="%lb.forgotPassword" />
-<!--                              Register-->
-                              <Button layoutX="124.0" layoutY="419.0" mnemonicParsing="false" onAction="#goRegister" prefHeight="46.0" prefWidth="139.0" style="-fx-background-color: #000055; -fx-border-color: transparent;" text="%title.register" textFill="WHITE" />
-                              <Label layoutX="121.0" layoutY="92.0" prefHeight="35.0" prefWidth="148.0" text="The 90s Brew ">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </Label>
-                              <PasswordField fx:id="txt_password" layoutX="123.0" layoutY="313.0" prefHeight="42.0" prefWidth="331.0" promptText="Enter 8 characters or more" />
-                           </children>
-                        </Pane>
-                     </children>
-                  </StackPane>
-               </children></Pane>
+                  <Label styleClass="logo-text" text="The 90s Brew">
+                     <font>
+                        <Font name="Segoe UI Semibold" size="32.0" />
+                     </font>
+                  </Label>
+                  <Label styleClass="welcome-text" text="Welcome back!">
+                     <font>
+                        <Font name="Segoe UI" size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="30.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label styleClass="field-label" text="%lb.email">
+                     <VBox.margin>
+                        <Insets bottom="-15.0" left="-280.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="txt_email" prefHeight="45.0" prefWidth="400.0"
+                             promptText="example@email.com" styleClass="input-field" />
+                  <Label styleClass="field-label" text="%lb.password">
+                     <VBox.margin>
+                        <Insets bottom="-15.0" left="-260.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <PasswordField fx:id="txt_password" prefHeight="45.0" prefWidth="400.0"
+                                 promptText="Enter your password" styleClass="input-field" />
+                  <Button onAction="#onResetPassword" styleClass="forgot-password" text="%lb.forgotPassword">
+                     <VBox.margin>
+                        <Insets left="200.0" top="-5.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="btn_login" onAction="#login" prefHeight="50.0" prefWidth="380.0"
+                          styleClass="login-button" text="%title.login">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Label styleClass="signup-text" text="Don't have an account?">
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Button onAction="#goRegister" styleClass="register-button" text="%title.register" />
+               </children>
+            </VBox>
          </center>
       </BorderPane>
    </children>
