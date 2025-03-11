@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -9,13 +10,13 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.geometry.Insets?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="600.0" prefWidth="900.0" stylesheets="@../../../../assets/css/login-styles.css"
+            prefHeight="600.0" prefWidth="1150.0" stylesheets="@../../../../assets/css/login-styles.css"
             xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controller.LoginUIController">
    <children>
@@ -23,7 +24,7 @@
          <left>
             <Pane prefHeight="600.0" prefWidth="400.0" styleClass="image-panel" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="600.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="600.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../assets/images/login-coffee.jpg" />
                      </image>
@@ -55,40 +56,53 @@
                         <Font name="Segoe UI" size="18.0" />
                      </font>
                      <VBox.margin>
-                        <Insets bottom="30.0" top="10.0" />
+                        <Insets bottom="20.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <Label styleClass="field-label" text="%lb.email">
-                     <VBox.margin>
-                        <Insets bottom="-15.0" left="-280.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TextField fx:id="txt_email" prefHeight="45.0" prefWidth="400.0"
-                             promptText="example@email.com" styleClass="input-field" />
-                  <Label styleClass="field-label" text="%lb.password">
-                     <VBox.margin>
-                        <Insets bottom="-15.0" left="-260.0" top="10.0" />
-                     </VBox.margin>
-                  </Label>
-                  <PasswordField fx:id="txt_password" prefHeight="45.0" prefWidth="400.0"
-                                 promptText="Enter your password" styleClass="input-field" />
-                  <Button onAction="#onResetPassword" styleClass="forgot-password" text="%lb.forgotPassword">
-                     <VBox.margin>
-                        <Insets left="200.0" top="-5.0" />
-                     </VBox.margin>
-                  </Button>
+
+                  <VBox styleClass="login-form-container" spacing="20.0">
+                     <VBox spacing="5.0">
+                        <children>
+                           <Label styleClass="field-label" text="%lb.email" />
+                           <TextField fx:id="txt_email" prefHeight="45.0" prefWidth="400.0"
+                                      promptText="example@email.com" styleClass="input-field" />
+                        </children>
+                     </VBox>
+
+                     <VBox spacing="5.0">
+                        <children>
+                           <Label styleClass="field-label" text="%lb.password" />
+                           <PasswordField fx:id="txt_password" prefHeight="45.0" prefWidth="400.0"
+                                          promptText="Enter your password" styleClass="input-field" />
+                        </children>
+                        <VBox.margin>
+                           <Insets top="10.0" />
+                        </VBox.margin>
+                     </VBox>
+
+                     <HBox alignment="CENTER_RIGHT">
+                        <children>
+                           <Button onAction="#onResetPassword" styleClass="forgot-password" text="%lb.forgotPassword" />
+                        </children>
+                     </HBox>
+                  </VBox>
+
                   <Button fx:id="btn_login" onAction="#login" prefHeight="50.0" prefWidth="380.0"
                           styleClass="login-button" text="%title.login">
                      <VBox.margin>
                         <Insets top="20.0" />
                      </VBox.margin>
                   </Button>
-                  <Label styleClass="signup-text" text="Don't have an account?">
+
+                  <HBox alignment="CENTER" spacing="10.0">
+                     <children>
+                        <Label styleClass="signup-text" text="Don't have an account?" />
+                        <Button onAction="#goRegister" styleClass="register-button" text="%title.register" />
+                     </children>
                      <VBox.margin>
                         <Insets top="15.0" />
                      </VBox.margin>
-                  </Label>
-                  <Button onAction="#goRegister" styleClass="register-button" text="%title.register" />
+                  </HBox>
                </children>
             </VBox>
          </center>

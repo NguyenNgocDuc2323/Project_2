@@ -33,6 +33,7 @@
     -fx-font-size: 14px;
     -fx-text-fill: #5D4037;
     -fx-font-weight: bold;
+
 }
 
 .input-field {
@@ -101,10 +102,58 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
 }
 
-/* Ensure the ImageView fits properly */
+/* Modify this in your login-styles.css file */
 .auth-main-background ImageView {
-    -fx-fit-width: 485px;
-    -fx-fit-height: 610px;
+    -fx-fit-width: 400px;
+    -fx-fit-height: 600px; /* Changed from fx-height: 800px */
     -fx-preserve-ratio: true;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);
 }
+
+/* Add this for more specific control over the login image */
+.image-panel ImageView {
+    -fx-fit-height: 600px;
+    -fx-fit-width: 400px;
+    -fx-preserve-ratio: false; /* This ensures the image fills the entire area */
+}
+
+.login-form-container {
+    -fx-background-color: rgba(255, 255, 255, 0.6);
+    -fx-background-radius: 10px;
+    -fx-padding: 25px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+    -fx-border-color: #d9c3a9;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-min-width: 380px;
+}
+
+.login-form-container .field-label {
+    -fx-font-size: 15px;
+    -fx-text-fill: #5D4037;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 5px 5px;
+}
+
+/* Add these specific selectors to override the FXML attributes */
+.image-panel {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+    -fx-min-width: 500px !important;
+    -fx-pref-width: 500px !important;
+    -fx-max-width: 500px !important;
+}
+
+/* Override ImageView dimensions with higher specificity */
+.image-panel > ImageView,
+.auth-main-background .image-panel ImageView {
+    -fx-fit-width: 500px !important;
+    -fx-fit-height: 600px !important;
+    -fx-preserve-ratio: false !important;
+}
+
+/* Adjust BorderPane width to accommodate wider image */
+.auth-main-background {
+    -fx-background-color: #f9f5f2;
+    -fx-pref-width: 1124px !important;
+}
+
