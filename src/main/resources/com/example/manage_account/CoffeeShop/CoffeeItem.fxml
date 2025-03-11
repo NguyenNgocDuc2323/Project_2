@@ -14,7 +14,10 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox spacing="12" styleClass="coffee-item" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox spacing="12" styleClass="coffee-item" xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controller.CoffeeShop.CoffeeItemController"
+>
     <stylesheets>
         <URL value="@../../../../assets/styles/coffeeitem.css" />
     </stylesheets>
@@ -23,6 +26,7 @@
             <!-- Coffee Image with Rating -->
             <StackPane styleClass="coffee-image-container">
                 <Rectangle fill="#f0e6d9" height="140" width="200" />
+                <!-- The ImageView will be added programmatically -->
 
                 <HBox alignment="CENTER" styleClass="rating-badge">
                     <StackPane.alignment>TOP_RIGHT</StackPane.alignment>
