@@ -12,11 +12,12 @@
     <children>
         <TableView fx:id="tbl_account" onMouseClicked="#onAccountSelected" prefHeight="306.0" prefWidth="600.0">
             <columns>
-                <TableColumn fx:id="tbl_id" prefWidth="161.0" text="ID" />
-                <TableColumn fx:id="tbl_email" minWidth="0.0" prefWidth="132.0" text="Email" />
-                <TableColumn fx:id="tbl_password" prefWidth="111.0" text="%lb.password" />
-                <TableColumn fx:id="tbl_status" minWidth="0.0" prefWidth="97.0" text="%lb.status" />
-                <TableColumn fx:id="tbl_type" prefWidth="98.0" text="%lb.type" />
+                <TableColumn fx:id="tbl_id" prefWidth="42.0" text="ID" />
+                <TableColumn fx:id="tbl_name" minWidth="0.0" prefWidth="93.0" text="%lb.name" />
+                <TableColumn fx:id="tbl_email" prefWidth="118.0" text="Email" />
+                <TableColumn fx:id="tbl_password" minWidth="0.0" prefWidth="123.0" text="%lb.password" />
+                <TableColumn fx:id="tbl_status" prefWidth="114.0" text="%lb.status" />
+            <TableColumn fx:id="tbl_type" minWidth="0.0" prefWidth="109.0" text="%lb.type" />
             </columns>
         </TableView>
         <TilePane alignment="CENTER" hgap="10.0" layoutX="-3.0" layoutY="306.0" prefHeight="139.0" prefWidth="606.0" tileAlignment="TOP_CENTER" vgap="10.0">

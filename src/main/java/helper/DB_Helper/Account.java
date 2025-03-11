@@ -13,11 +13,12 @@ public class Account {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int id = rs.getInt("id");
+                String name = rs.getString("full_name");
                 String result_email = rs.getString("email");
                 String result_password = rs.getString("password");
                 int type = rs.getInt("type");
                 boolean lock_status = rs.getBoolean("lock_status");
-                return new model.Account(id,result_email,result_password,type,lock_status);
+                return new model.Account(id,name,result_email,result_password,type,lock_status);
             }
         }catch (SQLException e) {
             e.printStackTrace();
@@ -27,29 +28,41 @@ public class Account {
     public static void addAccount(model.Account account) {
         try (Connection conn = ConnectDatabase.getConnection()) {
             String checkQuery = "SELECT * FROM account WHERE email = ?";
-            PreparedStatement checkPs = conn.prepareStatement(checkQuery);
-            checkPs.setString(1, account.getEmail());
-            ResultSet rs = checkPs.executeQuery();
-            if (rs.next()) {
-                System.out.println("Account with email " + account.getEmail() + " already exists.");
-                return;
+            try (PreparedStatement checkPs = conn.prepareStatement(checkQuery)) {
+                checkPs.setString(1, account.getEmail());
+                try (ResultSet rs = checkPs.executeQuery()) {
+                    if (rs.next()) {
+                        System.out.println("Account with email " + account.getEmail() + " already exists.");
+                        return;
+                    }
+                }
             }
-            String insertQuery = "INSERT INTO account (email, password, type, lock_status) VALUES (?, ?, ?, ?)";
-            PreparedStatement ps = conn.prepareStatement(insertQuery);
-            ps.setString(1, account.getEmail());
-            ps.setString(2, account.getPassword());
-            ps.setInt(3, account.getType());
-            ps.setBoolean(4, account.isLocked());
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Account successfully added: " + account.getEmail());
-            } else {
-                System.out.println("Failed to add the account.");
+
+            String insertQuery = "INSERT INTO account (email, password, full_name, type, lock_status) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement ps = conn.prepareStatement(insertQuery)) {
+                ps.setString(1, account.getEmail());
+                ps.setString(2, account.getPassword());
+                String fullName = account.getName();
+                if (fullName == null || fullName.trim().isEmpty()) {
+                    fullName = "Unknown";
+                }
+                ps.setString(3, fullName);
+
+                ps.setInt(4, account.getType());
+                ps.setBoolean(5, account.isLocked());
+
+                int rowsAffected = ps.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Account successfully added: " + account.getEmail());
+                } else {
+                    System.out.println("Failed to add the account.");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
     public static int countAcc() {
         int count = 0;
         String query = "SELECT COUNT(*) FROM account";

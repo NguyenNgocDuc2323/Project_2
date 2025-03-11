@@ -32,6 +32,7 @@ public class Navigator {
     public static final String ADMIN_HOME = "/com/example/manage_account/Admin/admin_dashboard.fxml";
     public static final String CALCULATE_HOME = "/com/example/manage_account/CalculateUI.fxml";
     public static final String RESET_PASSWORD = "/com/example/manage_account/Admin/reset_password.fxml";
+    public static final String FOTGOT_PASSWORD = "/com/example/manage_account/Auth/ForgotPassword.fxml";
     public static final String CHANGE_PASSWORD = "/com/example/manage_account/Admin/change_password.fxml";
     public static final String MENU_SCENE = "/com/example/manage_account/CoffeeShop/Dashboard.fxml";
     private Navigator() {
@@ -51,7 +52,9 @@ public class Navigator {
     public void gotoLogin() throws IOException {
         gotoScene(Translator.translate("title.login"), LOGIN_SCENE);
     }
-
+    public void gotoForgotPassword() throws IOException {
+        gotoScene(Translator.translate("title.forgotPassword"),FOTGOT_PASSWORD);
+    }
     public void gotoAdminHome() throws IOException {
         gotoScene(Translator.translate("title.adminHome"), ADMIN_HOME);
     }

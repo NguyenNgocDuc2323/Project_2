@@ -26,8 +26,8 @@ public class LoginUIController implements Initializable {
     private model.Account selectedAccount;
     @FXML
     private PasswordField txt_password;
-//    private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-//    private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+    private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+    private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
 
 
     public LoginUIController() {
@@ -56,22 +56,22 @@ public class LoginUIController implements Initializable {
     public void login() throws SQLException {
         String passFill = txt_password.getText();
         String emailFill = txt_email.getText();
-//        if (!emailFill.matches(EMAIL_REGEX)) {
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setTitle("Error");
-//            alert.setHeaderText(null);
-//            alert.setContentText("Invalid email format!");
-//            alert.showAndWait();
-//            return;
-//        }
-//        if (!passFill.matches(PASSWORD_REGEX)) {
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setTitle("Error");
-//            alert.setHeaderText(null);
-//            alert.setContentText("Password must be at least 8 characters long and contain at least one letter and one number.");
-//            alert.showAndWait();
-//            return;
-//        }
+        if (!emailFill.matches(EMAIL_REGEX)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Invalid email format!");
+            alert.showAndWait();
+            return;
+        }
+        if (!passFill.matches(PASSWORD_REGEX)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Password must be at least 8 characters long and contain at least one letter and one number.");
+            alert.showAndWait();
+            return;
+        }
 
         model.Account acc = Account.getAccountByEmailAndPassword(emailFill, passFill);
 

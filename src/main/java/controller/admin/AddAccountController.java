@@ -26,7 +26,8 @@ public class AddAccountController implements Initializable {
 
     @FXML
     private TextField txt_email;
-
+    @FXML
+    private TextField txt_name;
     @FXML
     private PasswordField txt_password;
     @FXML
@@ -61,6 +62,7 @@ public class AddAccountController implements Initializable {
         String email = txt_email.getText();
         String password = txt_password.getText();
         String confirmPassword = txt_confirm_password.getText();
+        String name = txt_name.getText();
         if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             System.out.println("Please fill all fields.");
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -82,7 +84,7 @@ public class AddAccountController implements Initializable {
         DisplayText selectedLockStatus = txt_acc_lock_status.getValue();
         boolean lockStatus = selectedLockStatus != null && selectedLockStatus.getValue() == 1;
         int accNumber = Account.countAcc();
-        model.Account newAccount = new model.Account(accNumber + 1,email, password, type, lockStatus);
+        model.Account newAccount = new model.Account(accNumber + 1,name,email, password, type, lockStatus);
         if (Account.getAccountByEmailAndPassword(email,password) != null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning");

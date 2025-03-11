@@ -34,11 +34,12 @@ public class AccountManager {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
+                String name = rs.getString("name");
                 String email = rs.getString("email");
                 String password = rs.getString("password");
                 int type = rs.getInt("type");
                 boolean isLocked = rs.getInt("lock_status") == 1;
-                accounts.add(new Account(id, email, password, type, isLocked));
+                accounts.add(new Account(id,name, email, password, type, isLocked));
             }
 
             System.out.println("Tải dữ liệu thành công. Số tài khoản: " + accounts.size());

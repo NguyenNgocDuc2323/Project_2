@@ -15,11 +15,12 @@ public class Account_DB_Helper {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int id = rs.getInt("id");
+                String name = rs.getString("name");
                 String result_email = rs.getString("email");
                 String result_password = rs.getString("password");
                 int type = rs.getInt("type");
                 boolean lock_status = rs.getBoolean("lock_status");
-                return new model.Account(id,result_email,result_password,type,lock_status);
+                return new model.Account(id,name,result_email,result_password,type,lock_status);
             }
         }catch (SQLException e) {
             e.printStackTrace();

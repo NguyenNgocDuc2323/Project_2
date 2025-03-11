@@ -25,6 +25,8 @@ public class RegisterController implements Initializable {
     private Button btn_register;
 
     @FXML
+    private TextField register_name;
+    @FXML
     private TextField register_email;
 
     @FXML
@@ -53,7 +55,7 @@ public class RegisterController implements Initializable {
         String email = register_email.getText();
         String password = register_password.getText();
         String rePassword = register_repassword.getText();
-
+        String name = register_name.getText();
         if (!REGEX.isValidEmail(email)) {
             showAlert("Invalid email format!");
             return;
@@ -69,10 +71,8 @@ public class RegisterController implements Initializable {
             return;
         }
 
-        int accNumber = Account.countAcc();
-        model.Account newAccount = new model.Account(accNumber + 1,email, password, 2, false);
+        model.Account newAccount = new model.Account(email,name, password, 2, false);
         Account.addAccount(newAccount);
-
         showSuccess("Registration successful! You can now log in.");
         goLogin(event);
     }
