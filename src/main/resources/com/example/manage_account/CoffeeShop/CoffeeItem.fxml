@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="12" styleClass="coffee-item" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <stylesheets>
+        <URL value="@../../../../assets/styles/coffeeitem.css" />
+    </stylesheets>
+    <StackPane styleClass="coffee-card">
+        <VBox spacing="8">
+            <!-- Coffee Image with Rating -->
+            <StackPane styleClass="coffee-image-container">
+                <Rectangle fill="#f0e6d9" height="140" width="200" />
+
+                <HBox alignment="CENTER" styleClass="rating-badge">
+                    <StackPane.alignment>TOP_RIGHT</StackPane.alignment>
+                    <padding>
+                        <Insets bottom="4" left="8" right="8" top="4" />
+                    </padding>
+                    <Label fx:id="ratingLabel" styleClass="rating-text" text="4.8" />
+                </HBox>
+
+                <Label fx:id="featuredBadge" styleClass="featured-badge" text="FEATURED">
+                    <StackPane.alignment>TOP_LEFT</StackPane.alignment>
+                    <padding>
+                        <Insets bottom="4" left="8" right="8" top="4" />
+                    </padding>
+                </Label>
+            </StackPane>
+
+            <!-- Coffee Details -->
+            <VBox spacing="5">
+                <padding>
+                    <Insets bottom="5" left="10" right="10" />
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label fx:id="coffeeName" styleClass="coffee-name" text="Caramel Macchiato">
+                        <font>
+                            <Font name="System Bold" size="16" />
+                        </font>
+                    </Label>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Label fx:id="coffeePrice" prefHeight="17.0" prefWidth="32.0" styleClass="coffee-price" text="4.50">
+                        <font>
+                            <Font size="16" />
+                        </font>
+                    </Label>
+                </HBox>
+
+                <Label fx:id="coffeeDescription" styleClass="coffee-description" text="Freshly steamed milk with vanilla-flavored syrup" wrapText="true" />
+
+                <HBox spacing="5" styleClass="coffee-tags">
+                    <Label styleClass="coffee-tag" text="Popular" />
+                    <Label styleClass="coffee-tag" text="Sweet" />
+                </HBox>
+
+                <Separator styleClass="coffee-separator" />
+
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <Label styleClass="option-label" text="Size:" />
+                    <HBox spacing="5" styleClass="size-options">
+                        <ToggleButton fx:id="sizeSmall" selected="true" styleClass="size-toggle" text="S" />
+                        <ToggleButton fx:id="sizeMedium" styleClass="size-toggle" text="M" />
+                        <ToggleButton fx:id="sizeLarge" styleClass="size-toggle" text="L" />
+                    </HBox>
+                </HBox>
+
+                <HBox alignment="CENTER" spacing="10">
+                    <HBox alignment="CENTER" spacing="5" styleClass="quantity-control">
+                        <Button fx:id="decreaseBtn" styleClass="quantity-btn" text="-" />
+                        <TextField fx:id="quantityField" prefWidth="40" styleClass="quantity-field" text="1" />
+                        <Button fx:id="increaseBtn" styleClass="quantity-btn" text="+" />
+                    </HBox>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button fx:id="addToCartBtn" styleClass="add-to-cart-btn" text="Add to Cart" />
+                </HBox>
+            </VBox>
+        </VBox>
+    </StackPane>
+</VBox>

@@ -7,6 +7,9 @@ module com.example.manage_account {
 
     opens com.example.manage_account to javafx.graphics;
 
+    // Add this line to open your controller package to JavaFX FXML
+    opens controller.CoffeeShop to javafx.fxml;
+
     exports controller;
     opens controller to javafx.fxml;
     exports controller.admin;

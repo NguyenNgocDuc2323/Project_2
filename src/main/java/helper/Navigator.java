@@ -34,6 +34,7 @@ public class Navigator {
     public static final String RESET_PASSWORD = "/com/example/manage_account/Admin/reset_password.fxml";
     public static final String FOTGOT_PASSWORD = "/com/example/manage_account/Auth/ForgotPassword.fxml";
     public static final String CHANGE_PASSWORD = "/com/example/manage_account/Admin/change_password.fxml";
+    public static final String MENU_SCENE = "/com/example/manage_account/CoffeeShop/Dashboard.fxml";
     private Navigator() {
     }
 
@@ -75,6 +76,7 @@ public class Navigator {
     }
 
     public void gotoScene(String title, String URL) throws IOException {
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource(URL), Translator.getResourceBundle());
         Parent root = loader.load();
         Scene scene = new Scene(root);
@@ -104,5 +106,8 @@ public class Navigator {
         state.show();
     }
 
+    public void gotoMenu() throws IOException {
+        gotoScene("Menu", MENU_SCENE);
+    }
 
 }

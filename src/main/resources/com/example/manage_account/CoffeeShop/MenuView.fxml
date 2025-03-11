@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.*?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.CoffeeShop.MenuViewController"
+      stylesheets="@../../../../assets/styles/dashboard.css, @../../../../assets/styles/coffee-menu.css"
+      styleClass="coffee-background">
+
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30" />
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" styleClass="section-header">
+        <Label text="Today's Coffee Selection" styleClass="section-title">
+            <font>
+                <Font name="Palatino Linotype Bold" size="32" />
+            </font>
+            <graphic>
+                <ImageView fitHeight="36" fitWidth="36" preserveRatio="true">
+                    <Image url="@../../../../assets/images/coffee-bean-icon.png" />
+                </ImageView>
+            </graphic>
+        </Label>
+
+        <Region HBox.hgrow="ALWAYS" />
+
+        <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="filter-box">
+            <HBox alignment="CENTER" spacing="8" styleClass="filter-container">
+                <ImageView fitHeight="18" fitWidth="18" preserveRatio="true">
+                    <Image url="@../../../../assets/images/filter-icon.png" />
+                </ImageView>
+                <ComboBox fx:id="categoryFilter" promptText="All Categories" styleClass="coffee-combobox" />
+            </HBox>
+
+            <HBox alignment="CENTER" spacing="8" styleClass="filter-container">
+                <ImageView fitHeight="18" fitWidth="18" preserveRatio="true">
+                    <Image url="@../../../../assets/images/sort-icon.png" />
+                </ImageView>
+                <ComboBox fx:id="sortOptions" promptText="Sort by" styleClass="coffee-combobox" />
+            </HBox>
+        </HBox>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" styleClass="coffee-scroll-pane">
+        <FlowPane fx:id="coffeeItemsContainer" hgap="25" vgap="25" styleClass="coffee-item-container">
+            <!-- Coffee items will be added here programmatically -->
+        </FlowPane>
+    </ScrollPane>
+</VBox>
