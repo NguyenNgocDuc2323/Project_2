@@ -25,6 +25,8 @@
     -fx-background-color: linear-gradient(to bottom, #d7c8b0, #e8dbc7);
     -fx-background-radius: 10px 10px 0 0;
     -fx-effect: innershadow(gaussian, rgba(92, 74, 58, 0.2), 3, 0, 0, 0);
+    -fx-pref-width: 280px;
+    -fx-pref-height: 200px;
 }
 
 /* Rectangle placeholder styling for smaller image */
@@ -36,8 +38,8 @@ Rectangle {
     -fx-stroke-width: 1;
     -fx-stroke-type: inside;
     -fx-effect: innershadow(gaussian, rgba(92, 74, 58, 0.15), 5, 0, 0, 0);
-    -fx-width: 180px; /* Reduced width */
-    -fx-height: 120px; /* Reduced height */
+    -fx-width: 280px; /* Reduced width */
+    -fx-height: 200px; /* Reduced height */
 }
 
 /* Rating badge styling */

@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import model.Coffee;
 
+import javafx.scene.shape.Rectangle;
 import java.io.File;
 
 public class CoffeeItemController {
@@ -116,48 +117,55 @@ public class CoffeeItemController {
             String imagePath = coffee.getImage();
             Image image = null;
 
-            // Try different approaches to load the image
-            // 1. Try to load from resources
-            String resourcePath = "/assets/images/coffee/" + imagePath;
+            // Define target dimensions
+            final double TARGET_WIDTH = 210;
+            final double TARGET_HEIGHT = 200;
+
+            // Try loading from different sources
+            String resourcePath = "/assets/images/CoffeeItem/" + imagePath;
             try {
                 image = new Image(getClass().getResourceAsStream(resourcePath));
             } catch (Exception e) {
-                // Resource not found, try other methods
+                System.err.println("Failed to load from resource path: " + resourcePath);
             }
 
-            // 2. Try as direct file path
             if (image == null || image.isError()) {
-                File file = new File(imagePath);
+                File file = new File("src/main/resources/assets/images/CoffeeItem/" + imagePath);
                 if (file.exists()) {
                     image = new Image(file.toURI().toString());
                 }
             }
 
-            // 3. Try with application-specific path
             if (image == null || image.isError()) {
-                File file = new File("src/main/resources/assets/images/coffee/" + imagePath);
-                if (file.exists()) {
-                    image = new Image(file.toURI().toString());
+                try {
+                    image = new Image(getClass().getResourceAsStream("/assets/images/CoffeeItem/default.jpg"));
+                } catch (Exception e) {
+                    System.err.println("Even default image failed to load: " + e.getMessage());
                 }
             }
 
-            // 4. Use default image if all attempts fail
-            if (image == null || image.isError()) {
-                image = new Image(getClass().getResourceAsStream("/assets/images/coffee/default_coffee.png"));
-            }
-
-            // Display the image
+            // Display the image with fixed dimensions
             if (image != null && !image.isError()) {
                 ImageView imageView = new ImageView(image);
-                imageView.setFitWidth(200);
-                imageView.setFitHeight(140);
-                imageView.setPreserveRatio(true);
 
-                // Clear previous content and add the image view
+                // Force the exact dimensions - CRITICAL CHANGE
+                imageView.setFitWidth(TARGET_WIDTH);
+                imageView.setFitHeight(TARGET_HEIGHT);
+                imageView.setPreserveRatio(false); // Don't preserve ratio to ensure exact sizing
+
+                // Use high quality rendering
+                imageView.setSmooth(true);
+
+                // Clip the image to ensure it doesn't overflow container
+                Rectangle clip = new Rectangle(TARGET_WIDTH, TARGET_HEIGHT);
+                clip.setArcWidth(10);
+                clip.setArcHeight(10);
+                imageView.setClip(clip);
+
+                // Replace existing content with new image
                 coffeeImageContainer.getChildren().clear();
                 coffeeImageContainer.getChildren().add(imageView);
             }
-
         } catch (Exception e) {
             System.err.println("Error loading coffee image: " + e.getMessage());
             e.printStackTrace();

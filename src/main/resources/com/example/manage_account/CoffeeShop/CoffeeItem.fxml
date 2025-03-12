@@ -24,8 +24,8 @@
     <StackPane styleClass="coffee-card">
         <VBox spacing="8">
             <!-- Coffee Image with Rating -->
-            <StackPane styleClass="coffee-image-container">
-                <Rectangle fill="#f0e6d9" height="140" width="200" />
+            <StackPane fx:id="coffeeImageContainer" styleClass="coffee-image-container">
+                <Rectangle fill="#f0e6d9" height="240" width="320" />
                 <!-- The ImageView will be added programmatically -->
 
                 <HBox alignment="CENTER" styleClass="rating-badge">
