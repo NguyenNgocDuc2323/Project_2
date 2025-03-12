@@ -23,7 +23,7 @@
                 </padding>
                 <ImageView fx:id="logoImage" fitWidth="40" fitHeight="40" preserveRatio="true">
                     <image>
-                        <Image url="@../images/coffee-logo.png" />
+                        <Image url="@../../../../assets/images/logo_1.png" />
                     </image>
                 </ImageView>
                 <Label text="The 90s Brew" styleClass="logo-text">

@@ -27,8 +27,8 @@ public class Navigator {
     private FXMLLoader fxLoader;
 
     public static final String ADMIN_MENU = "/com/example/manage_account/AdminMenuUI.fxml";
-    public static final String LOGIN_SCENE = "/com/example/manage_account/Auth/LoginUI.fxml"; // login
-    public static final String REGISTER_SCENE = "/com/example/manage_account/Auth/RegisterUI.fxml"; // login
+    public static final String LOGIN_SCENE = "/com/example/manage_account/Auth/LoginUI.fxml";
+    public static final String REGISTER_SCENE = "/com/example/manage_account/Auth/RegisterUI.fxml";
     public static final String ADMIN_HOME = "/com/example/manage_account/Admin/admin_dashboard.fxml";
     public static final String CALCULATE_HOME = "/com/example/manage_account/CalculateUI.fxml";
     public static final String RESET_PASSWORD = "/com/example/manage_account/Admin/reset_password.fxml";
