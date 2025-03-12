@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -15,16 +16,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="600.0" prefWidth="1150.0" stylesheets="@../../../../assets/css/login-styles.css"
-            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.LoginUIController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1124.0" stylesheets="@../../../../assets/css/auth-style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginUIController">
    <children>
       <BorderPane prefHeight="600.0" prefWidth="1024.0" styleClass="auth-main-background">
          <left>
             <Pane prefHeight="600.0" prefWidth="400.0" styleClass="image-panel" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="600.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="600.0" fitWidth="500.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../assets/images/login-coffee.jpg" />
                      </image>
@@ -60,20 +58,18 @@
                      </VBox.margin>
                   </Label>
 
-                  <VBox styleClass="login-form-container" spacing="20.0">
+                  <VBox spacing="20.0" styleClass="login-form-container">
                      <VBox spacing="5.0">
                         <children>
                            <Label styleClass="field-label" text="%lb.email" />
-                           <TextField fx:id="txt_email" prefHeight="45.0" prefWidth="400.0"
-                                      promptText="example@email.com" styleClass="input-field" />
+                           <TextField fx:id="txt_email" prefHeight="45.0" prefWidth="400.0" promptText="example@email.com" styleClass="input-field" />
                         </children>
                      </VBox>
 
                      <VBox spacing="5.0">
                         <children>
                            <Label styleClass="field-label" text="%lb.password" />
-                           <PasswordField fx:id="txt_password" prefHeight="45.0" prefWidth="400.0"
-                                          promptText="Enter your password" styleClass="input-field" />
+                           <PasswordField fx:id="txt_password" prefHeight="45.0" prefWidth="400.0" promptText="Enter your password" styleClass="input-field" />
                         </children>
                         <VBox.margin>
                            <Insets top="10.0" />
@@ -87,8 +83,7 @@
                      </HBox>
                   </VBox>
 
-                  <Button fx:id="btn_login" onAction="#login" prefHeight="50.0" prefWidth="380.0"
-                          styleClass="login-button" text="%title.login">
+                  <Button fx:id="btn_login" onAction="#login" prefHeight="50.0" prefWidth="380.0" styleClass="login-button" text="%title.login">
                      <VBox.margin>
                         <Insets top="20.0" />
                      </VBox.margin>
@@ -97,7 +92,7 @@
                   <HBox alignment="CENTER" spacing="10.0">
                      <children>
                         <Label styleClass="signup-text" text="Don't have an account?" />
-                        <Button onAction="#goRegister" styleClass="register-button" text="%title.register" />
+                        <Hyperlink onAction="#goRegister" style="-fx-text-fill: #8B4513;" text="%title.register" />
                      </children>
                      <VBox.margin>
                         <Insets top="15.0" />

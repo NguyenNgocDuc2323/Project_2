@@ -5,26 +5,27 @@ import helper.ConnectDatabase;
 import java.sql.*;
 
 public class Account {
-    public static model.Account getAccountByEmailAndPassword(String email, String password) {
-        try(Connection conn = ConnectDatabase.getConnection();) {
-            PreparedStatement ps = conn.prepareStatement("select * from account where email = ? and password = ?");
+    public static model.Account getAccountByEmail(String email) {
+        try (Connection conn = ConnectDatabase.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM account WHERE email = ?");
             ps.setString(1, email);
-            ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("full_name");
                 String result_email = rs.getString("email");
-                String result_password = rs.getString("password");
+                String result_password = rs.getString("password"); // Lấy mật khẩu đã mã hóa từ DB
                 int type = rs.getInt("type");
                 boolean lock_status = rs.getBoolean("lock_status");
-                return new model.Account(id,name,result_email,result_password,type,lock_status);
+                return new model.Account(id, name, result_email, result_password, type, lock_status);
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
+
+
     public static void addAccount(model.Account account) {
         try (Connection conn = ConnectDatabase.getConnection()) {
             String checkQuery = "SELECT * FROM account WHERE email = ?";

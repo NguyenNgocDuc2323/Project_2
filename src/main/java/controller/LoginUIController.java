@@ -1,14 +1,15 @@
 package controller;
-
+import helper.Alert;
 import helper.DB_Helper.Account;
 import helper.Navigator;
+import helper.REGEX;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 import java.net.URL;
@@ -56,61 +57,41 @@ public class LoginUIController implements Initializable {
     public void login() throws SQLException {
         String passFill = txt_password.getText();
         String emailFill = txt_email.getText();
-        if (!emailFill.matches(EMAIL_REGEX)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Invalid email format!");
-            alert.showAndWait();
+
+        if (!REGEX.isValidEmail(emailFill)) {
+            helper.Alert.showAlert("Invalid email format!");
             return;
         }
-        if (!passFill.matches(PASSWORD_REGEX)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Password must be at least 8 characters long and contain at least one letter and one number.");
-            alert.showAndWait();
+        if (!REGEX.isValidPassword(passFill)) {
+            Alert.showAlert("Password must be at least 8 characters long and contain at least one letter, one number, and one special character.");
             return;
         }
 
-        model.Account acc = Account.getAccountByEmailAndPassword(emailFill, passFill);
+        model.Account acc = Account.getAccountByEmail(emailFill);
 
-        if (acc == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Invalid email or password");
-            alert.showAndWait();
-        } else {
-            if (acc.isLocked()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Account is locked. Please contact the administrator.");
-                alert.showAndWait();
-            } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setHeaderText(null);
-                alert.setContentText("Login successful");
-                alert.showAndWait();
+        if (acc == null || !BCrypt.checkpw(passFill, acc.getPassword())) {
+            Alert.showAlert("Invalid email or password");
+            return;
+        }
 
-                if (acc.getTypeAsString().equalsIgnoreCase("Admin")) {
-                    try {
-                        Navigator.getInstance().gotoAdminHome();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else if (acc.getTypeAsString().equalsIgnoreCase("Staff")) {
-                    try {
-                        Navigator.getInstance().gotoStaffDashboard();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+        if (acc.isLocked()) {
+            Alert.showAlert("Account is locked. Please contact the administrator.");
+            return;
+        }
+
+        Alert.showSuccess("Login successful");
+
+        try {
+            if (acc.getTypeAsString().equalsIgnoreCase("Admin")) {
+                Navigator.getInstance().gotoAdminHome();
+            } else if (acc.getTypeAsString().equalsIgnoreCase("Staff")) {
+                Navigator.getInstance().gotoStaffDashboard();
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
+
     @FXML
     void onResetPassword(ActionEvent event) {
         try {

@@ -3,6 +3,7 @@ module com.example.manage_account {
     requires javafx.fxml;
     requires java.sql;
     requires java.desktop;
+    requires jbcrypt;
 
 
     opens com.example.manage_account to javafx.graphics;
