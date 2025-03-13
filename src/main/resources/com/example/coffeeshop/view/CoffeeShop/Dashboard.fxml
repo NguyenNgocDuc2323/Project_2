@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<?import javafx.scene.shape.Circle?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.coffeeshop.controller.CoffeeShop.DashboardController"
+            stylesheets="@../../assets/styles/dashboard.css"
+            prefWidth="1200"
+            prefHeight="800">
+    <!-- Left Navigation Bar -->
+    <left>
+        <VBox fx:id="sideNav" styleClass="side-nav" prefWidth="240" spacing="15">
+            <!-- App Logo -->
+            <StackPane styleClass="logo-container" alignment="CENTER_LEFT">
+                <padding>
+                    <Insets top="20" right="15" bottom="30" left="15" />
+                </padding>
+                <ImageView fx:id="logoImage" fitWidth="40" fitHeight="40" preserveRatio="true">
+                    <image>
+                        <Image url="@../../assets/images/logo_1.png" />
+                    </image>
+                </ImageView>
+                <Label text="The 90s Brew" styleClass="logo-text">
+                    <font>
+                        <Font name="System Bold" size="18" />
+                    </font>
+                    <StackPane.margin>
+                        <Insets left="50" />
+                    </StackPane.margin>
+                </Label>
+            </StackPane>
+
+            <!-- Navigation Items -->
+            <VBox spacing="10" styleClass="nav-items" VBox.vgrow="ALWAYS">
+                <padding>
+                    <Insets top="10" right="15" bottom="10" left="15" />
+                </padding>
+
+                <Button fx:id="menuBtn" styleClass="nav-button,active" maxWidth="Infinity">
+                    <graphic>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="24" fitHeight="24" preserveRatio="true">
+                                <image>
+                                    <Image url="@../images/menu-icon.png" />
+                                </image>
+                            </ImageView>
+                            <Label text="Menu" styleClass="nav-text" />
+                        </HBox>
+                    </graphic>
+                    <padding>
+                        <Insets top="12" right="15" bottom="12" left="15" />
+                    </padding>
+                </Button>
+
+                <Button fx:id="cartBtn" styleClass="nav-button" maxWidth="Infinity">
+                    <graphic>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="24" fitHeight="24" preserveRatio="true">
+                                <image>
+                                    <Image url="@../images/cart-icon.png" />
+                                </image>
+                            </ImageView>
+                            <Label text="Cart" styleClass="nav-text" />
+                            <StackPane styleClass="cart-badge">
+                                <Circle radius="10" styleClass="badge-circle" />
+                                <Label fx:id="cartItemCount" text="0" styleClass="badge-text" />
+                            </StackPane>
+                        </HBox>
+                    </graphic>
+                    <padding>
+                        <Insets top="12" right="15" bottom="12" left="15" />
+                    </padding>
+                </Button>
+
+                <Button fx:id="historyBtn" styleClass="nav-button" maxWidth="Infinity">
+                    <graphic>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="24" fitHeight="24" preserveRatio="true">
+                                <image>
+                                    <Image url="@../images/history-icon.png" />
+                                </image>
+                            </ImageView>
+                            <Label text="Orders" styleClass="nav-text" />
+                        </HBox>
+                    </graphic>
+                    <padding>
+                        <Insets top="12" right="15" bottom="12" left="15" />
+                    </padding>
+                </Button>
+
+                <Button fx:id="profileBtn" styleClass="nav-button" maxWidth="Infinity">
+                    <graphic>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="24" fitHeight="24" preserveRatio="true">
+                                <image>
+                                    <Image url="@../images/profile-icon.png" />
+                                </image>
+                            </ImageView>
+                            <Label text="Profile" styleClass="nav-text" />
+                        </HBox>
+                    </graphic>
+                    <padding>
+                        <Insets top="12" right="15" bottom="12" left="15" />
+                    </padding>
+                </Button>
+
+                <VBox.margin>
+                    <Insets bottom="20" />
+                </VBox.margin>
+            </VBox>
+
+            <!-- User Info at Bottom -->
+            <VBox styleClass="user-info">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15" />
+                </padding>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <ImageView fitWidth="40" fitHeight="40" styleClass="user-avatar">
+                        <image>
+                            <Image url="@../images/user-avatar.png" />
+                        </image>
+                    </ImageView>
+                    <VBox>
+                        <Label fx:id="userNameLabel" text="John Doe" styleClass="user-name" />
+                        <Label fx:id="userRoleLabel" text="Staff" styleClass="user-role" />
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button fx:id="logoutBtn" styleClass="logout-button">
+                        <graphic>
+                            <ImageView fitWidth="18" fitHeight="18">
+                                <image>
+                                    <Image url="@../images/logout-icon.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </HBox>
+            </VBox>
+
+            <!-- Toggle Button for Collapsing Sidebar -->
+            <Button fx:id="toggleNavBtn" styleClass="toggle-button">
+                <graphic>
+                    <ImageView fitWidth="16" fitHeight="16" preserveRatio="true">
+                        <image>
+                            <Image url="@../images/collapse-icon.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </VBox>
+    </left>
+
+    <!-- Main Content Area -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="content-scroll" hbarPolicy="NEVER">
+<!--            <StackPane fx:id="contentArea" styleClass="content-area">-->
+<!--                &lt;!&ndash; Coffee Items Grid &ndash;&gt;-->
+<!--                <VBox spacing="20">-->
+<!--                    <HBox alignment="CENTER_LEFT" styleClass="section-header">-->
+<!--                        <Label text="Today's Coffee Selection" styleClass="section-title">-->
+<!--                            <font>-->
+<!--                                <Font size="24" name="System Bold" />-->
+<!--                            </font>-->
+<!--                        </Label>-->
+<!--                    </HBox>-->
+
+<!--                    <FlowPane fx:id="coffeeItemsContainer" hgap="20" vgap="20">-->
+<!--                        &lt;!&ndash; Coffee items will be added here programmatically &ndash;&gt;-->
+<!--                        <fx:include source="CoffeeItem.fxml" />-->
+<!--                        <fx:include source="CoffeeItem.fxml" />-->
+<!--                        <fx:include source="CoffeeItem.fxml" />-->
+<!--                        <fx:include source="CoffeeItem.fxml" />-->
+
+<!--                    </FlowPane>-->
+<!--                </VBox>-->
+<!--            </StackPane>-->
+
+            <StackPane fx:id="contentArea" styleClass="content-area">
+                <!-- This is where different views will be loaded dynamically -->
+            </StackPane>
+        </ScrollPane>
+    </center>
+</BorderPane>
