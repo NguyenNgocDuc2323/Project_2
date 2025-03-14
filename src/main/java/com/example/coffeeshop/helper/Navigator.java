@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Navigator {
-
     private static Navigator navigator;
     private Stage state;
     private FXMLLoader fxLoader;
@@ -24,6 +23,8 @@ public class Navigator {
     public static final String FOTGOT_PASSWORD = "/com/example/coffeeshop/view/Auth/ForgotPassword.fxml";
     public static final String CHANGE_PASSWORD = "/com/example/coffeeshop/view/Admin/change_password.fxml";
     public static final String MENU_SCENE = "/com/example/coffeeshop/view/CoffeeShop/Dashboard.fxml";
+    public static final String TABLE = "/com/example/coffeeshop/view/Table.fxml";
+
     private Navigator() {
     }
 
@@ -34,6 +35,15 @@ public class Navigator {
         return navigator;
     }
 
+    public void gotoScene(String title, String URL) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(URL), Translator.getResourceBundle());
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        state.setTitle(title);
+        state.setScene(scene);
+        state.show();
+    }
+
     public void setState(Stage state) {
         navigator.state = state;
     }
@@ -41,37 +51,33 @@ public class Navigator {
     public void gotoLogin() throws IOException {
         gotoScene(Translator.translate("title.login"), LOGIN_SCENE);
     }
+
     public void gotoForgotPassword() throws IOException {
         gotoScene(Translator.translate("title.forgotPassword"),FOTGOT_PASSWORD);
     }
+
     public void gotoAdminHome() throws IOException {
         gotoScene(Translator.translate("title.adminHome"), ADMIN_HOME);
     }
+
     public void gotoCalculate() throws IOException {
         gotoScene("Calculator", CALCULATE_HOME);
     }
+
     public void gotoAddNewAccount() throws IOException {
         gotoScene(Translator.translate("title.addNewAccount"), "/com/example/coffeeshop/view/Admin/add_new_account.fxml");
     }
+
     public void gotoResetPassword() throws IOException {
         gotoScene(Translator.translate("title.resetPassword"), "/com/example/coffeeshop/view/Admin/reset_password.fxml");
     }
+
     public void gotoStaffDashboard() throws IOException {
         gotoScene(Translator.translate("title.staffDashboard"), "/com/example/coffeeshop/view/Staff/staff_dashboard.fxml");
     }
 
     public void gotoRegister() throws IOException {
         gotoScene(Translator.translate("title.register"), REGISTER_SCENE);
-    }
-
-    public void gotoScene(String title, String URL) throws IOException {
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(URL), Translator.getResourceBundle());
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-        state.setTitle(title);
-        state.setScene(scene);
-        state.show();
     }
 
     public void gotoResetPasswordWithAccountId(int accountId) throws IOException {
@@ -84,6 +90,7 @@ public class Navigator {
         state.setScene(scene);
         state.show();
     }
+
     public void gotoChangePasswordWithAccountId(int accountId) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(CHANGE_PASSWORD), Translator.getResourceBundle());
         Parent root = loader.load();
@@ -97,6 +104,10 @@ public class Navigator {
 
     public void gotoMenu() throws IOException {
         gotoScene("Menu", MENU_SCENE);
+    }
+
+    public void gotoTable() throws IOException {
+        gotoScene(Translator.translate("title.table"), TABLE);
     }
 
 }

@@ -30,7 +30,7 @@ public class AdminController implements Initializable {
     private Button btn_change_password;
 
     @FXML
-    private Button btn_log;
+    private Button btn_lock;
 
     @FXML
     private Button btn_logout;
@@ -39,7 +39,7 @@ public class AdminController implements Initializable {
     private Button btn_reset_password;
 
     @FXML
-    private Button btn_un_log;
+    private Button btn_unlock;
 
     @FXML
     private TableView<Account> tbl_account;

@@ -4,6 +4,7 @@ module com.example.coffeeshop {
     requires java.sql;
     requires java.desktop;
     requires jbcrypt;
+    requires static lombok;
 
 
     opens com.example.coffeeshop to javafx.graphics;
