@@ -7,11 +7,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import model.Coffee;
 
 import javafx.scene.shape.Rectangle;
 import java.io.File;
+import java.sql.*;
+
 
 public class CoffeeItemController {
     @FXML private Label coffeeName;
@@ -104,12 +107,45 @@ public class CoffeeItemController {
         // Load coffee image
         loadCoffeeImage();
 
+        // Load and display category name
+        loadCategoryName(coffee.getCategoryId());
+
         // Set random rating for demo purposes
         double rating = 3.5 + Math.random() * 1.5;
         ratingLabel.setText(String.format("%.1f", rating));
 
         // Show featured badge for certain items (optional logic)
         featuredBadge.setVisible(rating >= 4.5);
+    }
+
+    @FXML private HBox coffeeTagsContainer;
+
+    private void loadCategoryName(int categoryId) {
+        try (Connection connection = helper.ConnectDatabase.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT category_name FROM category WHERE id = ?")) {
+
+            statement.setInt(1, categoryId);
+            ResultSet resultSet = statement.executeQuery();
+
+            // Clear existing tags
+            coffeeTagsContainer.getChildren().clear();
+
+            if (resultSet.next()) {
+                String categoryName = resultSet.getString("category_name");
+
+                // Create a new label for the category
+                Label categoryLabel = new Label(categoryName);
+                categoryLabel.getStyleClass().add("coffee-tag");
+
+                // Add it to the tags container
+                coffeeTagsContainer.getChildren().add(categoryLabel);
+
+            }
+        } catch (SQLException e) {
+            System.err.println("Error loading category name: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void loadCoffeeImage() {
@@ -130,13 +166,6 @@ public class CoffeeItemController {
             }
 
             if (image == null || image.isError()) {
-                File file = new File("src/main/resources/assets/images/CoffeeItem/" + imagePath);
-                if (file.exists()) {
-                    image = new Image(file.toURI().toString());
-                }
-            }
-
-            if (image == null || image.isError()) {
                 try {
                     image = new Image(getClass().getResourceAsStream("/assets/images/CoffeeItem/default.jpg"));
                 } catch (Exception e) {
@@ -151,9 +180,8 @@ public class CoffeeItemController {
                 // Force the exact dimensions - CRITICAL CHANGE
                 imageView.setFitWidth(TARGET_WIDTH);
                 imageView.setFitHeight(TARGET_HEIGHT);
-                imageView.setPreserveRatio(false); // Don't preserve ratio to ensure exact sizing
+                imageView.setPreserveRatio(false);
 
-                // Use high quality rendering
                 imageView.setSmooth(true);
 
                 // Clip the image to ensure it doesn't overflow container
@@ -171,6 +199,8 @@ public class CoffeeItemController {
             e.printStackTrace();
         }
     }
+
+
 
     private void decreaseQuantity() {
         if (quantity > 1) {

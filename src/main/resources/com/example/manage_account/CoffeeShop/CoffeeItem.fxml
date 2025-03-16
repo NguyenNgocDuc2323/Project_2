@@ -66,7 +66,7 @@
 
                 <Label fx:id="coffeeDescription" styleClass="coffee-description" text="Freshly steamed milk with vanilla-flavored syrup" wrapText="true" />
 
-                <HBox spacing="5" styleClass="coffee-tags">
+                <HBox fx:id="coffeeTagsContainer"  spacing="5" styleClass="coffee-tags">
                     <Label styleClass="coffee-tag" text="Popular" />
                     <Label styleClass="coffee-tag" text="Sweet" />
                 </HBox>
