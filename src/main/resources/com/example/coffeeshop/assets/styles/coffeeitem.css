@@ -1,0 +1,196 @@
+/* Coffee Item Styling - Compact Version */
+.coffee-item {
+    -fx-background-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(72, 52, 36, 0.15), 10, 0, 0, 2);
+    -fx-transition: all 0.3s ease;
+    -fx-max-width: 190px; /* Reduced overall width */
+}
+
+.coffee-item:hover {
+    -fx-translate-y: -1;
+}
+
+/* Card styling with wood texture */
+.coffee-card {
+    -fx-background-color: linear-gradient(to bottom, #fdfbf7, #f5f0e6);
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #e8dbc7;
+    -fx-border-width: 1px;
+    -fx-effect: innershadow(gaussian, rgba(92, 74, 58, 0.1), 3, 0, 0, 1);
+}
+
+/* Image container styling */
+.coffee-image-container {
+    -fx-background-color: linear-gradient(to bottom, #d7c8b0, #e8dbc7);
+    -fx-background-radius: 10px 10px 0 0;
+    -fx-effect: innershadow(gaussian, rgba(92, 74, 58, 0.2), 3, 0, 0, 0);
+    -fx-pref-width: 280px;
+    -fx-pref-height: 200px;
+}
+
+/* Rectangle placeholder styling for smaller image */
+Rectangle {
+    -fx-arc-height: 10;
+    -fx-arc-width: 10;
+    -fx-fill: linear-gradient(to bottom right, #e8dbc7, #d7c8b0);
+    -fx-stroke: #d7c8b0;
+    -fx-stroke-width: 1;
+    -fx-stroke-type: inside;
+    -fx-effect: innershadow(gaussian, rgba(92, 74, 58, 0.15), 5, 0, 0, 0);
+    -fx-width: 280px; /* Reduced width */
+    -fx-height: 200px; /* Reduced height */
+}
+
+/* Rating badge styling */
+.rating-badge {
+    -fx-background-color: rgba(255, 246, 235, 0.92);
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(92, 74, 58, 0.3), 3, 0, 0, 1);
+    -fx-padding: 2 6 2 6;
+}
+
+.rating-text {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-weight: bold;
+    -fx-text-fill: #b8692f;
+    -fx-effect: dropshadow(gaussian, rgba(255, 248, 240, 0.7), 1, 0, 0, 0);
+    -fx-font-size: 11px; /* Smaller font */
+}
+
+/* Featured badge styling */
+.featured-badge {
+    -fx-background-color: linear-gradient(to bottom, #d1935e, #b8692f);
+    -fx-text-fill: #fff8f0;
+    -fx-font-size: 8px; /* Smaller font */
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 3 8 3 8;
+    -fx-effect: dropshadow(gaussian, rgba(92, 74, 58, 0.3), 3, 0, 0, 1);
+}
+
+/* Coffee details styling */
+.coffee-name {
+    -fx-font-family: "Georgia", "Segoe UI Semibold";
+    -fx-font-weight: bold;
+    -fx-font-size: 14px; /* Smaller font */
+    -fx-text-fill: #3c2a21;
+    -fx-effect: dropshadow(gaussian, rgba(255, 248, 240, 0.8), 1, 0, 0, 0);
+}
+
+.coffee-price {
+    -fx-font-family: "Segoe UI";
+    -fx-font-weight: bold;
+    -fx-font-size: 13px; /* Smaller font */
+    -fx-text-fill: #b8692f;
+}
+
+.coffee-description {
+    -fx-text-fill: #6b5c4d;
+    -fx-font-size: 10px; /* Smaller font */
+    -fx-font-family: "Segoe UI";
+    -fx-font-style: italic;
+    -fx-max-height: 40px; /* Limit description height */
+}
+
+/* Tags styling */
+.coffee-tags {
+    -fx-padding: 3 0 3 0;
+    -fx-spacing: 3;
+}
+
+.coffee-tag {
+    -fx-background-color: #f3ead9;
+    -fx-text-fill: #b8692f;
+    -fx-background-radius: 8px;
+    -fx-padding: 1 6 1 6;
+    -fx-font-size: 8px; /* Smaller font */
+    -fx-font-family: "Segoe UI";
+    -fx-font-weight: bold;
+    -fx-border-color: #e8dbc7;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+}
+
+.coffee-separator {
+    -fx-background-color: linear-gradient(to right, transparent, #d7c8b0, transparent);
+    -fx-opacity: 0.7;
+    -fx-padding: 1;
+}
+
+/* Size options styling */
+.size-options {
+    -fx-spacing: 5;
+}
+
+.size-toggle {
+    -fx-background-color: #f3ead9;
+    -fx-text-fill: #6b5c4d;
+    -fx-background-radius: 50%;
+    -fx-min-width: 24px; /* Smaller toggle */
+    -fx-min-height: 24px; /* Smaller toggle */
+    -fx-max-width: 24px; /* Smaller toggle */
+    -fx-max-height: 24px; /* Smaller toggle */
+    -fx-padding: 0;
+    -fx-border-color: #e8dbc7;
+    -fx-border-width: 1px;
+    -fx-border-radius: 50%;
+    -fx-cursor: hand;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 10px; /* Smaller font */
+}
+
+.size-toggle:selected {
+    -fx-background-color: #b8692f;
+    -fx-text-fill: #fff8f0;
+    -fx-effect: innershadow(gaussian, rgba(92, 74, 58, 0.3), 2, 0, 0, 0);
+}
+
+.option-label {
+    -fx-text-fill: #6b5c4d;
+    -fx-font-family: "Segoe UI";
+    -fx-font-style: italic;
+    -fx-font-size: 10px; /* Smaller font */
+}
+
+/* Quantity control styling */
+.quantity-control {
+    -fx-border-color: #d7c8b0;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-background-color: #f8f3ea;
+}
+
+.quantity-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #b8692f;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px; /* Smaller font */
+    -fx-padding: 3 7 3 7;
+    -fx-cursor: hand;
+}
+
+.quantity-field {
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+    -fx-pref-width: 25px; /* Narrower field */
+    -fx-border-width: 0;
+    -fx-text-fill: #3c2a21;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 11px; /* Smaller font */
+}
+
+/* Add to cart button styling */
+.add-to-cart-btn {
+    -fx-background-color: linear-gradient(to bottom, #b8692f, #a25929);
+    -fx-text-fill: #fff8f0;
+    -fx-background-radius: 6px;
+    -fx-padding: 5 12 5 12; /* Smaller padding */
+    -fx-cursor: hand;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 10px; /* Smaller font */
+    -fx-effect: innershadow(gaussian, rgba(92, 74, 58, 0.3), 1, 0, 0, 0);
+    -fx-transition: all 0.15s ease;
+}
+
