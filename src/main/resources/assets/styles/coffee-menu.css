@@ -25,7 +25,7 @@
 
 /* Filter and Sorting Area */
 .filter-box {
-    -fx-padding: 5px;
+    -fx-padding: 1px;
 }
 
 .filter-container {
@@ -34,7 +34,7 @@
     -fx-border-radius: 20px;
     -fx-border-color: #d7ccc8;
     -fx-border-width: 1px;
-    -fx-padding: 5px 10px;
+    -fx-padding: 3px 7px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0, 0, 1);
 }
 
