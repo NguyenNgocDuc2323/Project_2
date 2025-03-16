@@ -52,6 +52,9 @@ public class Navigator {
     public void gotoLogin() throws IOException {
         gotoScene(Translator.translate("title.login"), LOGIN_SCENE);
     }
+    public void gotoUserManagement() throws IOException {
+        gotoScene("User Management", "/com/example/manage_account/Admin/admin_dashboard.fxml");
+    }
     public void gotoForgotPassword() throws IOException {
         gotoScene(Translator.translate("title.forgotPassword"),FOTGOT_PASSWORD);
     }

@@ -134,4 +134,9 @@ public class Account {
     public StringProperty lockedAsStringProperty() {
         return lockedProperty;
     }
+
+    public void setName(String name) {
+        this.name.set(name); // Gán giá trị mới cho thuộc tính name
+
+    }
 }
