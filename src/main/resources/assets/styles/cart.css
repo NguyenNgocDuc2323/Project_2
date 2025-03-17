@@ -1,0 +1,60 @@
+.secondary-button {
+    -fx-background-color: #e0d6c9;
+    -fx-text-fill: #5a4a3f;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #d0c7ba;
+}
+
+.table-view {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: #8c6e4f;
+    -fx-text-fill: white;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell {
+    -fx-background-color: #ffffff;
+    -fx-table-cell-border-color: #f0e6d9;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f7f2eb;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #d1c1aa;
+}
+
+.remove-button {
+    -fx-background-color: #e57373;
+    -fx-text-fill: white;
+    -fx-background-radius: 3;
+}
+
+.remove-button:hover {
+    -fx-background-color: #ef5350;
+}
+
+.quantity-button {
+    -fx-background-color: #b0a090;
+    -fx-text-fill: white;
+    -fx-min-width: 24px;
+    -fx-min-height: 24px;
+    -fx-background-radius: 3;
+}
+
+.quantity-button:hover {
+    -fx-background-color: #8c6e4f;
+}

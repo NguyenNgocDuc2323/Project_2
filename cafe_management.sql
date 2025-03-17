@@ -98,34 +98,6 @@ INSERT INTO `customers` (`id`, `name`, `age`, `phone`, `email`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `floors`
---
-
-CREATE TABLE `floors` (
-                          `id` int NOT NULL,
-                          `floor_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-                          `table_id` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `floors`
---
-
-INSERT INTO `floors` (`id`, `floor_name`, `table_id`) VALUES
-                                                          (1, 'Ground Floor', 1),
-                                                          (2, 'Ground Floor', 2),
-                                                          (3, 'First Floor', 3),
-                                                          (4, 'First Floor', 4),
-                                                          (5, 'Rooftop', 5),
-                                                          (6, 'Ground Floor', 1),
-                                                          (7, 'Ground Floor', 2),
-                                                          (8, 'First Floor', 3),
-                                                          (9, 'First Floor', 4),
-                                                          (10, 'Rooftop', 5);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `orders`
 --
 
@@ -213,6 +185,7 @@ CREATE TABLE `tables` (
                           `id` int NOT NULL,
                           `table_name` varchar(10) NOT NULL,
                           `capacity` int DEFAULT '4',
+                          `floor_number` int NOT NULL,
                           `status` varchar(20) DEFAULT 'available'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -220,12 +193,12 @@ CREATE TABLE `tables` (
 -- Dumping data for table `tables`
 --
 
-INSERT INTO `tables` (`id`, `table_name`, `capacity`, `status`) VALUES
-                                                                    (1, 'Table 1', 4, 'Available'),
-                                                                    (2, 'Table 2', 2, 'Occupied'),
-                                                                    (3, 'Table 3', 6, 'Reserved'),
-                                                                    (4, 'Table 4', 4, 'Available'),
-                                                                    (5, 'Table 5', 8, 'Cleaning');
+INSERT INTO `tables` (`id`, `table_name`, `capacity`, `floor_number`, `status`) VALUES
+                                                                    (1, 'Table 1', 4, 1, 'Available'),
+                                                                    (2, 'Table 2', 2, 1, 'Occupied'),
+                                                                    (3, 'Table 3', 6, 2, 'Reserved'),
+                                                                    (4, 'Table 4', 4, 2, 'Available'),
+                                                                    (5, 'Table 5', 8, 3, 'Occupied');
 
 -- --------------------------------------------------------
 
@@ -376,12 +349,6 @@ ALTER TABLE `units`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `floors`
---
-ALTER TABLE `floors`
-    ADD CONSTRAINT `floors_ibfk_1` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`);
 
 --
 -- Constraints for table `orders`
