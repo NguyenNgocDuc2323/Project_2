@@ -1,5 +1,8 @@
 package controller.CoffeeShop;
 
+import helper.CoffeeShop.CartManager;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -7,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,8 +36,21 @@ public class DashboardController implements Initializable {
         loadView("/com/example/manage_account/CoffeeShop/MenuView.fxml");
 
         // Example for updating cart badge
-        cartItemCount.setText("0");
+//        cartItemCount.setText("0");
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.seconds(2), event -> updateCartCount())
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
+
+    private void updateCartCount() {
+        int count = CartManager.getInstance().getCartItemCount();
+        cartItemCount.setText(String.valueOf(count));
+        cartItemCount.setVisible(count > 0);
+    }
+
 
     private void loadView(String fxmlFile) {
         try {

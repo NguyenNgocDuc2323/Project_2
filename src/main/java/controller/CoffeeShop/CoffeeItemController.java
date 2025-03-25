@@ -1,10 +1,8 @@
 package controller.CoffeeShop;
 
+import helper.CoffeeShop.CartManager;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -223,11 +221,42 @@ public class CoffeeItemController {
         }
     }
 
+//    private void addToCart() {
+//        // Here you would implement the logic to add the item to the cart
+//        System.out.println("Added to cart: " + coffee.getName() +
+//                ", Size: " + selectedSize +
+//                ", Quantity: " + quantity);
+//        // You can create a CartManager class to handle the shopping cart functionality
+//    }
+
     private void addToCart() {
-        // Here you would implement the logic to add the item to the cart
-        System.out.println("Added to cart: " + coffee.getName() +
-                ", Size: " + selectedSize +
-                ", Quantity: " + quantity);
-        // You can create a CartManager class to handle the shopping cart functionality
+        if (coffee == null) return;
+
+        // Calculate the adjusted price based on size
+        double adjustedPrice = coffee.getPrice() * priceMultiplier;
+
+        // Add to cart using CartManager
+        CartManager.getInstance().addToCart(
+                coffee.getId(),
+                coffee.getName(),
+                selectedSize,
+                quantity,
+                adjustedPrice
+        );
+
+        // Show success notification
+        showNotification("Added to cart: " + coffee.getName() + " (" + selectedSize + ") x" + quantity);
+
+        // Reset quantity to 1 after adding to cart
+        quantity = 1;
+        quantityField.setText("1");
+    }
+
+    private void showNotification(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Cart Updated");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

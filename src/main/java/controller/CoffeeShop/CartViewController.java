@@ -1,5 +1,6 @@
 package controller.CoffeeShop;
 
+import helper.CoffeeShop.CartManager;
 import helper.ConnectDatabase;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -143,11 +144,13 @@ public class CartViewController implements Initializable {
 
         try (Connection connection = ConnectDatabase.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "SELECT table_name FROM tables WHERE status = 'Available'");
+                     "SELECT table_name, status FROM tables");
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                tableNames.add(resultSet.getString("table_name"));
+                String tableName = resultSet.getString("table_name");
+                String status = resultSet.getString("status");
+                tableNames.add(tableName + " (" + status + ")");
             }
 
             tableComboBox.setItems(tableNames);
@@ -173,11 +176,18 @@ public class CartViewController implements Initializable {
     }
 
     // This would be replaced with actual cart data in a real app
-    private void
-    loadCartItems() {
-        // Sample data
-        cartItems.add(new CartItem(1, "Espresso", "M", 1, 50000));
-        cartItems.add(new CartItem(2, "Cappuccino", "L", 2, 60000));
+    private void loadCartItems() {
+        // Clear previous items
+        cartItems.clear();
+
+        // Get cart items from CartManager
+        cartItems.addAll(CartManager.getInstance().getCartItems());
+
+        // Update the cart table
+        cartTable.setItems(cartItems);
+
+        // Update summary
+        updateCartSummary();
     }
 
     private void updateCartSummary() {
@@ -217,8 +227,12 @@ public class CartViewController implements Initializable {
     }
 
     private void clearCart() {
-        cartItems.clear();
-        updateCartSummary();
+        CartManager.getInstance().clearCart();
+        loadCartItems();
+    }
+
+    public void refreshCart() {
+        loadCartItems();
     }
 
     private void checkout() {
@@ -232,16 +246,351 @@ public class CartViewController implements Initializable {
             return;
         }
 
-        // In a real application, this would create an order in the database
-        // and transition to a confirmation or payment screen
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Order Placed");
-        alert.setHeaderText("Your order has been placed successfully!");
-        alert.setContentText("Your order will be served to table: " + tableComboBox.getValue());
-        alert.showAndWait();
+        String selectedTable = tableComboBox.getValue();
+        String tableName = extractTableName(selectedTable);
+        String tableStatus = extractTableStatus(selectedTable);
 
-        // Clear the cart after successful checkout
-        clearCart();
+        int tableId = getTableId(tableName);
+        if (tableId == -1) {
+            showAlert("Error finding table in database.");
+            return;
+        }
+
+        if ("Occupied".equals(tableStatus)) {
+            boolean addToExisting = showConfirmationDialog(
+                    "Add to Existing Order",
+                    "Table " + tableName + " already has an active order. Would you like to add these items to the existing order?"
+            );
+
+            if (!addToExisting) {
+                return;
+            }
+            // Add to existing order
+            addToExistingOrder(tableId);
+        } else if ("Unavailable".equals(tableStatus)) {
+            boolean placeAsTakeaway = showConfirmationDialog(
+                    "Table Unavailable",
+                    "Table " + tableName + " is currently unavailable. Would you like to place this as a takeaway order instead?"
+            );
+
+            if (!placeAsTakeaway) {
+                return;
+            }
+            // Process as takeaway
+            processTakeawayOrder();
+        } else {
+            // Process as new order
+            processNewOrder(tableId);
+        }
+    }
+
+    private int getTableId(String tableName) {
+        try (Connection connection = ConnectDatabase.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT id FROM tables WHERE table_name = ?")) {
+
+            statement.setString(1, tableName);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting table ID: " + e.getMessage());
+        }
+        return -1;
+    }
+
+    private void processNewOrder(int tableId) {
+        try (Connection connection = ConnectDatabase.getConnection()) {
+            // Turn off auto-commit
+            connection.setAutoCommit(false);
+
+            try {
+                // Insert into orders table
+                int orderId;
+                try (PreparedStatement stmt = connection.prepareStatement(
+                        "INSERT INTO orders (user_id, table_id, status, total_price, payment_method) VALUES (?, ?, ?, ?, ?)",
+                        PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+                    // Assuming user ID 1 for now, in a real app this would be the logged-in user
+                    stmt.setInt(1, 1);
+                    stmt.setInt(2, tableId);
+                    stmt.setString(3, "Pending");
+
+                    // Calculate total
+                    double total = cartItems.stream().mapToDouble(CartItem::getSubtotal).sum();
+                    stmt.setDouble(4, total);
+
+                    stmt.setString(5, "Cash"); // Default payment method
+
+                    stmt.executeUpdate();
+
+                    // Get the generated order ID
+                    ResultSet rs = stmt.getGeneratedKeys();
+                    if (rs.next()) {
+                        orderId = rs.getInt(1);
+                    } else {
+                        throw new SQLException("Creating order failed, no ID obtained.");
+                    }
+                }
+
+                // Insert order details
+                try (PreparedStatement stmt = connection.prepareStatement(
+                        "INSERT INTO order_detail (order_id, product_id, quantity, unit_price) VALUES (?, ?, ?, ?)")) {
+
+                    for (CartItem item : cartItems) {
+                        stmt.setInt(1, orderId);
+                        stmt.setInt(2, item.getProductId());
+                        stmt.setInt(3, item.getQuantity());
+                        stmt.setDouble(4, item.getUnitPrice());
+                        stmt.addBatch();
+                    }
+
+                    stmt.executeBatch();
+                }
+
+                // Update table status to Occupied
+                try (PreparedStatement stmt = connection.prepareStatement(
+                        "UPDATE tables SET status = 'Occupied' WHERE id = ?")) {
+
+                    stmt.setInt(1, tableId);
+                    stmt.executeUpdate();
+                }
+
+                // Commit the transaction
+                connection.commit();
+
+                // Show success message
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Order Placed");
+                alert.setHeaderText("Your order has been placed successfully!");
+                alert.setContentText("Your order will be served to selected table.");
+                alert.showAndWait();
+
+                // Clear the cart
+                CartManager.getInstance().clearCart();
+                loadCartItems();
+
+            } catch (SQLException e) {
+                // If there is any error, roll back the transaction
+                connection.rollback();
+                System.err.println("Error processing order: " + e.getMessage());
+                e.printStackTrace();
+
+                showAlert("Error processing order: " + e.getMessage());
+            } finally {
+                // Restore auto-commit to true
+                connection.setAutoCommit(true);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Database connection error: " + e.getMessage());
+            e.printStackTrace();
+
+            showAlert("Database connection error: " + e.getMessage());
+        }
+    }
+
+    private void addToExistingOrder(int tableId) {
+        try (Connection connection = ConnectDatabase.getConnection()) {
+            // Turn off auto-commit
+            connection.setAutoCommit(false);
+
+            try {
+                // Find the existing order for this table
+                int orderId;
+                try (PreparedStatement stmt = connection.prepareStatement(
+                        "SELECT id FROM orders WHERE table_id = ? AND status = 'Pending'")) {
+
+                    stmt.setInt(1, tableId);
+                    ResultSet rs = stmt.executeQuery();
+
+                    if (rs.next()) {
+                        orderId = rs.getInt("id");
+                    } else {
+                        // No existing order found, create a new one
+                        processNewOrder(tableId);
+                        return;
+                    }
+                }
+
+                // Add items to existing order
+                try (PreparedStatement stmt = connection.prepareStatement(
+                        "INSERT INTO order_detail (order_id, product_id, quantity, unit_price) VALUES (?, ?, ?, ?)")) {
+
+                    double totalAddition = 0;
+
+                    for (CartItem item : cartItems) {
+                        stmt.setInt(1, orderId);
+                        stmt.setInt(2, item.getProductId());
+                        stmt.setInt(3, item.getQuantity());
+                        stmt.setDouble(4, item.getUnitPrice());
+                        stmt.addBatch();
+
+                        totalAddition += item.getSubtotal();
+                    }
+
+                    stmt.executeBatch();
+
+                    // Update the order total
+                    try (PreparedStatement updateStmt = connection.prepareStatement(
+                            "UPDATE orders SET total_price = total_price + ? WHERE id = ?")) {
+
+                        updateStmt.setDouble(1, totalAddition);
+                        updateStmt.setInt(2, orderId);
+                        updateStmt.executeUpdate();
+                    }
+                }
+
+                // Commit the transaction
+                connection.commit();
+
+                // Show success message
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Order Updated");
+                alert.setHeaderText("Your items have been added to the existing order!");
+                alert.setContentText("Your additional items will be served to the table.");
+                alert.showAndWait();
+
+                // Clear the cart
+                CartManager.getInstance().clearCart();
+                loadCartItems();
+
+            } catch (SQLException e) {
+                // If there is any error, roll back the transaction
+                connection.rollback();
+                System.err.println("Error adding to existing order: " + e.getMessage());
+                e.printStackTrace();
+
+                showAlert("Error adding to existing order: " + e.getMessage());
+            } finally {
+                // Restore auto-commit to true
+                connection.setAutoCommit(true);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Database connection error: " + e.getMessage());
+            e.printStackTrace();
+
+            showAlert("Database connection error: " + e.getMessage());
+        }
+    }
+
+    private void processTakeawayOrder() {
+        try (Connection connection = ConnectDatabase.getConnection()) {
+            // Turn off auto-commit
+            connection.setAutoCommit(false);
+
+            try {
+                // Insert into orders table with special table_id for takeaway
+                int orderId;
+                try (PreparedStatement stmt = connection.prepareStatement(
+                        "INSERT INTO orders (user_id, table_id, status, total_price, payment_method) VALUES (?, 0, ?, ?, ?)",
+                        PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+                    // Assuming user ID 1 for now
+                    stmt.setInt(1, 1);
+                    stmt.setString(2, "Takeaway");
+
+                    // Calculate total
+                    double total = cartItems.stream().mapToDouble(CartItem::getSubtotal).sum();
+                    stmt.setDouble(3, total);
+
+                    stmt.setString(4, "Cash"); // Default payment method
+
+                    stmt.executeUpdate();
+
+                    // Get the generated order ID
+                    ResultSet rs = stmt.getGeneratedKeys();
+                    if (rs.next()) {
+                        orderId = rs.getInt(1);
+                    } else {
+                        throw new SQLException("Creating takeaway order failed, no ID obtained.");
+                    }
+                }
+
+                // Insert order details
+                try (PreparedStatement stmt = connection.prepareStatement(
+                        "INSERT INTO order_detail (order_id, product_id, quantity, unit_price) VALUES (?, ?, ?, ?)")) {
+
+                    for (CartItem item : cartItems) {
+                        stmt.setInt(1, orderId);
+                        stmt.setInt(2, item.getProductId());
+                        stmt.setInt(3, item.getQuantity());
+                        stmt.setDouble(4, item.getUnitPrice());
+                        stmt.addBatch();
+                    }
+
+                    stmt.executeBatch();
+                }
+
+                // Commit the transaction
+                connection.commit();
+
+                // Show success message
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Takeaway Order Placed");
+                alert.setHeaderText("Your takeaway order has been placed successfully!");
+                alert.setContentText("Your order will be prepared for pickup.");
+                alert.showAndWait();
+
+                // Clear the cart
+                CartManager.getInstance().clearCart();
+                loadCartItems();
+
+            } catch (SQLException e) {
+                // If there is any error, roll back the transaction
+                connection.rollback();
+                System.err.println("Error processing takeaway order: " + e.getMessage());
+                e.printStackTrace();
+
+                showAlert("Error processing takeaway order: " + e.getMessage());
+            } finally {
+                // Restore auto-commit to true
+                connection.setAutoCommit(true);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Database connection error: " + e.getMessage());
+            e.printStackTrace();
+
+            showAlert("Database connection error: " + e.getMessage());
+        }
+    }
+
+    private String extractTableName(String tableWithStatus) {
+        // Extract name from string like "Table 1 (Available)"
+        int endIndex = tableWithStatus.lastIndexOf(" (");
+        if (endIndex != -1) {
+            return tableWithStatus.substring(0, endIndex);
+        }
+        return tableWithStatus; // Default if format doesn't match
+    }
+
+    private String extractTableStatus(String tableWithStatus) {
+        // Extract status from string like "Table 1 (Available)"
+        int startIndex = tableWithStatus.lastIndexOf("(");
+        int endIndex = tableWithStatus.lastIndexOf(")");
+
+        if (startIndex != -1 && endIndex != -1) {
+            return tableWithStatus.substring(startIndex + 1, endIndex);
+        }
+        return "Unknown"; // Default if format doesn't match
+    }
+
+    private boolean showConfirmationDialog(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+
+        ButtonType yesButton = new ButtonType("Yes");
+        ButtonType noButton = new ButtonType("No");
+
+        alert.getButtonTypes().setAll(yesButton, noButton);
+
+        return alert.showAndWait().orElse(noButton) == yesButton;
     }
 
     private void showAlert(String message) {
