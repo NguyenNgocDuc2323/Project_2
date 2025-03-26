@@ -246,13 +246,6 @@ ALTER TABLE `customers`
     ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `floors`
---
-ALTER TABLE `floors`
-    ADD PRIMARY KEY (`id`),
-  ADD KEY `table_id` (`table_id`);
-
---
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
@@ -309,12 +302,6 @@ ALTER TABLE `category`
 --
 ALTER TABLE `customers`
     MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `floors`
---
-ALTER TABLE `floors`
-    MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `orders`
