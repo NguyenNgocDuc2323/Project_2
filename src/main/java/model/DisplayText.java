@@ -1,4 +1,4 @@
-package model.displayText;
+package model;
 
 public class DisplayText {
     private String displayText;
