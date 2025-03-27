@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OrderDetailController">
+    <center>
+        <TableView fx:id="orderDetailTable">
+            <columns>
+                <TableColumn fx:id="idColumn" text="Id" />
+                <TableColumn fx:id="orderIdColumn" text="Order Id" />
+                <TableColumn fx:id="productIdColumn" text="Product Id" />
+                <TableColumn fx:id="productNameColumn" text="Product Name" />
+                <TableColumn fx:id="quantityColumn" text="Quantity" />
+                <TableColumn fx:id="unitPriceColumn" text="Unit Price" />
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+        </TableView>
+    </center>
+    <bottom>
+        <FlowPane alignment="CENTER" hgap="50.0" prefHeight="100.0" BorderPane.alignment="CENTER">
+            <Button onAction="#handleCreateOrderDetail" text="Create Order Detail" />
+            <Button onAction="#handleUpdateOrderDetail" text="Update Order Detail" />
+            <Button onAction="#handleBackToOrder" text="Back To Order Management" />
+        </FlowPane>
+    </bottom>
+</BorderPane>
