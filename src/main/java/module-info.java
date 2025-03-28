@@ -5,13 +5,20 @@ module com.example.manage_account {
     requires java.desktop;
     requires jbcrypt;
 
-    opens com.example.manage_account to javafx.graphics;
-    opens controller.CoffeeShop to javafx.fxml;
-    exports controller;
+    // This opens your entire module to JavaFX base
+    opens com.example.manage_account to javafx.base, javafx.graphics, javafx.fxml;
+
+    // These are still needed for specific controllers
     opens controller to javafx.fxml;
-    exports controller.admin;
     opens controller.admin to javafx.fxml;
     opens controller.staff to javafx.fxml;
+    opens controller.CoffeeShop to javafx.base, javafx.fxml;
+
+    // Add this line to open the model package to JavaFX base
+    opens model to javafx.base;
+
+    exports controller;
+    exports controller.admin;
     exports controller.staff to javafx.fxml;
     opens model to javafx.base;
 }

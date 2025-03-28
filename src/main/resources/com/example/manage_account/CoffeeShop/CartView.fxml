@@ -39,6 +39,16 @@
             <ComboBox fx:id="tableComboBox" promptText="Select a table"/>
         </HBox>
 
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Status Legend:"/>
+            <HBox spacing="5" alignment="CENTER_LEFT">
+                <Label text="Available" styleClass="status-available"/>
+                <Label text="Occupied" styleClass="status-occupied"/>
+                <Label text="Unavailable" styleClass="status-unavailable"/>
+            </HBox>
+        </HBox>
+
+
         <GridPane hgap="10" vgap="10">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="200"/>

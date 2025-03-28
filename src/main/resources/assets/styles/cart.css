@@ -58,3 +58,28 @@
 .quantity-button:hover {
     -fx-background-color: #8c6e4f;
 }
+
+.status-available {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-padding: 2 5;
+    -fx-background-radius: 3;
+}
+
+.status-occupied {
+    -fx-background-color: #FF9800;
+    -fx-text-fill: white;
+    -fx-padding: 2 5;
+    -fx-background-radius: 3;
+}
+
+.status-unavailable {
+    -fx-background-color: #F44336;
+    -fx-text-fill: white;
+    -fx-padding: 2 5;
+    -fx-background-radius: 3;
+}
+
+.combo-box .cell {
+    -fx-padding: 5;
+}

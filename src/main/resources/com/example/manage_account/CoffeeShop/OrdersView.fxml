@@ -1,13 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Rectangle?>
 
-<VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml">
+<VBox spacing="20" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.CoffeeShop.OrdersViewController"
+      stylesheets="@../../../../assets/styles/orders.css">
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20" />
+        <Insets top="30" right="30" bottom="30" left="30" />
     </padding>
-    <Label text="Cart View Coming Soon" style="-fx-font-size: 24px;" />
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" styleClass="section-header">
+        <Label text="Order History" styleClass="section-title">
+            <font>
+                <Font name="System Bold" size="24" />
+            </font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS" />
+        <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="filter-container">
+            <ComboBox fx:id="statusFilter" promptText="Filter by Status" styleClass="filter-control" />
+            <DatePicker fx:id="datePicker" promptText="Filter by Date" styleClass="filter-control" />
+        </HBox>
+    </HBox>
+
+    <!-- Orders Table -->
+    <StackPane styleClass="table-container" VBox.vgrow="ALWAYS">
+        <TableView fx:id="ordersTable" styleClass="coffee-table">
+            <columns>
+                <TableColumn fx:id="orderIdColumn" text="Order #" prefWidth="80" />
+                <TableColumn fx:id="dateColumn" text="Date &amp; Time" prefWidth="150" />
+                <TableColumn fx:id="tableColumn" text="Table" prefWidth="100" />
+                <TableColumn fx:id="statusColumn" text="Status" prefWidth="120" />
+                <TableColumn fx:id="totalColumn" text="Total" prefWidth="120" />
+                <TableColumn fx:id="actionColumn" text="Actions" prefWidth="150" />
+            </columns>
+        </TableView>
+    </StackPane>
+
+    <!-- Order Details Section (initially hidden) -->
+    <VBox fx:id="orderDetailsContainer" spacing="15" visible="false" managed="false" styleClass="details-container">
+        <VBox styleClass="details-header">
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Order Details" styleClass="details-title">
+                    <font>
+                        <Font name="System Bold" size="18" />
+                    </font>
+                </Label>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="closeDetailsBtn" text="×" styleClass="close-button" />
+            </HBox>
+        </VBox>
+
+        <!-- Order Info -->
+        <VBox styleClass="order-info-section">
+            <HBox styleClass="order-info-container" spacing="30">
+                <VBox styleClass="order-info-column" HBox.hgrow="ALWAYS">
+                    <HBox styleClass="info-row">
+                        <Label text="Order #:" styleClass="info-label" />
+                        <Label fx:id="detailsOrderId" styleClass="info-value" />
+                    </HBox>
+                    <HBox styleClass="info-row">
+                        <Label text="Table:" styleClass="info-label" />
+                        <Label fx:id="detailsTable" styleClass="info-value" />
+                    </HBox>
+                </VBox>
+                <VBox styleClass="order-info-column" HBox.hgrow="ALWAYS">
+                    <HBox styleClass="info-row">
+                        <Label text="Date:" styleClass="info-label" />
+                        <Label fx:id="detailsDate" styleClass="info-value" />
+                    </HBox>
+                    <HBox styleClass="info-row">
+                        <Label text="Status:" styleClass="info-label" />
+                        <Label fx:id="detailsStatus" styleClass="info-value, status-badge" />
+                    </HBox>
+                </VBox>
+                <VBox styleClass="order-info-column" HBox.hgrow="ALWAYS">
+                    <HBox styleClass="info-row">
+                        <Label text="Payment:" styleClass="info-label" />
+                        <Label fx:id="detailsPayment" styleClass="info-value, payment-badge" />
+                    </HBox>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- Order Items Table -->
+        <StackPane styleClass="items-table-container">
+            <TableView fx:id="orderItemsTable" styleClass="items-table">
+                <columns>
+                    <TableColumn fx:id="itemNameColumn" text="Item" prefWidth="250" />
+                    <TableColumn fx:id="itemSizeColumn" text="Size" prefWidth="80" />
+                    <TableColumn fx:id="itemQuantityColumn" text="Quantity" prefWidth="100" />
+                    <TableColumn fx:id="itemUnitPriceColumn" text="Unit Price" prefWidth="120" />
+                    <TableColumn fx:id="itemSubtotalColumn" text="Subtotal" prefWidth="120" />
+                </columns>
+            </TableView>
+        </StackPane>
+
+        <!-- Order Totals -->
+        <HBox alignment="CENTER_RIGHT" styleClass="totals-section">
+            <VBox alignment="CENTER_RIGHT" spacing="8" styleClass="totals-container">
+                <HBox styleClass="total-row">
+                    <Label text="Subtotal:" styleClass="total-label" />
+                    <Region HBox.hgrow="ALWAYS" minWidth="20" />
+                    <Label fx:id="detailsSubtotal" styleClass="total-value" />
+                </HBox>
+                <HBox styleClass="total-row">
+                    <Label text="Tax (8%):" styleClass="total-label" />
+                    <Region HBox.hgrow="ALWAYS" minWidth="20" />
+                    <Label fx:id="detailsTax" styleClass="total-value" />
+                </HBox>
+                <Rectangle styleClass="total-divider" width="200" height="1" />
+                <HBox styleClass="grand-total-row">
+                    <Label text="Total:" styleClass="grand-total-label" />
+                    <Region HBox.hgrow="ALWAYS" minWidth="20" />
+                    <Label fx:id="detailsTotal" styleClass="grand-total-value" />
+                </HBox>
+            </VBox>
+        </HBox>
+    </VBox>
 </VBox>
