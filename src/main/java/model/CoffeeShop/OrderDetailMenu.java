@@ -1,4 +1,4 @@
-package model;
+package model.CoffeeShop;
 
 public class OrderDetailMenu {
     private String productName;

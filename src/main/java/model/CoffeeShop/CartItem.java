@@ -1,4 +1,4 @@
-package model;
+package model.CoffeeShop;
 
 public class CartItem {
     private int productId;

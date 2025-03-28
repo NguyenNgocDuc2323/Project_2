@@ -1,7 +1,7 @@
 package helper.CoffeeShop;
 
 import helper.ConnectDatabase;
-import model.Coffee;
+import model.CoffeeShop.Coffee;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -10,7 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.FlowPane;
-import model.Coffee;
+import model.CoffeeShop.Coffee;
 
 import java.io.IOException;
 import java.net.URL;

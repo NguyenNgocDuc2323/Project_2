@@ -11,8 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import model.OrderDetailMenu;
-import model.OrderItem;
+import model.CoffeeShop.OrderDetailMenu;
+import model.CoffeeShop.OrderItem;
 
 import java.net.URL;
 import java.sql.*;
