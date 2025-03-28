@@ -1,7 +1,7 @@
 package controller.admin;
 import helper.Alert;
 import helper.DB_Helper.Account;
-import model.displayText.DisplayText;
+import model.DisplayText;
 import helper.Navigator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
