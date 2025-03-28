@@ -11,7 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import model.OrderDetail;
+import model.OrderDetailMenu;
 import model.OrderItem;
 
 import java.net.URL;
@@ -44,15 +44,15 @@ public class OrdersViewController implements Initializable {
     @FXML private Label detailsTax;
     @FXML private Label detailsTotal;
 
-    @FXML private TableView<OrderDetail> orderItemsTable;
-    @FXML private TableColumn<OrderDetail, String> itemNameColumn;
-    @FXML private TableColumn<OrderDetail, String> itemSizeColumn;
-    @FXML private TableColumn<OrderDetail, Integer> itemQuantityColumn;
-    @FXML private TableColumn<OrderDetail, String> itemUnitPriceColumn;
-    @FXML private TableColumn<OrderDetail, String> itemSubtotalColumn;
+    @FXML private TableView<OrderDetailMenu> orderItemsTable;
+    @FXML private TableColumn<OrderDetailMenu, String> itemNameColumn;
+    @FXML private TableColumn<OrderDetailMenu, String> itemSizeColumn;
+    @FXML private TableColumn<OrderDetailMenu, Integer> itemQuantityColumn;
+    @FXML private TableColumn<OrderDetailMenu, String> itemUnitPriceColumn;
+    @FXML private TableColumn<OrderDetailMenu, String> itemSubtotalColumn;
 
     private ObservableList<OrderItem> ordersList = FXCollections.observableArrayList();
-    private ObservableList<OrderDetail> orderDetailsList = FXCollections.observableArrayList();
+    private ObservableList<OrderDetailMenu> orderDetailsListMenu = FXCollections.observableArrayList();
     private DecimalFormat currencyFormat = new DecimalFormat("#,###");
 
     @Override
@@ -254,7 +254,7 @@ public class OrdersViewController implements Initializable {
     }
 
     private void loadOrderItems(int orderId) {
-        orderDetailsList.clear();
+        orderDetailsListMenu.clear();
 
         try (Connection conn = ConnectDatabase.getConnection()) {
             String query = "SELECT od.quantity, od.unit_price, p.name AS product_name, " +
@@ -275,7 +275,7 @@ public class OrdersViewController implements Initializable {
                         int quantity = rs.getInt("quantity");
                         double unitPrice = rs.getDouble("unit_price");
 
-                        OrderDetail detail = new OrderDetail(
+                        OrderDetailMenu detail = new OrderDetailMenu(
                                 productName,
                                 size != null ? size : "-",
                                 quantity,
@@ -283,12 +283,12 @@ public class OrdersViewController implements Initializable {
                                 quantity * unitPrice
                         );
 
-                        orderDetailsList.add(detail);
+                        orderDetailsListMenu.add(detail);
                     }
                 }
             }
 
-            orderItemsTable.setItems(orderDetailsList);
+            orderItemsTable.setItems(orderDetailsListMenu);
 
         } catch (SQLException e) {
             showAlert("Error loading order items: " + e.getMessage());

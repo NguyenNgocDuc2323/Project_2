@@ -1,13 +1,13 @@
 package model;
 
-public class OrderDetail {
+public class OrderDetailMenu {
     private String productName;
     private String size;
     private int quantity;
     private double unitPrice;
     private double subtotal;
 
-    public OrderDetail(String productName, String size, int quantity, double unitPrice, double subtotal) {
+    public OrderDetailMenu(String productName, String size, int quantity, double unitPrice, double subtotal) {
         this.productName = productName;
         this.size = size;
         this.quantity = quantity;
