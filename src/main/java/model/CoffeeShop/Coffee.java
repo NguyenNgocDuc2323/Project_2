@@ -1,4 +1,4 @@
-package model;
+package model.CoffeeShop;
 import javafx.beans.property.*;
 
 public class Coffee {

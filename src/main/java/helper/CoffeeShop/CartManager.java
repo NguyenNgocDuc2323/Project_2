@@ -1,6 +1,6 @@
 package helper.CoffeeShop;
 
-import model.CartItem;
+import model.CoffeeShop.CartItem;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 

@@ -20,5 +20,6 @@ module com.example.manage_account {
     exports controller;
     exports controller.admin;
     exports controller.staff to javafx.fxml;
+    opens model.CoffeeShop to javafx.base;
 
 }

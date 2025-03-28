@@ -1,4 +1,4 @@
-package model;
+package model.CoffeeShop;
 
 import java.sql.Timestamp;
 
