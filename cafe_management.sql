@@ -1,377 +1,191 @@
--- phpMyAdmin SQL Dump
--- version 5.2.0
--- https://www.phpmyadmin.net/
---
--- Host: localhost:3306
--- Generation Time: Mar 02, 2025 at 12:19 PM
--- Server version: 8.0.30
--- PHP Version: 8.1.10
+-- Bảng Category
+CREATE TABLE `category` (
+                            `id` int NOT NULL AUTO_INCREMENT,
+                            `category_name` varchar(50) NOT NULL,
+                            `description` varchar(255) DEFAULT NULL,
+                            PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `cafe_management`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `account`
---
-
+-- Bảng Account (Người dùng)
 CREATE TABLE `account` (
-                           `id` int NOT NULL,
-                           `full_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+                           `id` int NOT NULL AUTO_INCREMENT,
+                           `full_name` varchar(50) NOT NULL,
                            `password` varchar(255) NOT NULL,
                            `type` tinyint NOT NULL COMMENT '1=admin, 2=manager, 3=employee',
                            `email` varchar(50) DEFAULT NULL,
-                           `lock_status` tinyint NOT NULL
+                           `lock_status` tinyint NOT NULL,
+                           PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `account`
---
-
-INSERT INTO `account` (`id`, `full_name`, `password`, `type`, `email`, `lock_status`) VALUES
-                                                                                          (1, 'John Doe', '123', 1, 'john@example.com', 0),
-                                                                                          (2, 'Jane Smith', '$2y$10$Fwq2beROd0yHP9dtbHxifuFvZdDDNucBMbidaN39E6qwKBaV0ByQm\n', 2, 'jane@example.com', 0),
-                                                                                          (3, 'Bob Lee', '$2y$10$Fwq2beROd0yHP9dtbHxifuFvZdDDNucBMbidaN39E6qwKBaV0ByQm', 3, 'bob@example.com', 1),
-                                                                                          (4, 'Alice Wong', '$2y$10$Fwq2beROd0yHP9dtbHxifuFvZdDDNucBMbidaN39E6qwKBaV0ByQm', 3, 'alice@example.com', 0),
-                                                                                          (5, 'Tom Brown', '$2y$10$Fwq2beROd0yHP9dtbHxifuFvZdDDNucBMbidaN39E6qwKBaV0ByQm', 3, 'tom@example.com', 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `category`
---
-
-CREATE TABLE `category` (
-                            `id` int NOT NULL,
-                            `category_name` varchar(50) NOT NULL,
-                            `description` varchar(255) DEFAULT NULL
+-- Bảng Tables (Bàn trong nhà hàng/quán cafe)
+CREATE TABLE `tables` (
+                          `id` int NOT NULL AUTO_INCREMENT,
+                          `table_name` varchar(10) NOT NULL,
+                          `capacity` int DEFAULT '4',
+                          `floor_number` int NOT NULL,
+                          `status` varchar(20) DEFAULT 'available',
+                          PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `category`
---
-
-INSERT INTO `category` (`id`, `category_name`, `description`) VALUES
-                                                                  (1, 'Beverages', 'Various drinks such as coffee, tea, juices, smoothies'),
-                                                                  (2, 'Pastries', 'Various pastries served with drinks'),
-                                                                  (3, 'Snacks', 'Light snacks such as chips, spring rolls, finger foods'),
-                                                                  (4, 'Combos', 'Combo deals of drinks and food with special offers'),
-                                                                  (5, 'Promotions', 'Special promotional programs for customers');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `customers`
---
-
-CREATE TABLE `customers` (
-                             `id` int NOT NULL,
-                             `name` varchar(50) NOT NULL,
-                             `age` int DEFAULT NULL,
-                             `phone` varchar(20) DEFAULT NULL,
-                             `email` varchar(50) DEFAULT NULL
+-- Bảng Units for products
+CREATE TABLE `units` (
+                         `id` int NOT NULL AUTO_INCREMENT,
+                         `name` varchar(20) NOT NULL,
+                         PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `customers`
---
-
-INSERT INTO `customers` (`id`, `name`, `age`, `phone`, `email`) VALUES
-                                                                    (1, 'John Doe', 28, '1234567890', 'john.doe@example.com'),
-                                                                    (2, 'Jane Smith', 32, '0987654321', 'jane.smith@example.com'),
-                                                                    (3, 'Michael Brown', 25, '1122334455', 'michael.brown@example.com'),
-                                                                    (4, 'Emily Davis', 22, '2233445566', 'emily.davis@example.com'),
-                                                                    (5, 'David Wilson', 35, '3344556677', 'david.wilson@example.com');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `orders`
---
-
-CREATE TABLE `orders` (
-                          `id` int NOT NULL,
-                          `user_id` int NOT NULL,
-                          `table_id` int NOT NULL,
-                          `order_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-                          `status` varchar(20) DEFAULT 'Pending',
-                          `total_price` decimal(10,2) DEFAULT '0.00',
-                          `payment_method` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`id`, `user_id`, `table_id`, `order_date`, `status`, `total_price`, `payment_method`) VALUES
-                                                                                                                (7, 1, 1, '2025-02-25 03:30:00', 'Pending', '150.00', 'Cash'),
-                                                                                                                (8, 2, 2, '2025-02-25 04:00:00', 'Completed', '250.00', 'Credit Card'),
-                                                                                                                (9, 3, 3, '2025-02-25 05:15:00', 'Cancelled', '0.00', 'Cash'),
-                                                                                                                (10, 4, 4, '2025-02-25 06:00:00', 'Processing', '320.00', 'E-Wallet'),
-                                                                                                                (11, 5, 5, '2025-02-25 07:45:00', 'Completed', '200.00', 'Credit Card');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `order_detail`
---
-
-CREATE TABLE `order_detail` (
-                                `id` int NOT NULL,
-                                `order_id` int NOT NULL,
-                                `product_id` int NOT NULL,
-                                `quantity` int NOT NULL DEFAULT '1',
-                                `unit_price` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `order_detail`
---
-
-INSERT INTO `order_detail` (`id`, `order_id`, `product_id`, `quantity`, `unit_price`) VALUES
-                                                                                          (21, 7, 6, 2, '50000.00'),
-                                                                                          (22, 8, 7, 1, '60000.00'),
-                                                                                          (23, 9, 7, 3, '40000.00'),
-                                                                                          (24, 10, 8, 2, '70000.00'),
-                                                                                          (25, 10, 9, 5, '30000.00');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product`
---
-
+-- Bảng Product (Sản phẩm)
 CREATE TABLE `product` (
-                           `id` int NOT NULL,
+                           `id` int NOT NULL AUTO_INCREMENT,
                            `name` varchar(50) NOT NULL,
                            `category_id` int NOT NULL,
                            `price` decimal(10,2) NOT NULL,
                            `quantity` int DEFAULT '0',
                            `image` text,
-                           `unit_id` int NOT NULL,
-                           `description` varchar(255) DEFAULT NULL
+                           `unit_id` int DEFAULT '1',
+                           `description` varchar(255) DEFAULT NULL,
+                           PRIMARY KEY (`id`),
+                           FOREIGN KEY (`category_id`) REFERENCES `category`(`id`) ON DELETE CASCADE,
+                           FOREIGN KEY (`unit_id`) REFERENCES `units`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `product`
---
-
-INSERT INTO `product` (`id`, `name`, `category_id`, `price`, `quantity`, `image`, `unit_id`, `description`) VALUES
-                                                                                                                (6, 'Espresso', 1, '50000.00', 100, 'espresso.jpg', 1, 'Strong and rich coffee'),
-                                                                                                                (7, 'Cappuccino', 1, '60000.00', 80, 'cappuccino.jpg', 1, 'Coffee with steamed milk and foam'),
-                                                                                                                (8, 'Green Tea', 2, '40000.00', 50, 'green_tea.jpg', 2, 'Refreshing green tea'),
-                                                                                                                (9, 'Cheesecake', 3, '70000.00', 30, 'cheesecake.jpg', 3, 'Creamy cheesecake with a graham crust'),
-                                                                                                                (10, 'Croissant', 3, '30000.00', 40, 'croissant.jpg', 3, 'Flaky and buttery croissant');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tables`
---
-
-CREATE TABLE `tables` (
-                          `id` int NOT NULL,
-                          `table_name` varchar(10) NOT NULL,
-                          `capacity` int DEFAULT '4',
-                          `floor_number` int NOT NULL,
-                          `status` varchar(20) DEFAULT 'available'
+CREATE TABLE `orders` (
+                          `id` int NOT NULL AUTO_INCREMENT,
+                          `user_id` int NOT NULL,
+                          `table_id` int DEFAULT NULL,
+                          `order_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+                          `status` varchar(20) DEFAULT 'Pending',
+                          `total_price` decimal(10,2) DEFAULT '0.00',
+                          `payment_method` varchar(20) DEFAULT NULL,
+                          PRIMARY KEY (`id`),
+                          FOREIGN KEY (`user_id`) REFERENCES `account`(`id`) ON DELETE CASCADE,
+                          FOREIGN KEY (`table_id`) REFERENCES `tables`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `tables`
---
-
-INSERT INTO `tables` (`id`, `table_name`, `capacity`, `floor_number`, `status`) VALUES
-                                                                    (1, 'Table 1', 4, 1, 'Available'),
-                                                                    (2, 'Table 2', 2, 1, 'Occupied'),
-                                                                    (3, 'Table 3', 6, 2, 'Reserved'),
-                                                                    (4, 'Table 4', 4, 2, 'Available'),
-                                                                    (5, 'Table 5', 8, 3, 'Occupied');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `units`
---
-
-CREATE TABLE `units` (
-                         `id` int NOT NULL,
-                         `unit_name` varchar(50) NOT NULL,
-                         `symbol` varchar(20) NOT NULL
+-- Bảng Sizes (Kích thước sản phẩm)
+CREATE TABLE `sizes` (
+                         `id` int NOT NULL AUTO_INCREMENT,
+                         `name` varchar(50) NOT NULL,
+                         `symbol` varchar(20) NOT NULL,
+                         PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `units`
---
+-- Bảng Product_Sizes (Liên kết sản phẩm với kích thước)
+CREATE TABLE `product_sizes` (
+                                 `id` INT NOT NULL AUTO_INCREMENT,
+                                 `product_id` INT NOT NULL,
+                                 `size_id` INT NOT NULL,
+                                 `price` DECIMAL(10,2) NOT NULL COMMENT 'Giá cho từng size',
+                                 PRIMARY KEY (`id`),
+                                 FOREIGN KEY (`product_id`) REFERENCES `product`(`id`) ON DELETE CASCADE,
+                                 FOREIGN KEY (`size_id`) REFERENCES `sizes`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `units` (`id`, `unit_name`, `symbol`) VALUES
-                                                      (1, 'Cup', 'cup'),
-                                                      (2, 'Bottle', 'btl'),
-                                                      (3, 'Piece', 'pcs'),
-                                                      (4, 'Glass', 'gls'),
-                                                      (5, 'Can', 'can');
+-- Bảng Order_Detail (Chi tiết đơn hàng)
+CREATE TABLE `order_detail` (
+                                `id` int NOT NULL AUTO_INCREMENT,
+                                `order_id` int NOT NULL,
+                                `product_id` int NOT NULL,
+                                `quantity` int NOT NULL DEFAULT '1',
+                                `unit_price` decimal(10,2) NOT NULL,
+                                PRIMARY KEY (`id`),
+                                FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`) ON DELETE CASCADE,
+                                FOREIGN KEY (`product_id`) REFERENCES `product`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Indexes for dumped tables
---
+-- Insert Units
+INSERT INTO `units` (`id`, `name`) VALUES
+                                       (1, 'cup'),
+                                       (2, 'piece'),
+                                       (3, 'bottle');
 
---
--- Indexes for table `account`
---
-ALTER TABLE `account`
-    ADD PRIMARY KEY (`id`);
+-- Insert Categories
+INSERT INTO `category` (`category_name`, `description`) VALUES
+                                                            ('Coffee', 'Various coffee beverages'),
+                                                            ('Tea', 'Selections of tea'),
+                                                            ('Pastry', 'Fresh bakery items'),
+                                                            ('Smoothie', 'Fruit and yogurt smoothies'),
+                                                            ('Sandwich', 'Fresh sandwiches');
 
---
--- Indexes for table `category`
---
-ALTER TABLE `category`
-    ADD PRIMARY KEY (`id`);
+-- Insert Account data
+INSERT INTO `account` (`full_name`, `password`, `type`, `email`, `lock_status`) VALUES
+                                                                                    ('Admin User', 'admin123', 1, 'admin@cafeshop.com', 0),
+                                                                                    ('Manager User', 'manager123', 2, 'manager@cafeshop.com', 0),
+                                                                                    ('Employee One', 'employee123', 3, 'employee1@cafeshop.com', 0),
+                                                                                    ('Employee Two', 'employee123', 3, 'employee2@cafeshop.com', 0);
 
---
--- Indexes for table `customers`
---
-ALTER TABLE `customers`
-    ADD PRIMARY KEY (`id`);
+-- Insert Tables
+INSERT INTO `tables` (`table_name`, `capacity`, `floor_number`, `status`) VALUES
+                                                                              ('A1', 2, 1, 'available'),
+                                                                              ('A2', 2, 1, 'available'),
+                                                                              ('A3', 4, 1, 'available'),
+                                                                              ('B1', 4, 1, 'available'),
+                                                                              ('B2', 6, 1, 'available'),
+                                                                              ('C1', 8, 2, 'available'),
+                                                                              ('C2', 4, 2, 'available');
 
---
--- Indexes for table `floors`
---
-ALTER TABLE `floors`
-    ADD PRIMARY KEY (`id`),
-  ADD KEY `table_id` (`table_id`);
+-- Insert Sizes
+INSERT INTO `sizes` (`name`, `symbol`) VALUES
+                                           ('Small', 'S'),
+                                           ('Medium', 'M'),
+                                           ('Large', 'L');
 
---
--- Indexes for table `orders`
---
-ALTER TABLE `orders`
-    ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `table_id` (`table_id`);
+-- Insert Products with unit_id
+INSERT INTO `product` (`name`, `category_id`, `price`, `quantity`, `image`, `unit_id`, `description`) VALUES
+                                                                                                          ('Espresso', 1, 35000, 100, 'espresso.jpg', 1, 'Strong Italian coffee'),
+                                                                                                          ('Cappuccino', 1, 45000, 100, 'cappuccino.jpg', 1, 'Espresso with steamed milk and foam'),
+                                                                                                          ('Latte', 1, 45000, 100, 'latte.jpg', 1, 'Espresso with lots of steamed milk'),
+                                                                                                          ('Americano', 1, 40000, 100, 'americano.jpg', 1, 'Espresso with hot water'),
+                                                                                                          ('Green Tea', 2, 35000, 100, 'green_tea.jpg', 1, 'Classic green tea'),
+                                                                                                          ('Black Tea', 2, 35000, 100, 'black_tea.jpg', 1, 'Strong black tea'),
+                                                                                                          ('Croissant', 3, 25000, 50, 'croissant.jpg', 2, 'Buttery French pastry'),
+                                                                                                          ('Mango Smoothie', 4, 50000, 50, 'mango_smoothie.jpg', 1, 'Fresh mango smoothie'),
+                                                                                                          ('Chicken Sandwich', 5, 55000, 30, 'chicken_sandwich.jpg', 2, 'Grilled chicken sandwich');
 
---
--- Indexes for table `order_detail`
---
-ALTER TABLE `order_detail`
-    ADD PRIMARY KEY (`id`),
-  ADD KEY `order_id` (`order_id`),
-  ADD KEY `product_id` (`product_id`);
+-- Insert Product Sizes
+INSERT INTO `product_sizes` (`product_id`, `size_id`, `price`) VALUES
+                                                                   (1, 1, 35000),
+                                                                   (1, 2, 40000),
+                                                                   (1, 3, 45000),
+                                                                   (2, 1, 45000),
+                                                                   (2, 2, 50000),
+                                                                   (2, 3, 55000),
+                                                                   (3, 1, 45000),
+                                                                   (3, 2, 50000),
+                                                                   (3, 3, 55000),
+                                                                   (4, 1, 40000),
+                                                                   (4, 2, 45000),
+                                                                   (4, 3, 50000),
+                                                                   (5, 1, 35000),
+                                                                   (5, 2, 40000),
+                                                                   (5, 3, 45000),
+                                                                   (6, 1, 35000),
+                                                                   (6, 2, 40000),
+                                                                   (6, 3, 45000),
+                                                                   (7, 1, 25000),
+                                                                   (8, 2, 50000),
+                                                                   (8, 3, 60000),
+                                                                   (9, 1, 55000),
+                                                                   (9, 2, 65000);
 
---
--- Indexes for table `product`
---
-ALTER TABLE `product`
-    ADD PRIMARY KEY (`id`),
-  ADD KEY `category_id` (`category_id`),
-  ADD KEY `unit_id` (`unit_id`);
+-- Insert Sample Orders
+INSERT INTO `orders` (`user_id`, `table_id`, `order_date`, `status`, `total_price`, `payment_method`) VALUES
+                                                                                                          (3, 1, '2023-11-01 08:30:00', 'Completed', 135000, 'Cash'),
+                                                                                                          (3, 2, '2023-11-01 09:15:00', 'Completed', 90000, 'Card'),
+                                                                                                          (4, 3, '2023-11-01 10:00:00', 'Completed', 195000, 'Cash'),
+                                                                                                          (3, 4, '2023-11-02 14:30:00', 'Completed', 120000, 'Card'),
+                                                                                                          (4, 5, CURRENT_TIMESTAMP, 'Pending', 115000, NULL);
 
---
--- Indexes for table `tables`
---
-ALTER TABLE `tables`
-    ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `units`
---
-ALTER TABLE `units`
-    ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `account`
---
-ALTER TABLE `account`
-    MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `category`
---
-ALTER TABLE `category`
-    MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `customers`
---
-ALTER TABLE `customers`
-    MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `floors`
---
-ALTER TABLE `floors`
-    MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `orders`
---
-ALTER TABLE `orders`
-    MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
--- AUTO_INCREMENT for table `order_detail`
---
-ALTER TABLE `order_detail`
-    MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
-
---
--- AUTO_INCREMENT for table `product`
---
-ALTER TABLE `product`
-    MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `tables`
---
-ALTER TABLE `tables`
-    MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `units`
---
-ALTER TABLE `units`
-    MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `orders`
---
-ALTER TABLE `orders`
-    ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `account` (`id`),
-  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`);
-
---
--- Constraints for table `order_detail`
---
-ALTER TABLE `order_detail`
-    ADD CONSTRAINT `order_detail_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
-  ADD CONSTRAINT `order_detail_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
-
---
--- Constraints for table `product`
---
-ALTER TABLE `product`
-    ADD CONSTRAINT `product_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
-  ADD CONSTRAINT `product_ibfk_2` FOREIGN KEY (`unit_id`) REFERENCES `units` (`id`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- Insert Order Details
+INSERT INTO `order_detail` (`order_id`, `product_id`, `quantity`, `unit_price`) VALUES
+                                                                                    (1, 1, 1, 45000),
+                                                                                    (1, 2, 1, 50000),
+                                                                                    (1, 7, 2, 25000),
+                                                                                    (2, 4, 2, 45000),
+                                                                                    (3, 3, 2, 50000),
+                                                                                    (3, 8, 1, 60000),
+                                                                                    (3, 9, 1, 55000),
+                                                                                    (4, 5, 1, 40000),
+                                                                                    (4, 6, 2, 40000),
+                                                                                    (5, 2, 1, 55000),
+                                                                                    (5, 8, 1, 60000);
