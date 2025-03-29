@@ -1,33 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <cart>
-      
+        
+  
   
   <item>
-            
+                
+    
     
     <productId>1</productId>
-            
+                
+    
     
     <name>Espresso</name>
-            
+                
+    
     
     <size>S</size>
-            
+                
     
-    <quantity>2</quantity>
-            
+    
+    <quantity>3</quantity>
+                
+    
     
     <unitPrice>35000.0</unitPrice>
-          
+              
+  
   
   </item>
-    
+      
 
+  
   <item>
+        
     <productId>2</productId>
+        
     <name>Cappuccino</name>
+        
     <size>S</size>
+        
     <quantity>1</quantity>
+        
     <unitPrice>45000.0</unitPrice>
+      
   </item>
+  
 </cart>
