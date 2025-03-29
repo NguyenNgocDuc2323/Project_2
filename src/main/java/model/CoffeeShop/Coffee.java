@@ -3,15 +3,16 @@ import javafx.beans.property.*;
 
 public class Coffee {
     private final IntegerProperty id;
-    private final StringProperty name ;
+    private final StringProperty name;
     private final IntegerProperty categoryId;
     private final DoubleProperty price;
     private final IntegerProperty quantity;
-    private final StringProperty image ;
+    private final StringProperty image;
     private final IntegerProperty unitId;
-    private final StringProperty description ;
+    private final StringProperty description;
+    private final IntegerProperty status; // New field for product status
 
-    public Coffee(int id, String name, int categoryId, double price, int quantity, String image, int unitId, String description) {
+    public Coffee(int id, String name, int categoryId, double price, int quantity, String image, int unitId, String description, int status) {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
         this.categoryId = new SimpleIntegerProperty(categoryId);
@@ -20,10 +21,13 @@ public class Coffee {
         this.image = new SimpleStringProperty(image);
         this.unitId = new SimpleIntegerProperty(unitId);
         this.description = new SimpleStringProperty(description);
+        this.status = new SimpleIntegerProperty(status);
     }
 
-
-
+    // Add no-args constructor for convenience
+    public Coffee() {
+        this(0, "", 0, 0.0, 0, "", 0, "", 1);
+    }
 
     // Getters for properties (JavaFX binding)
     public IntegerProperty idProperty() { return id; }
@@ -34,6 +38,7 @@ public class Coffee {
     public StringProperty imageProperty() { return image; }
     public IntegerProperty unitIdProperty() { return unitId; }
     public StringProperty descriptionProperty() { return description; }
+    public IntegerProperty statusProperty() { return status; }
 
     // Getters and Setters for values
     public int getId() { return id.get(); }
@@ -60,4 +65,8 @@ public class Coffee {
     public String getDescription() { return description.get(); }
     public void setDescription(String description) { this.description.set(description); }
 
+    public int getStatus() { return status.get(); }
+    public void setStatus(int status) { this.status.set(status); }
+
+    public boolean isActive() { return status.get() == 1; }
 }

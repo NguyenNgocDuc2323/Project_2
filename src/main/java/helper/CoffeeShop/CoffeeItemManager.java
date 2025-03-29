@@ -3,10 +3,7 @@ package helper.CoffeeShop;
 import helper.ConnectDatabase;
 import model.CoffeeShop.Coffee;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,45 +21,39 @@ public class CoffeeItemManager {
         // Private constructor for singleton pattern
     }
 
+    // In the CoffeeItemManager class
     public List<Coffee> getAllCoffeeItems() {
-        List<Coffee> coffeeItems = new ArrayList<>();
-        String query = "SELECT * FROM product";
+        List<Coffee> items = new ArrayList<>();
 
-        try (Connection conn = ConnectDatabase.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+        try (Connection connection = ConnectDatabase.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT * FROM product WHERE status = 1")) { // Only select active products
 
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                int categoryId = rs.getInt("category_id");
-                double price = rs.getDouble("price");
-                int quantity = rs.getInt("quantity");
-                String image = rs.getString("image");
-                int unitId = rs.getInt("unit_id");
-                String description = rs.getString("description");
+            ResultSet resultSet = statement.executeQuery();
 
-                Coffee coffee = new Coffee(id, name, categoryId, price, quantity, image, unitId, description);
-                coffeeItems.add(coffee);
+            while (resultSet.next()) {
+                Coffee coffee = new Coffee();
+                coffee.setId(resultSet.getInt("id"));
+                coffee.setName(resultSet.getString("name"));
+                coffee.setCategoryId(resultSet.getInt("category_id"));
+                coffee.setPrice(resultSet.getDouble("price"));
+                coffee.setQuantity(resultSet.getInt("quantity"));
+                coffee.setImage(resultSet.getString("image"));
+                coffee.setUnitId(resultSet.getInt("unit_id"));
+                coffee.setDescription(resultSet.getString("description"));
+                coffee.setStatus(resultSet.getInt("status"));
+
+                items.add(coffee);
             }
+
         } catch (SQLException e) {
+            System.err.println("Error loading coffee items: " + e.getMessage());
             e.printStackTrace();
         }
 
-        return coffeeItems;
+        return items;
     }
 
-    private Coffee mapResultSetToCoffeeItem(ResultSet rs) throws SQLException {
-        int id = rs.getInt("id");
-        String name = rs.getString("name");
-        int categoryId = rs.getInt("category_id");
-        double price = rs.getDouble("price");
-        int quantity = rs.getInt("quantity");
-        String image = rs.getString("image");
-        int unitId = rs.getInt("unit_id");
-        String description = rs.getString("description");
 
-        return new Coffee(id, name, categoryId, price, quantity, image, unitId, description);
-    }
 
 }

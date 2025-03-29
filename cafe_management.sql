@@ -189,3 +189,7 @@ INSERT INTO `order_detail` (`order_id`, `product_id`, `quantity`, `unit_price`) 
                                                                                     (4, 6, 2, 40000),
                                                                                     (5, 2, 1, 55000),
                                                                                     (5, 8, 1, 60000);
+
+-- Add status column to product table
+ALTER TABLE `product`
+    ADD COLUMN `status` TINYINT NOT NULL DEFAULT 1 COMMENT '1=active (shown), 0=inactive (hidden)';
