@@ -219,4 +219,51 @@ public class CartManager {
             return 0;
         }
     }
+
+    public void removeFromCart(int productId, String size) {
+        try {
+            Document doc = loadDocument();
+            NodeList items = doc.getElementsByTagName("item");
+
+            for (int i = 0; i < items.getLength(); i++) {
+                Element item = (Element) items.item(i);
+                String existingProductId = item.getElementsByTagName("productId").item(0).getTextContent();
+                String existingSize = item.getElementsByTagName("size").item(0).getTextContent();
+
+                if (existingProductId.equals(String.valueOf(productId)) && existingSize.equals(size)) {
+                    // Remove this item
+                    doc.getDocumentElement().removeChild(item);
+                    saveDocument(doc);
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error removing from cart: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void updateItemQuantity(int productId, String size, int newQuantity) {
+        try {
+            Document doc = loadDocument();
+            NodeList items = doc.getElementsByTagName("item");
+
+            for (int i = 0; i < items.getLength(); i++) {
+                Element item = (Element) items.item(i);
+                String existingProductId = item.getElementsByTagName("productId").item(0).getTextContent();
+                String existingSize = item.getElementsByTagName("size").item(0).getTextContent();
+
+                if (existingProductId.equals(String.valueOf(productId)) && existingSize.equals(size)) {
+                    // Update quantity
+                    item.getElementsByTagName("quantity").item(0).setTextContent(String.valueOf(newQuantity));
+                    saveDocument(doc);
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error updating quantity in cart: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 }

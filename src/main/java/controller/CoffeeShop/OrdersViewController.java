@@ -59,7 +59,7 @@ public class OrdersViewController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupFilters();
         setupOrdersTable();
-        setupOrderDetailsTable();
+//        setupOrderDetailsTable();
         setupEventListeners();
         loadOrders();
     }
@@ -87,6 +87,18 @@ public class OrdersViewController implements Initializable {
         tableColumn.setCellValueFactory(new PropertyValueFactory<>("tableName"));
 
         statusColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getStatus()));
+        totalColumn.setCellValueFactory(param -> {
+            double total = param.getValue().getTotalPrice();
+            return new SimpleStringProperty(currencyFormat.format(total) + "đ");
+        });
+
+        // Center alignment for all columns
+        centerAlignColumn(orderIdColumn);
+        centerAlignColumn(dateColumn);
+        centerAlignColumn(tableColumn);
+        centerAlignColumn(totalColumn);
+
+        // Keep the custom cell factory for status column but ensure centering
         statusColumn.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(String status, boolean empty) {
@@ -100,18 +112,37 @@ public class OrdersViewController implements Initializable {
                     statusLabel.getStyleClass().addAll("status-badge", "status-" + status.toLowerCase());
                     setGraphic(statusLabel);
                     setText(null);
+                    setAlignment(Pos.CENTER);
                 }
             }
         });
 
-        totalColumn.setCellValueFactory(param -> {
-            double total = param.getValue().getTotalPrice();
-            return new SimpleStringProperty(currencyFormat.format(total) + "đ");
-        });
-
         setupActionColumn();
+
+        // Do the same for order details table
+        setupOrderDetailsTableCentered();
     }
 
+    // Add this helper method to center align columns
+    private <T> void centerAlignColumn(TableColumn<OrderItem, T> column) {
+        column.setCellFactory(col -> {
+            TableCell<OrderItem, T> cell = new TableCell<>() {
+                @Override
+                protected void updateItem(T item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.toString());
+                    }
+                    setAlignment(Pos.CENTER);
+                }
+            };
+            return cell;
+        });
+    }
+
+    // Update action column to be centered
     private void setupActionColumn() {
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button viewBtn = new Button("View");
@@ -135,12 +166,14 @@ public class OrdersViewController implements Initializable {
                     container.setAlignment(Pos.CENTER);
                     container.getChildren().add(viewBtn);
                     setGraphic(container);
+                    setAlignment(Pos.CENTER);
                 }
             }
         });
     }
 
-    private void setupOrderDetailsTable() {
+    // Modified method for details table
+    private void setupOrderDetailsTableCentered() {
         orderItemsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
@@ -155,6 +188,32 @@ public class OrdersViewController implements Initializable {
         itemSubtotalColumn.setCellValueFactory(param -> {
             double subtotal = param.getValue().getSubtotal();
             return new SimpleStringProperty(currencyFormat.format(subtotal) + "đ");
+        });
+
+        // Center align all detail table columns
+        centerAlignDetailColumn(itemNameColumn);
+        centerAlignDetailColumn(itemSizeColumn);
+        centerAlignDetailColumn(itemQuantityColumn);
+        centerAlignDetailColumn(itemUnitPriceColumn);
+        centerAlignDetailColumn(itemSubtotalColumn);
+    }
+
+    // Helper method for detail table columns
+    private <T> void centerAlignDetailColumn(TableColumn<OrderDetailMenu, T> column) {
+        column.setCellFactory(col -> {
+            TableCell<OrderDetailMenu, T> cell = new TableCell<>() {
+                @Override
+                protected void updateItem(T item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.toString());
+                    }
+                    setAlignment(Pos.CENTER);
+                }
+            };
+            return cell;
         });
     }
 

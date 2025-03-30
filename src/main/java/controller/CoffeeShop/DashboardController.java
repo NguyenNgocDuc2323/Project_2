@@ -48,7 +48,7 @@ public class DashboardController implements Initializable {
     private void updateCartCount() {
         int count = CartManager.getInstance().getCartItemCount();
         cartItemCount.setText(String.valueOf(count));
-        cartItemCount.setVisible(count > 0);
+        cartItemCount.setVisible(true);
     }
 
 

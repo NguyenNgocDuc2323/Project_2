@@ -37,6 +37,7 @@ public class CartViewController implements Initializable {
     @FXML private Button clearCartButton;
     @FXML private Button continueShoppingButton;
     @FXML private ComboBox<String> tableComboBox;
+    @FXML private ComboBox<String> paymentMethodComboBox;
 
     private ObservableList<CartItem> cartItems = FXCollections.observableArrayList();
     private final double TAX_RATE = 0.08; // 8% tax
@@ -53,6 +54,12 @@ public class CartViewController implements Initializable {
 
         // Load available tables
         loadTables();
+
+        // Initialize payment method dropdown
+        paymentMethodComboBox.setItems(FXCollections.observableArrayList(
+                "Cash", "Credit Card", "Mobile Payment", "Voucher"
+        ));
+        paymentMethodComboBox.getSelectionModel().selectFirst(); // Default to Cash
 
         // Set up event handlers
         setupEventHandlers();
@@ -96,41 +103,50 @@ public class CartViewController implements Initializable {
             }
         });
 
-        // Add action buttons to the table
+        // In your CartViewController.java, modify the updateItem method in the actionColumn.setCellFactory:
+
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button removeButton = new Button("Remove");
             private final Button increaseButton = new Button("+");
             private final Button decreaseButton = new Button("-");
+            private final HBox buttonBox = new HBox(5, decreaseButton, increaseButton, removeButton);
 
             {
                 removeButton.getStyleClass().add("remove-button");
                 increaseButton.getStyleClass().add("quantity-button");
                 decreaseButton.getStyleClass().add("quantity-button");
 
-                HBox buttonBox = new HBox(5, decreaseButton, increaseButton, removeButton);
-
                 removeButton.setOnAction(event -> {
-                    CartItem item = getTableView().getItems().get(getIndex());
-                    removeFromCart(item);
+                    if (getTableRow() != null && getTableRow().getItem() != null) {
+                        CartItem item = getTableRow().getItem();
+                        removeFromCart(item);
+                    }
                 });
 
                 increaseButton.setOnAction(event -> {
-                    CartItem item = getTableView().getItems().get(getIndex());
-                    increaseQuantity(item);
+                    if (getTableRow() != null && getTableRow().getItem() != null) {
+                        CartItem item = getTableRow().getItem();
+                        increaseQuantity(item);
+                    }
                 });
 
                 decreaseButton.setOnAction(event -> {
-                    CartItem item = getTableView().getItems().get(getIndex());
-                    decreaseQuantity(item);
+                    if (getTableRow() != null && getTableRow().getItem() != null) {
+                        CartItem item = getTableRow().getItem();
+                        decreaseQuantity(item);
+                    }
                 });
-
-                setGraphic(buttonBox);
             }
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : getGraphic());
+
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(buttonBox);
+                }
             }
         });
 
@@ -205,22 +221,30 @@ public class CartViewController implements Initializable {
     }
 
     private void removeFromCart(CartItem item) {
-        cartItems.remove(item);
-        updateCartSummary();
+        // Remove from cart manager first
+        CartManager.getInstance().removeFromCart(item.getProductId(), item.getSize());
+
+        // Then reload cart items from the updated XML
+        loadCartItems();
     }
 
     private void increaseQuantity(CartItem item) {
-        item.setQuantity(item.getQuantity() + 1);
-        cartTable.refresh();
-        updateCartSummary();
+        // Update in cart manager
+        CartManager.getInstance().updateItemQuantity(item.getProductId(), item.getSize(), item.getQuantity() + 1);
+
+        // Reload cart items
+        loadCartItems();
     }
 
     private void decreaseQuantity(CartItem item) {
         if (item.getQuantity() > 1) {
-            item.setQuantity(item.getQuantity() - 1);
-            cartTable.refresh();
-            updateCartSummary();
+            // Update in cart manager
+            CartManager.getInstance().updateItemQuantity(item.getProductId(), item.getSize(), item.getQuantity() - 1);
+
+            // Reload cart items
+            loadCartItems();
         } else {
+            // Remove item if quantity becomes 0
             removeFromCart(item);
         }
     }
@@ -306,6 +330,12 @@ public class CartViewController implements Initializable {
             connection.setAutoCommit(false);
 
             try {
+                // Get selected payment method
+                String paymentMethod = paymentMethodComboBox.getValue();
+                if (paymentMethod == null) {
+                    paymentMethod = "Cash"; // Default if none selected
+                }
+
                 // Insert into orders table
                 int orderId;
                 try (PreparedStatement stmt = connection.prepareStatement(
@@ -318,10 +348,13 @@ public class CartViewController implements Initializable {
                     stmt.setString(3, "Pending");
 
                     // Calculate total
-                    double total = cartItems.stream().mapToDouble(CartItem::getSubtotal).sum();
+                    double subtotal = cartItems.stream().mapToDouble(CartItem::getSubtotal).sum();
+                    double tax = subtotal * TAX_RATE;
+                    double total = subtotal + tax;
                     stmt.setDouble(4, total);
 
-                    stmt.setString(5, "Cash"); // Default payment method
+                    // Set the selected payment method
+                    stmt.setString(5, paymentMethod);
 
                     stmt.executeUpdate();
 
@@ -364,7 +397,7 @@ public class CartViewController implements Initializable {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Order Placed");
                 alert.setHeaderText("Your order has been placed successfully!");
-                alert.setContentText("Your order will be served to selected table.");
+                alert.setContentText("Order placed for table with payment method: " + paymentMethod);
                 alert.showAndWait();
 
                 // Clear the cart
@@ -397,28 +430,32 @@ public class CartViewController implements Initializable {
             connection.setAutoCommit(false);
 
             try {
+                // Get selected payment method
+                String paymentMethod = paymentMethodComboBox.getValue();
+                if (paymentMethod == null) {
+                    paymentMethod = "Cash"; // Default if none selected
+                }
+
                 // Find the existing order for this table
                 int orderId;
-                try (PreparedStatement stmt = connection.prepareStatement(
-                        "SELECT id FROM orders WHERE table_id = ? AND status = 'Pending'")) {
+                double currentTotal = 0;
 
+                try (PreparedStatement stmt = connection.prepareStatement(
+                        "SELECT id, total_price FROM orders WHERE table_id = ? AND status = 'Pending'")) {
                     stmt.setInt(1, tableId);
                     ResultSet rs = stmt.executeQuery();
 
                     if (rs.next()) {
                         orderId = rs.getInt("id");
+                        currentTotal = rs.getDouble("total_price");
                     } else {
-                        // No existing order found, create a new one
-                        processNewOrder(tableId);
-                        return;
+                        throw new SQLException("No existing pending order found for this table");
                     }
                 }
 
-                // Add items to existing order
+                // Insert new order details
                 try (PreparedStatement stmt = connection.prepareStatement(
                         "INSERT INTO order_detail (order_id, product_id, quantity, unit_price) VALUES (?, ?, ?, ?)")) {
-
-                    double totalAddition = 0;
 
                     for (CartItem item : cartItems) {
                         stmt.setInt(1, orderId);
@@ -426,20 +463,22 @@ public class CartViewController implements Initializable {
                         stmt.setInt(3, item.getQuantity());
                         stmt.setDouble(4, item.getUnitPrice());
                         stmt.addBatch();
-
-                        totalAddition += item.getSubtotal();
                     }
 
                     stmt.executeBatch();
+                }
 
-                    // Update the order total
-                    try (PreparedStatement updateStmt = connection.prepareStatement(
-                            "UPDATE orders SET total_price = total_price + ? WHERE id = ?")) {
+                // Update the total price and payment method
+                double newItemsTotal = cartItems.stream().mapToDouble(CartItem::getSubtotal).sum();
+                double tax = newItemsTotal * TAX_RATE;
+                double newTotal = currentTotal + newItemsTotal + tax;
 
-                        updateStmt.setDouble(1, totalAddition);
-                        updateStmt.setInt(2, orderId);
-                        updateStmt.executeUpdate();
-                    }
+                try (PreparedStatement stmt = connection.prepareStatement(
+                        "UPDATE orders SET total_price = ?, payment_method = ? WHERE id = ?")) {
+                    stmt.setDouble(1, newTotal);
+                    stmt.setString(2, paymentMethod);
+                    stmt.setInt(3, orderId);
+                    stmt.executeUpdate();
                 }
 
                 // Commit the transaction
@@ -448,8 +487,8 @@ public class CartViewController implements Initializable {
                 // Show success message
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Order Updated");
-                alert.setHeaderText("Your items have been added to the existing order!");
-                alert.setContentText("Your additional items will be served to the table.");
+                alert.setHeaderText("Items added to existing order!");
+                alert.setContentText("Order #" + orderId + " updated with payment method: " + paymentMethod);
                 alert.showAndWait();
 
                 // Clear the cart
@@ -457,17 +496,16 @@ public class CartViewController implements Initializable {
                 loadCartItems();
 
             } catch (SQLException e) {
-                // If there is any error, roll back the transaction
+                // Roll back the transaction in case of error
                 connection.rollback();
                 System.err.println("Error adding to existing order: " + e.getMessage());
                 e.printStackTrace();
 
                 showAlert("Error adding to existing order: " + e.getMessage());
             } finally {
-                // Restore auto-commit to true
+                // Reset auto-commit to default
                 connection.setAutoCommit(true);
             }
-
         } catch (SQLException e) {
             System.err.println("Database connection error: " + e.getMessage());
             e.printStackTrace();
@@ -482,13 +520,19 @@ public class CartViewController implements Initializable {
             connection.setAutoCommit(false);
 
             try {
-                // Insert into orders table with special table_id for takeaway
+                // Get selected payment method
+                String paymentMethod = paymentMethodComboBox.getValue();
+                if (paymentMethod == null) {
+                    paymentMethod = "Cash"; // Default if none selected
+                }
+
+                // Insert into orders table with special table_id for takeaway (0)
                 int orderId;
                 try (PreparedStatement stmt = connection.prepareStatement(
                         "INSERT INTO orders (user_id, table_id, status, total_price, payment_method) VALUES (?, 0, ?, ?, ?)",
                         PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-                    // Assuming user ID 1 for now
+                    // Assuming user ID 1 for now, in a real app this would be the logged-in user
                     stmt.setInt(1, 1);
                     stmt.setString(2, "Takeaway");
 
@@ -496,7 +540,7 @@ public class CartViewController implements Initializable {
                     double total = cartItems.stream().mapToDouble(CartItem::getSubtotal).sum();
                     stmt.setDouble(3, total);
 
-                    stmt.setString(4, "Cash"); // Default payment method
+                    stmt.setString(4, paymentMethod); // Use selected payment method
 
                     stmt.executeUpdate();
 
@@ -531,7 +575,7 @@ public class CartViewController implements Initializable {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Takeaway Order Placed");
                 alert.setHeaderText("Your takeaway order has been placed successfully!");
-                alert.setContentText("Your order will be prepared for pickup.");
+                alert.setContentText("Order #" + orderId + " - Please wait for pickup.");
                 alert.showAndWait();
 
                 // Clear the cart
@@ -539,22 +583,31 @@ public class CartViewController implements Initializable {
                 loadCartItems();
 
             } catch (SQLException e) {
-                // If there is any error, roll back the transaction
+                // If there's an error, roll back the transaction
                 connection.rollback();
-                System.err.println("Error processing takeaway order: " + e.getMessage());
+                System.err.println("Error creating takeaway order: " + e.getMessage());
                 e.printStackTrace();
 
-                showAlert("Error processing takeaway order: " + e.getMessage());
+                // Show error message
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Failed to place takeaway order");
+                alert.setContentText("Database error: " + e.getMessage());
+                alert.showAndWait();
             } finally {
-                // Restore auto-commit to true
+                // Reset auto-commit to default
                 connection.setAutoCommit(true);
             }
-
         } catch (SQLException e) {
-            System.err.println("Database connection error: " + e.getMessage());
+            System.err.println("Connection error: " + e.getMessage());
             e.printStackTrace();
 
-            showAlert("Database connection error: " + e.getMessage());
+            // Show error message
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Connection Error");
+            alert.setHeaderText("Failed to connect to database");
+            alert.setContentText("Error: " + e.getMessage());
+            alert.showAndWait();
         }
     }
 
