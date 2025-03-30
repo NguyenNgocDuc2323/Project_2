@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OrderController">
+<BorderPane prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.staff.OrderController">
     <top>
         <HBox alignment="CENTER" prefHeight="50.0" spacing="5.0" BorderPane.alignment="CENTER">
             <Label text="User Id:" />
@@ -19,10 +19,9 @@
     <center>
         <TableView fx:id="orderTable">
             <columns>
-                <TableColumn fx:id="idColumn" text="Id" />
+                <TableColumn fx:id="orderIdColumn" text="Order Id" />
                 <TableColumn fx:id="userIdColumn" text="User Id" />
-                <TableColumn fx:id="tableIdColumn" text="Table Id" />
-                <TableColumn fx:id="tableNameColumn" text="Table Name" />
+                <TableColumn fx:id="tableNameColumn" text="Table" />
                 <TableColumn fx:id="statusColumn" text="Status" />
                 <TableColumn fx:id="totalPriceColumn" text="Total Price" />
                 <TableColumn fx:id="paymentMethodColumn" text="Payment Method" />

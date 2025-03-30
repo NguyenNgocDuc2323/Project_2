@@ -1,4 +1,4 @@
-package controller;
+package controller.staff;
 
 import database.TableDB;
 import helper.Alert;
@@ -104,7 +104,7 @@ public class TableController implements Initializable {
 
     private void openDialog(String title, Table table) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/TableDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/Staff/TableDialog.fxml"));
             Parent root = loader.load();
             TableDialogController controller = loader.getController();
             controller.setTable(table);

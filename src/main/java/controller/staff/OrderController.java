@@ -1,4 +1,4 @@
-package controller;
+package controller.staff;
 
 import database.OrderDB;
 import helper.Alert;
@@ -27,11 +27,9 @@ public class OrderController {
     @FXML
     private TableView<Order> orderTable;
     @FXML
-    private TableColumn<Order, Integer> idColumn;
+    private TableColumn<Order, Integer> orderIdColumn;
     @FXML
     private TableColumn<Order, Integer> userIdColumn;
-    @FXML
-    private TableColumn<Order, Integer> tableIdColumn;
     @FXML
     private TableColumn<Order, String> tableNameColumn;
     @FXML
@@ -44,9 +42,8 @@ public class OrderController {
 
     @FXML
     private void initialize() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        orderIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         userIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
-        tableIdColumn.setCellValueFactory(new PropertyValueFactory<>("tableId"));
         tableNameColumn.setCellValueFactory(new PropertyValueFactory<>("tableName"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));

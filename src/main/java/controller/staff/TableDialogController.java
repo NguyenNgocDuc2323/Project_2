@@ -1,4 +1,4 @@
-package controller;
+package controller.staff;
 
 import database.TableDB;
 import helper.Alert;

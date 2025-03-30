@@ -3,14 +3,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OrderDetailController">
+<BorderPane prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.staff.OrderDetailController">
     <center>
         <TableView fx:id="orderDetailTable">
             <columns>
-                <TableColumn fx:id="idColumn" text="Id" />
+                <TableColumn fx:id="orderDetailIdColumn" text="Order Detail Id" />
                 <TableColumn fx:id="orderIdColumn" text="Order Id" />
-                <TableColumn fx:id="productIdColumn" text="Product Id" />
-                <TableColumn fx:id="productNameColumn" text="Product Name" />
+                <TableColumn fx:id="productNameColumn" text="Product" />
                 <TableColumn fx:id="quantityColumn" text="Quantity" />
                 <TableColumn fx:id="unitPriceColumn" text="Unit Price" />
             </columns>
