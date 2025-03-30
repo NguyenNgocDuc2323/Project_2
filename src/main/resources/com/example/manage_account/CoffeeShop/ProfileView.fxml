@@ -87,7 +87,7 @@
         </HBox>
     </VBox>
 
-    <HBox spacing="15" alignment="CENTER">
+    <HBox spacing="15" alignment="CENTER_RIGHT">
         <Button fx:id="signOutButton" text="Sign Out" styleClass="sign-out-button" />
     </HBox>
 </VBox>
