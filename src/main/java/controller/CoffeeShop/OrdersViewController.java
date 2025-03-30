@@ -53,19 +53,22 @@ public class OrdersViewController implements Initializable {
 
     private ObservableList<OrderItem> ordersList = FXCollections.observableArrayList();
     private ObservableList<OrderDetailMenu> orderDetailsListMenu = FXCollections.observableArrayList();
-    private DecimalFormat currencyFormat = new DecimalFormat("#,###");
+    private DecimalFormat currencyFormat;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        setupCurrencyFormatter();
         setupFilters();
         setupOrdersTable();
-//        setupOrderDetailsTable();
         setupEventListeners();
         loadOrders();
     }
 
-    private void setupFilters() {
+    private void setupCurrencyFormatter() {
+        currencyFormat = new DecimalFormat("$#,##0.00");
+    }
 
+    private void setupFilters() {
         // Setup status filter
         ObservableList<String> statusOptions = FXCollections.observableArrayList(
                 "All", "Pending", "Processing", "Completed", "Cancelled"
@@ -89,7 +92,7 @@ public class OrdersViewController implements Initializable {
         statusColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getStatus()));
         totalColumn.setCellValueFactory(param -> {
             double total = param.getValue().getTotalPrice();
-            return new SimpleStringProperty(currencyFormat.format(total) + "đ");
+            return new SimpleStringProperty(currencyFormat.format(total));
         });
 
         // Center alignment for all columns
@@ -118,12 +121,10 @@ public class OrdersViewController implements Initializable {
         });
 
         setupActionColumn();
-
-        // Do the same for order details table
         setupOrderDetailsTableCentered();
     }
 
-    // Add this helper method to center align columns
+    // Center align columns
     private <T> void centerAlignColumn(TableColumn<OrderItem, T> column) {
         column.setCellFactory(col -> {
             TableCell<OrderItem, T> cell = new TableCell<>() {
@@ -172,7 +173,7 @@ public class OrdersViewController implements Initializable {
         });
     }
 
-    // Modified method for details table
+    // Setup details table
     private void setupOrderDetailsTableCentered() {
         orderItemsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -182,12 +183,12 @@ public class OrdersViewController implements Initializable {
 
         itemUnitPriceColumn.setCellValueFactory(param -> {
             double unitPrice = param.getValue().getUnitPrice();
-            return new SimpleStringProperty(currencyFormat.format(unitPrice) + "đ");
+            return new SimpleStringProperty(currencyFormat.format(unitPrice));
         });
 
         itemSubtotalColumn.setCellValueFactory(param -> {
             double subtotal = param.getValue().getSubtotal();
-            return new SimpleStringProperty(currencyFormat.format(subtotal) + "đ");
+            return new SimpleStringProperty(currencyFormat.format(subtotal));
         });
 
         // Center align all detail table columns
@@ -218,7 +219,10 @@ public class OrdersViewController implements Initializable {
     }
 
     private void setupEventListeners() {
-        closeDetailsBtn.setOnAction(e -> orderDetailsContainer.setVisible(false));
+        closeDetailsBtn.setOnAction(e -> {
+            orderDetailsContainer.setVisible(false);
+            orderDetailsContainer.setManaged(false);
+        });
     }
 
     private void loadOrders() {
@@ -241,7 +245,7 @@ public class OrdersViewController implements Initializable {
                     String paymentMethod = rs.getString("payment_method");
                     String tableName = rs.getString("table_name");
 
-                    if (tableName == null && rs.getInt("table_id") == 0) {
+                    if (tableName == null && rs.wasNull()) {
                         tableName = "Takeaway";
                     }
 
@@ -303,9 +307,9 @@ public class OrdersViewController implements Initializable {
         double subtotal = order.getTotalPrice() / 1.08; // Remove 8% tax for subtotal
         double tax = order.getTotalPrice() - subtotal;
 
-        detailsSubtotal.setText(currencyFormat.format(subtotal) + "đ");
-        detailsTax.setText(currencyFormat.format(tax) + "đ");
-        detailsTotal.setText(currencyFormat.format(order.getTotalPrice()) + "đ");
+        detailsSubtotal.setText(currencyFormat.format(subtotal));
+        detailsTax.setText(currencyFormat.format(tax));
+        detailsTotal.setText(currencyFormat.format(order.getTotalPrice()));
 
         // Show order details container
         orderDetailsContainer.setVisible(true);

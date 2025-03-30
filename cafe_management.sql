@@ -130,65 +130,65 @@ INSERT INTO `sizes` (`name`, `symbol`) VALUES
                                            ('Medium', 'M'),
                                            ('Large', 'L');
 
--- Insert Products with unit_id
+-- Insert Products with unit_id (prices converted to USD)
 INSERT INTO `product` (`name`, `category_id`, `price`, `quantity`, `image`, `unit_id`, `description`) VALUES
-                                                                                                          ('Espresso', 1, 35000, 100, 'espresso.jpg', 1, 'Strong Italian coffee'),
-                                                                                                          ('Cappuccino', 1, 45000, 100, 'cappuccino.jpg', 1, 'Espresso with steamed milk and foam'),
-                                                                                                          ('Latte', 1, 45000, 100, 'latte.jpg', 1, 'Espresso with lots of steamed milk'),
-                                                                                                          ('Americano', 1, 40000, 100, 'americano.jpg', 1, 'Espresso with hot water'),
-                                                                                                          ('Green Tea', 2, 35000, 100, 'green_tea.jpg', 1, 'Classic green tea'),
-                                                                                                          ('Black Tea', 2, 35000, 100, 'black_tea.jpg', 1, 'Strong black tea'),
-                                                                                                          ('Croissant', 3, 25000, 50, 'croissant.jpg', 2, 'Buttery French pastry'),
-                                                                                                          ('Mango Smoothie', 4, 50000, 50, 'mango_smoothie.jpg', 1, 'Fresh mango smoothie'),
-                                                                                                          ('Chicken Sandwich', 5, 55000, 30, 'chicken_sandwich.jpg', 2, 'Grilled chicken sandwich');
+                                                                                                          ('Espresso', 1, 1.46, 100, 'espresso.jpg', 1, 'Strong Italian coffee'),
+                                                                                                          ('Cappuccino', 1, 1.88, 100, 'cappuccino.jpg', 1, 'Espresso with steamed milk and foam'),
+                                                                                                          ('Latte', 1, 1.88, 100, 'latte.jpg', 1, 'Espresso with lots of steamed milk'),
+                                                                                                          ('Americano', 1, 1.67, 100, 'americano.jpg', 1, 'Espresso with hot water'),
+                                                                                                          ('Green Tea', 2, 1.46, 100, 'green_tea.jpg', 1, 'Classic green tea'),
+                                                                                                          ('Black Tea', 2, 1.46, 100, 'black_tea.jpg', 1, 'Strong black tea'),
+                                                                                                          ('Croissant', 3, 1.04, 50, 'croissant.jpg', 2, 'Buttery French pastry'),
+                                                                                                          ('Mango Smoothie', 4, 2.08, 50, 'mango_smoothie.jpg', 1, 'Fresh mango smoothie'),
+                                                                                                          ('Chicken Sandwich', 5, 2.29, 30, 'chicken_sandwich.jpg', 2, 'Grilled chicken sandwich');
 
--- Insert Product Sizes
+-- Insert Product Sizes (prices converted to USD)
 INSERT INTO `product_sizes` (`product_id`, `size_id`, `price`) VALUES
-                                                                   (1, 1, 35000),
-                                                                   (1, 2, 40000),
-                                                                   (1, 3, 45000),
-                                                                   (2, 1, 45000),
-                                                                   (2, 2, 50000),
-                                                                   (2, 3, 55000),
-                                                                   (3, 1, 45000),
-                                                                   (3, 2, 50000),
-                                                                   (3, 3, 55000),
-                                                                   (4, 1, 40000),
-                                                                   (4, 2, 45000),
-                                                                   (4, 3, 50000),
-                                                                   (5, 1, 35000),
-                                                                   (5, 2, 40000),
-                                                                   (5, 3, 45000),
-                                                                   (6, 1, 35000),
-                                                                   (6, 2, 40000),
-                                                                   (6, 3, 45000),
-                                                                   (7, 1, 25000),
-                                                                   (8, 2, 50000),
-                                                                   (8, 3, 60000),
-                                                                   (9, 1, 55000),
-                                                                   (9, 2, 65000);
+                                                                   (1, 1, 1.46),
+                                                                   (1, 2, 1.67),
+                                                                   (1, 3, 1.88),
+                                                                   (2, 1, 1.88),
+                                                                   (2, 2, 2.08),
+                                                                   (2, 3, 2.29),
+                                                                   (3, 1, 1.88),
+                                                                   (3, 2, 2.08),
+                                                                   (3, 3, 2.29),
+                                                                   (4, 1, 1.67),
+                                                                   (4, 2, 1.88),
+                                                                   (4, 3, 2.08),
+                                                                   (5, 1, 1.46),
+                                                                   (5, 2, 1.67),
+                                                                   (5, 3, 1.88),
+                                                                   (6, 1, 1.46),
+                                                                   (6, 2, 1.67),
+                                                                   (6, 3, 1.88),
+                                                                   (7, 1, 1.04),
+                                                                   (8, 2, 2.08),
+                                                                   (8, 3, 2.50),
+                                                                   (9, 1, 2.29),
+                                                                   (9, 2, 2.71);
 
--- Insert Sample Orders
+-- Insert Sample Orders (prices converted to USD)
 INSERT INTO `orders` (`user_id`, `table_id`, `order_date`, `status`, `total_price`, `payment_method`) VALUES
-                                                                                                          (3, 1, '2023-11-01 08:30:00', 'Completed', 135000, 'Cash'),
-                                                                                                          (3, 2, '2023-11-01 09:15:00', 'Completed', 90000, 'Card'),
-                                                                                                          (4, 3, '2023-11-01 10:00:00', 'Completed', 195000, 'Cash'),
-                                                                                                          (3, 4, '2023-11-02 14:30:00', 'Completed', 120000, 'Card'),
-                                                                                                          (4, 5, CURRENT_TIMESTAMP, 'Pending', 115000, NULL);
+                                                                                                          (3, 1, '2023-11-01 08:30:00', 'Completed', 5.63, 'Cash'),
+                                                                                                          (3, 2, '2023-11-01 09:15:00', 'Completed', 3.75, 'Card'),
+                                                                                                          (3, 3, '2023-11-01 10:00:00', 'Completed', 8.13, 'Cash'),
+                                                                                                          (3, 4, '2023-11-02 14:30:00', 'Completed', 5.00, 'Card'),
+                                                                                                          (4, 5, CURRENT_TIMESTAMP, 'Pending', 4.79, NULL);
 
--- Insert Order Details
+-- Insert Order Details (prices converted to USD)
 INSERT INTO `order_detail` (`order_id`, `product_id`, `quantity`, `unit_price`) VALUES
-                                                                                    (1, 1, 1, 45000),
-                                                                                    (1, 2, 1, 50000),
-                                                                                    (1, 7, 2, 25000),
-                                                                                    (2, 4, 2, 45000),
-                                                                                    (3, 3, 2, 50000),
-                                                                                    (3, 8, 1, 60000),
-                                                                                    (3, 9, 1, 55000),
-                                                                                    (4, 5, 1, 40000),
-                                                                                    (4, 6, 2, 40000),
-                                                                                    (5, 2, 1, 55000),
-                                                                                    (5, 8, 1, 60000);
+                                                                                    (1, 1, 1, 1.88),
+                                                                                    (1, 2, 1, 2.08),
+                                                                                    (1, 7, 2, 1.04),
+                                                                                    (2, 4, 2, 1.88),
+                                                                                    (3, 3, 2, 2.08),
+                                                                                    (3, 8, 1, 2.50),
+                                                                                    (3, 9, 1, 2.29),
+                                                                                    (4, 5, 1, 1.67),
+                                                                                    (4, 6, 2, 1.67),
+                                                                                    (5, 2, 1, 2.29),
+                                                                                    (5, 8, 1, 2.50);
 
 -- Add status column to product table
 ALTER TABLE `product`

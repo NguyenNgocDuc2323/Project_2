@@ -121,21 +121,20 @@
                     <Insets top="15" right="15" bottom="15" left="15" />
                 </padding>
                 <HBox spacing="10" alignment="CENTER_LEFT">
-                    <ImageView fitWidth="40" fitHeight="40" styleClass="user-avatar">
-                        <image>
-                            <Image url="@../images/user-avatar.png" />
-                        </image>
-                    </ImageView>
+                    <StackPane>
+                        <Circle fx:id="userAvatar" radius="20" styleClass="user-avatar" />
+                        <Label fx:id="userInitialsLabel" styleClass="avatar-initials" text="JD" />
+                    </StackPane>
                     <VBox>
-                        <Label fx:id="userNameLabel" text="John Doe" styleClass="user-name" />
-                        <Label fx:id="userRoleLabel" text="Staff" styleClass="user-role" />
+                        <Label fx:id="userNameLabel" text="Loading..." styleClass="user-name" />
+                        <Label fx:id="userRoleLabel" text="Loading..." styleClass="user-role" />
                     </VBox>
                     <Region HBox.hgrow="ALWAYS" />
-                    <Button fx:id="logoutBtn" styleClass="logout-button">
+                    <Button fx:id="logoutBtn" styleClass="logout-button" onAction="#handleSignOut">
                         <graphic>
                             <ImageView fitWidth="18" fitHeight="18">
                                 <image>
-                                    <Image url="@../images/logout-icon.png" />
+                                    <Image url="@../images/logout.png" />
                                 </image>
                             </ImageView>
                         </graphic>
@@ -159,28 +158,6 @@
     <!-- Main Content Area -->
     <center>
         <ScrollPane fitToWidth="true" styleClass="content-scroll" hbarPolicy="NEVER">
-<!--            <StackPane fx:id="contentArea" styleClass="content-area">-->
-<!--                &lt;!&ndash; Coffee Items Grid &ndash;&gt;-->
-<!--                <VBox spacing="20">-->
-<!--                    <HBox alignment="CENTER_LEFT" styleClass="section-header">-->
-<!--                        <Label text="Today's Coffee Selection" styleClass="section-title">-->
-<!--                            <font>-->
-<!--                                <Font size="24" name="System Bold" />-->
-<!--                            </font>-->
-<!--                        </Label>-->
-<!--                    </HBox>-->
-
-<!--                    <FlowPane fx:id="coffeeItemsContainer" hgap="20" vgap="20">-->
-<!--                        &lt;!&ndash; Coffee items will be added here programmatically &ndash;&gt;-->
-<!--                        <fx:include source="CoffeeItem.fxml" />-->
-<!--                        <fx:include source="CoffeeItem.fxml" />-->
-<!--                        <fx:include source="CoffeeItem.fxml" />-->
-<!--                        <fx:include source="CoffeeItem.fxml" />-->
-
-<!--                    </FlowPane>-->
-<!--                </VBox>-->
-<!--            </StackPane>-->
-
             <StackPane fx:id="contentArea" styleClass="content-area">
                 <!-- This is where different views will be loaded dynamically -->
             </StackPane>

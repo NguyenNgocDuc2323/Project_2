@@ -1,0 +1,157 @@
+/* Profile View Styles */
+
+/* Profile picture container */
+.profile-picture-container {
+    -fx-min-height: 110px;
+    -fx-min-width: 110px;
+    -fx-padding: 5px;
+}
+
+.profile-picture {
+    -fx-fill: #b85c38; /* Default color, will be overridden by controller */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);
+    -fx-stroke: white;
+    -fx-stroke-width: 3;
+}
+
+.initials-label {
+    -fx-text-fill: white;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+.welcome-text {
+    -fx-font-size: 16px;
+    -fx-text-fill: #6b4f4b;
+    -fx-padding: 10 0 0 0;
+}
+
+.user-name {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3c2a21;
+}
+
+.profile-details {
+    -fx-padding: 20px;
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-border-color: #e6e0d4;
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 1);
+}
+
+.field-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6b4f4b;
+}
+
+.field-value {
+    -fx-font-size: 14px;
+    -fx-text-fill: #3c2a21;
+}
+
+.status-active {
+    -fx-fill: #4caf50;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.2), 1, 0, 0, 0);
+}
+
+.status-locked {
+    -fx-fill: #f44336;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.2), 1, 0, 0, 0);
+}
+
+.status-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: #3c2a21;
+}
+
+.action-button {
+    -fx-background-color: #5a8f7b;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 10 20;
+    -fx-background-radius: 20;
+    -fx-transition: background-color 0.2s;
+}
+
+.action-button:hover {
+    -fx-background-color: #4a7a69;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
+.sign-out-button {
+    -fx-background-color: #c75f5f;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 10 20;
+    -fx-background-radius: 20;
+    -fx-transition: background-color 0.2s;
+}
+
+.sign-out-button:hover {
+    -fx-background-color: #b54b4b;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
+/* Add these to your profile.css file */
+
+/* Password form styles */
+.password-form {
+    -fx-background-color: #f8f5f2;
+    -fx-background-radius: 10px;
+    -fx-border-color: #e6e0d4;
+    -fx-border-radius: 10px;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 1);
+}
+
+.section-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3c2a21;
+    -fx-padding: 0 0 5 0;
+}
+
+.password-field {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-color: #e6e0d4;
+    -fx-border-radius: 5px;
+    -fx-padding: 8px;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.05), 2, 0, 0, 0);
+}
+
+.password-field:focused {
+    -fx-border-color: #b85c38;
+}
+
+.cancel-button {
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: #666666;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 8 15;
+    -fx-background-radius: 20;
+}
+
+.cancel-button:hover {
+    -fx-background-color: #d0d0d0;
+}
+
+.update-button {
+    -fx-background-color: #5a8f7b;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 8 15;
+    -fx-background-radius: 20;
+}
+
+.update-button:hover {
+    -fx-background-color: #4a7a69;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
