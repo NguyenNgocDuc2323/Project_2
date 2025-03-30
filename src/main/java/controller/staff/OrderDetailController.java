@@ -1,4 +1,4 @@
-package controller;
+package controller.staff;
 
 import database.OrderDetailDB;
 import helper.Alert;
@@ -93,7 +93,7 @@ public class OrderDetailController implements Initializable {
 
     private void openDialog(String title, OrderDetail orderDetail) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/OrderDetailDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/Staff/OrderDetailDialog.fxml"));
             Parent root = loader.load();
             OrderDetailDialogController controller = loader.getController();
             controller.setOrderId(this.orderId);

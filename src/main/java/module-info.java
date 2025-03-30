@@ -16,10 +16,10 @@ module com.example.manage_account {
 
     // Add this line to open the model package to JavaFX base
     opens model to javafx.base;
+    opens model.CoffeeShop to javafx.base;
 
     exports controller;
     exports controller.admin;
-    exports controller.staff to javafx.fxml;
-    opens model.CoffeeShop to javafx.base;
+    exports controller.staff;
 
 }

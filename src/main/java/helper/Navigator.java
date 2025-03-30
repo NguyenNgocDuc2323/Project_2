@@ -2,7 +2,7 @@ package helper;
 
 import java.io.IOException;
 
-import controller.OrderDetailController;
+import controller.staff.OrderDetailController;
 import controller.admin.ChangePasswordController;
 import controller.admin.ResetPasswordController;
 import javafx.fxml.FXMLLoader;
@@ -25,10 +25,10 @@ public class Navigator {
     public static final String FORGOT_PASSWORD = "/com/example/manage_account/Auth/ForgotPassword.fxml";
     public static final String CHANGE_PASSWORD = "/com/example/manage_account/Admin/change_password.fxml";
     public static final String MENU_SCENE = "/com/example/manage_account/CoffeeShop/Dashboard.fxml";
-    public static final String TABLE = "/com/example/manage_account/Table.fxml";
-    public static final String ORDER = "/com/example/manage_account/Order.fxml";
-    public static final String ORDER_DIALOG = "/com/example/manage_account/OrderDialog.fxml";
-    public static final String ORDER_DETAIL = "/com/example/manage_account/OrderDetail.fxml";
+    public static final String TABLE = "/com/example/manage_account/Staff/Table.fxml";
+    public static final String ORDER = "/com/example/manage_account/Staff/Order.fxml";
+    public static final String ORDER_DIALOG = "/com/example/manage_account/Staff/OrderDialog.fxml";
+    public static final String ORDER_DETAIL = "/com/example/manage_account/Staff/OrderDetail.fxml";
 
     private Navigator() {
     }
