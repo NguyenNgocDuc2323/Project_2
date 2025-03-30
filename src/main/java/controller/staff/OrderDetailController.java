@@ -24,11 +24,9 @@ public class OrderDetailController implements Initializable {
     @FXML
     private TableView<OrderDetail> orderDetailTable;
     @FXML
-    private TableColumn<OrderDetail, Integer> idColumn;
+    private TableColumn<OrderDetail, Integer> orderDetailIdColumn;
     @FXML
     private TableColumn<OrderDetail, Integer> orderIdColumn;
-    @FXML
-    private TableColumn<OrderDetail, Integer> productIdColumn;
     @FXML
     private TableColumn<OrderDetail, String> productNameColumn;
     @FXML
@@ -45,9 +43,8 @@ public class OrderDetailController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        orderDetailIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         orderIdColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
-        productIdColumn.setCellValueFactory(new PropertyValueFactory<>("productId"));
         productNameColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         unitPriceColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));

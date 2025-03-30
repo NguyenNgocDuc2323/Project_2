@@ -7,10 +7,9 @@
     <center>
         <TableView fx:id="orderDetailTable">
             <columns>
-                <TableColumn fx:id="idColumn" text="Id" />
+                <TableColumn fx:id="orderDetailIdColumn" text="Order Detail Id" />
                 <TableColumn fx:id="orderIdColumn" text="Order Id" />
-                <TableColumn fx:id="productIdColumn" text="Product Id" />
-                <TableColumn fx:id="productNameColumn" text="Product Name" />
+                <TableColumn fx:id="productNameColumn" text="Product" />
                 <TableColumn fx:id="quantityColumn" text="Quantity" />
                 <TableColumn fx:id="unitPriceColumn" text="Unit Price" />
             </columns>
