@@ -24,7 +24,7 @@
                <children>
                   <ImageView fitHeight="600.0" fitWidth="500.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../assets/images/login-coffee.jpg" />
+                        <Image url="@../../../../assets/images/Login/login-coffee.jpg" />
                      </image>
                      <effect>
                         <DropShadow color="#0000004d" height="30.0" radius="14.5" width="30.0" />

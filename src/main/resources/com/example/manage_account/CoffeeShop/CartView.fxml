@@ -40,6 +40,11 @@
         </HBox>
 
         <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Payment Method:"/>
+            <ComboBox fx:id="paymentMethodComboBox" promptText="Select payment method"/>
+        </HBox>
+
+        <HBox alignment="CENTER_LEFT" spacing="10">
             <Label text="Status Legend:"/>
             <HBox spacing="5" alignment="CENTER_LEFT">
                 <Label text="Available" styleClass="status-available"/>

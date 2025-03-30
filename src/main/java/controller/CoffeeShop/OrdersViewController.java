@@ -53,19 +53,22 @@ public class OrdersViewController implements Initializable {
 
     private ObservableList<OrderItem> ordersList = FXCollections.observableArrayList();
     private ObservableList<OrderDetailMenu> orderDetailsListMenu = FXCollections.observableArrayList();
-    private DecimalFormat currencyFormat = new DecimalFormat("#,###");
+    private DecimalFormat currencyFormat;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        setupCurrencyFormatter();
         setupFilters();
         setupOrdersTable();
-        setupOrderDetailsTable();
         setupEventListeners();
         loadOrders();
     }
 
-    private void setupFilters() {
+    private void setupCurrencyFormatter() {
+        currencyFormat = new DecimalFormat("$#,##0.00");
+    }
 
+    private void setupFilters() {
         // Setup status filter
         ObservableList<String> statusOptions = FXCollections.observableArrayList(
                 "All", "Pending", "Processing", "Completed", "Cancelled"
@@ -87,6 +90,18 @@ public class OrdersViewController implements Initializable {
         tableColumn.setCellValueFactory(new PropertyValueFactory<>("tableName"));
 
         statusColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getStatus()));
+        totalColumn.setCellValueFactory(param -> {
+            double total = param.getValue().getTotalPrice();
+            return new SimpleStringProperty(currencyFormat.format(total));
+        });
+
+        // Center alignment for all columns
+        centerAlignColumn(orderIdColumn);
+        centerAlignColumn(dateColumn);
+        centerAlignColumn(tableColumn);
+        centerAlignColumn(totalColumn);
+
+        // Keep the custom cell factory for status column but ensure centering
         statusColumn.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(String status, boolean empty) {
@@ -100,18 +115,35 @@ public class OrdersViewController implements Initializable {
                     statusLabel.getStyleClass().addAll("status-badge", "status-" + status.toLowerCase());
                     setGraphic(statusLabel);
                     setText(null);
+                    setAlignment(Pos.CENTER);
                 }
             }
         });
 
-        totalColumn.setCellValueFactory(param -> {
-            double total = param.getValue().getTotalPrice();
-            return new SimpleStringProperty(currencyFormat.format(total) + "đ");
-        });
-
         setupActionColumn();
+        setupOrderDetailsTableCentered();
     }
 
+    // Center align columns
+    private <T> void centerAlignColumn(TableColumn<OrderItem, T> column) {
+        column.setCellFactory(col -> {
+            TableCell<OrderItem, T> cell = new TableCell<>() {
+                @Override
+                protected void updateItem(T item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.toString());
+                    }
+                    setAlignment(Pos.CENTER);
+                }
+            };
+            return cell;
+        });
+    }
+
+    // Update action column to be centered
     private void setupActionColumn() {
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button viewBtn = new Button("View");
@@ -135,12 +167,14 @@ public class OrdersViewController implements Initializable {
                     container.setAlignment(Pos.CENTER);
                     container.getChildren().add(viewBtn);
                     setGraphic(container);
+                    setAlignment(Pos.CENTER);
                 }
             }
         });
     }
 
-    private void setupOrderDetailsTable() {
+    // Setup details table
+    private void setupOrderDetailsTableCentered() {
         orderItemsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
@@ -149,17 +183,46 @@ public class OrdersViewController implements Initializable {
 
         itemUnitPriceColumn.setCellValueFactory(param -> {
             double unitPrice = param.getValue().getUnitPrice();
-            return new SimpleStringProperty(currencyFormat.format(unitPrice) + "đ");
+            return new SimpleStringProperty(currencyFormat.format(unitPrice));
         });
 
         itemSubtotalColumn.setCellValueFactory(param -> {
             double subtotal = param.getValue().getSubtotal();
-            return new SimpleStringProperty(currencyFormat.format(subtotal) + "đ");
+            return new SimpleStringProperty(currencyFormat.format(subtotal));
+        });
+
+        // Center align all detail table columns
+        centerAlignDetailColumn(itemNameColumn);
+        centerAlignDetailColumn(itemSizeColumn);
+        centerAlignDetailColumn(itemQuantityColumn);
+        centerAlignDetailColumn(itemUnitPriceColumn);
+        centerAlignDetailColumn(itemSubtotalColumn);
+    }
+
+    // Helper method for detail table columns
+    private <T> void centerAlignDetailColumn(TableColumn<OrderDetailMenu, T> column) {
+        column.setCellFactory(col -> {
+            TableCell<OrderDetailMenu, T> cell = new TableCell<>() {
+                @Override
+                protected void updateItem(T item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.toString());
+                    }
+                    setAlignment(Pos.CENTER);
+                }
+            };
+            return cell;
         });
     }
 
     private void setupEventListeners() {
-        closeDetailsBtn.setOnAction(e -> orderDetailsContainer.setVisible(false));
+        closeDetailsBtn.setOnAction(e -> {
+            orderDetailsContainer.setVisible(false);
+            orderDetailsContainer.setManaged(false);
+        });
     }
 
     private void loadOrders() {
@@ -182,7 +245,7 @@ public class OrdersViewController implements Initializable {
                     String paymentMethod = rs.getString("payment_method");
                     String tableName = rs.getString("table_name");
 
-                    if (tableName == null && rs.getInt("table_id") == 0) {
+                    if (tableName == null && rs.wasNull()) {
                         tableName = "Takeaway";
                     }
 
@@ -244,9 +307,9 @@ public class OrdersViewController implements Initializable {
         double subtotal = order.getTotalPrice() / 1.08; // Remove 8% tax for subtotal
         double tax = order.getTotalPrice() - subtotal;
 
-        detailsSubtotal.setText(currencyFormat.format(subtotal) + "đ");
-        detailsTax.setText(currencyFormat.format(tax) + "đ");
-        detailsTotal.setText(currencyFormat.format(order.getTotalPrice()) + "đ");
+        detailsSubtotal.setText(currencyFormat.format(subtotal));
+        detailsTax.setText(currencyFormat.format(tax));
+        detailsTotal.setText(currencyFormat.format(order.getTotalPrice()));
 
         // Show order details container
         orderDetailsContainer.setVisible(true);

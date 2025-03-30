@@ -63,7 +63,7 @@
 
 .coffee-table .column-header .label {
     -fx-text-fill: white;
-    -fx-alignment: CENTER-LEFT;
+    -fx-alignment: CENTER;
 }
 
 .coffee-table .table-row-cell {
@@ -274,3 +274,4 @@
     -fx-text-fill: #49281a;
     -fx-font-size: 14px;
 }
+

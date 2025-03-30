@@ -3,6 +3,7 @@ import helper.Alert;
 import helper.DB_Helper.Account;
 import helper.Navigator;
 import helper.REGEX;
+import helper.Session;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -54,6 +55,7 @@ public class LoginUIController implements Initializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
     public void login() throws SQLException {
         String passFill = txt_password.getText();
         String emailFill = txt_email.getText();
@@ -79,13 +81,24 @@ public class LoginUIController implements Initializable {
             return;
         }
 
+        // Set the current user in the session
+        Session.getInstance().setCurrentUser(acc);
+
         Alert.showSuccess("Login successful");
 
         try {
-            if (acc.getTypeAsString().equalsIgnoreCase("Admin")) {
-                Navigator.getInstance().gotoAdminHome();
-            } else if (acc.getTypeAsString().equalsIgnoreCase("Staff")) {
-                Navigator.getInstance().gotoStaffDashboard();
+            switch (acc.getType()) {
+                case model.Account.TYPE_ADMIN:  // Type 1 = admin
+                    Navigator.getInstance().gotoAdminHome();
+                    break;
+                case model.Account.TYPE_STAFF:  // Type 2 = manager
+                    Navigator.getInstance().gotoMenu();
+                    break;
+//                case model.Account.TYPE_GUEST:  // Type 3 = employee
+//                    break;
+                default:
+                    Alert.showAlert("Unknown account type");
+                    break;
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
