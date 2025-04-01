@@ -10,9 +10,9 @@ public class Coffee {
     private final StringProperty image;
     private final IntegerProperty unitId;
     private final StringProperty description;
-    private final IntegerProperty status; // New field for product status
+    private final IntegerProperty status = null;
 
-    public Coffee(int id, String name, int categoryId, double price, int quantity, String image, int unitId, String description, int status) {
+    public Coffee(int id, String name, int categoryId, double price, int quantity, String image, int unitId, String description) {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
         this.categoryId = new SimpleIntegerProperty(categoryId);
@@ -26,7 +26,7 @@ public class Coffee {
 
     // Add no-args constructor for convenience
     public Coffee() {
-        this(0, "", 0, 0.0, 0, "", 0, "", 1);
+        this(0, "", 0, 0.0, 0, "", 0, "");
     }
 
     // Getters for properties (JavaFX binding)

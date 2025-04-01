@@ -275,3 +275,31 @@
     -fx-font-size: 14px;
 }
 
+/* Table scrolling styles */
+.coffee-table {
+    -fx-fixed-cell-size: 40px;
+}
+
+.coffee-table .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.coffee-table .scroll-bar:vertical .thumb {
+    -fx-background-color: #c7a590;
+    -fx-background-radius: 5px;
+}
+
+.coffee-table .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #8a5a44;
+}
+
+.coffee-table .scroll-bar:vertical .increment-button,
+.coffee-table .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.coffee-table .scroll-bar:vertical .track {
+    -fx-background-color: #f8f5f2;
+}
+
