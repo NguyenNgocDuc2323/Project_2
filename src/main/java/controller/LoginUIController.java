@@ -91,7 +91,7 @@ public class LoginUIController implements Initializable {
                 case model.Account.TYPE_ADMIN:  // Type 1 = admin
                     Navigator.getInstance().gotoAdminHome();
                     break;
-                case model.Account.TYPE_STAFF:  // Type 2 = manager
+                case model.Account.TYPE_STAFF:  // Type 2 = staff
                     Navigator.getInstance().gotoMenu();
                     break;
 //                case model.Account.TYPE_GUEST:  // Type 3 = employee
