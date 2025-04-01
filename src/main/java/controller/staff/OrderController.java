@@ -18,6 +18,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static helper.Navigator.ORDER_DIALOG;
 
@@ -39,6 +41,7 @@ public class OrderController {
     @FXML
     private TableColumn<Order, String> paymentMethodColumn;
     private final ObservableList<Order> orderObservableList = FXCollections.observableArrayList();
+    private final ObservableList<Order> filteredOrderObservableList = FXCollections.observableArrayList();
 
     @FXML
     private void initialize() {
@@ -99,11 +102,12 @@ public class OrderController {
     public void handleSearchByUserId(ActionEvent actionEvent) {
         try {
             int userId = Integer.parseInt(userIdField.getText());
-            orderObservableList.clear();
-            orderObservableList.addAll(OrderDB.getInstance().getAllOrdersByUserId(userId));
-            orderTable.setItems(orderObservableList);
+            filteredOrderObservableList.setAll(orderObservableList.stream()
+                    .filter(order -> Objects.equals(order.getUserId(), userId))
+                    .collect(Collectors.toList()));
+            orderTable.setItems(filteredOrderObservableList);
         } catch (NumberFormatException e) {
-            loadOrdersFromDatabase();
+            orderTable.setItems(orderObservableList);
         }
     }
 
