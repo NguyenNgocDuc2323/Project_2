@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.CoffeeShop.OrderDetailMenu;
 import model.CoffeeShop.OrderItem;
+import javafx.beans.binding.Bindings;
 
 import java.net.URL;
 import java.sql.*;
@@ -62,6 +63,20 @@ public class OrdersViewController implements Initializable {
         setupOrdersTable();
         setupEventListeners();
         loadOrders();
+
+        // Set fixed height for the main orders table to show exactly 6 rows
+        ordersTable.setFixedCellSize(40);
+        double mainTableHeight = ordersTable.getFixedCellSize() * 6 + 30;
+        ordersTable.setPrefHeight(mainTableHeight);
+        ordersTable.setMinHeight(mainTableHeight);
+        ordersTable.setMaxHeight(mainTableHeight);
+
+        // Set fixed height for the order details table to show exactly 6 rows
+        orderItemsTable.setFixedCellSize(40);
+        double detailsTableHeight = orderItemsTable.getFixedCellSize() * 6 + 30;
+        orderItemsTable.setPrefHeight(detailsTableHeight);
+        orderItemsTable.setMinHeight(detailsTableHeight);
+        orderItemsTable.setMaxHeight(detailsTableHeight);
     }
 
     private void setupCurrencyFormatter() {
