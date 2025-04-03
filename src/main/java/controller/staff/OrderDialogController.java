@@ -7,17 +7,13 @@ import model.Order;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class OrderDialogController implements Initializable {
+public class OrderDialogController {
     @FXML
     public Text title;
     @FXML
@@ -31,7 +27,7 @@ public class OrderDialogController implements Initializable {
     @FXML
     public Button cancelButton;
     private Order order;
-    private final ObservableList<String> tables = FXCollections.observableArrayList();
+    private final ObservableList<String> tableObservableList = FXCollections.observableArrayList();
 
     public void setTitle(String title) {
         this.title.setText(title);
@@ -47,10 +43,10 @@ public class OrderDialogController implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        tables.addAll(TableDB.getInstance().getAllTablesName());
-        tableBox.setItems(tables);
+    @FXML
+    public void initialize() {
+        tableObservableList.setAll(TableDB.getInstance().getAllTablesName());
+        tableBox.setItems(tableObservableList);
     }
 
     @FXML
@@ -66,7 +62,12 @@ public class OrderDialogController implements Initializable {
             Alert.showAlert("User id must be a number");
             return;
         }
-        int tableId = TableDB.getInstance().getTableByName(tableBox.getValue()).getId();
+        String tableName = tableBox.getValue();
+        if (tableName == null || tableName.isBlank()) {
+            Alert.showAlert("Table must not blank");
+            return;
+        }
+        int tableId = TableDB.getInstance().getTableByName(tableName).getId();
         String status = statusBox.getValue();
         if (status == null || status.isBlank()) {
             Alert.showAlert("Status must not blank");
@@ -77,12 +78,19 @@ public class OrderDialogController implements Initializable {
             Alert.showAlert("Payment method must not blank");
             return;
         }
-        if (order == null) {
-            OrderDB.getInstance().createOrder(new Order(userId, tableId, paymentMethod));
-            handleCloseDialog();
+        if (this.order == null) {
+            Order order = new Order();
+            order.setUserId(userId);
+            order.setTableId(tableId);
+            order.setPaymentMethod(paymentMethod);
+            OrderDB.getInstance().createOrder(order);
         } else {
-            OrderDB.getInstance().updateOrder(new Order(order.getId(), tableId, status, paymentMethod));
-            handleCloseDialog();
+            Order order = new Order();
+            order.setId(this.order.getId());
+            order.setTableId(tableId);
+            order.setStatus(status);
+            order.setPaymentMethod(paymentMethod);
+            OrderDB.getInstance().updateOrder(order);
         }
     }
 

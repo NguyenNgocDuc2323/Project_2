@@ -47,16 +47,16 @@ public class ProductDB {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new Product(
-                            rs.getInt("id"),
-                            rs.getString("name"),
-                            rs.getInt("category_id"),
-                            rs.getDouble("price"),
-                            rs.getInt("quantity"),
-                            rs.getString("image"),
-                            rs.getInt("unit_id"),
-                            rs.getString("description")
-                    );
+                    Product product = new Product();
+                    product.setId(rs.getInt("id"));
+                    product.setName(rs.getString("name"));
+                    product.setCategoryId(rs.getInt("category_id"));
+                    product.setPrice(rs.getDouble("price"));
+                    product.setQuantity(rs.getInt("quantity"));
+                    product.setImage(rs.getString("image"));
+                    product.setUnitId(rs.getInt("unit_id"));
+                    product.setDescription(rs.getString("description"));
+                    return product;
                 }
             }
         } catch (SQLException e) {
@@ -73,16 +73,16 @@ public class ProductDB {
             ps.setString(1, name);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new Product(
-                            rs.getInt("id"),
-                            rs.getString("name"),
-                            rs.getInt("category_id"),
-                            rs.getDouble("price"),
-                            rs.getInt("quantity"),
-                            rs.getString("image"),
-                            rs.getInt("unit_id"),
-                            rs.getString("description")
-                    );
+                    Product product = new Product();
+                    product.setId(rs.getInt("id"));
+                    product.setName(rs.getString("name"));
+                    product.setCategoryId(rs.getInt("category_id"));
+                    product.setPrice(rs.getDouble("price"));
+                    product.setQuantity(rs.getInt("quantity"));
+                    product.setImage(rs.getString("image"));
+                    product.setUnitId(rs.getInt("unit_id"));
+                    product.setDescription(rs.getString("description"));
+                    return product;
                 }
             }
         } catch (SQLException e) {

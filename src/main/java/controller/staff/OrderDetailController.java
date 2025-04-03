@@ -8,7 +8,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
@@ -17,10 +16,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class OrderDetailController implements Initializable {
+public class OrderDetailController {
     @FXML
     private TableView<OrderDetail> orderDetailTable;
     @FXML
@@ -41,8 +38,8 @@ public class OrderDetailController implements Initializable {
         loadOrderDetailFromDatabase();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    public void initialize() {
         orderDetailIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         orderIdColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         productNameColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
@@ -51,8 +48,7 @@ public class OrderDetailController implements Initializable {
     }
 
     public void loadOrderDetailFromDatabase() {
-        orderDetailObservableList.clear();
-        orderDetailObservableList.addAll(OrderDetailDB.getInstance().getAllOrderDetailByOrderId(this.orderId));
+        orderDetailObservableList.setAll(OrderDetailDB.getInstance().getAllOrderDetailByOrderId(this.orderId));
         orderDetailTable.setItems(orderDetailObservableList);
     }
 

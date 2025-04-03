@@ -11,20 +11,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import model.Table;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Objects;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class TableController implements Initializable {
+public class TableController {
     @FXML
     public Button deleteButton;
     @FXML
@@ -44,8 +41,8 @@ public class TableController implements Initializable {
     private final ObservableList<Table> tableObservableList = FXCollections.observableArrayList();
     private final ObservableList<Table> filteredTableObservableList = FXCollections.observableArrayList();
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    @FXML
+    public void initialize() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("tableName"));
         capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
@@ -55,13 +52,12 @@ public class TableController implements Initializable {
     }
 
     private void loadTablesFromDatabase() {
-        tableObservableList.clear();
-        tableObservableList.addAll(TableDB.getInstance().getAllTables());
+        tableObservableList.setAll(TableDB.getInstance().getAllTables());
         tableTable.setItems(tableObservableList);
-        populateFloorFilter();
+        loadFloorFilter();
     }
 
-    private void populateFloorFilter() {
+    private void loadFloorFilter() {
         Set<Integer> floorNumbers = tableObservableList.stream()
                 .map(Table::getFloorNumber)
                 .collect(Collectors.toSet());

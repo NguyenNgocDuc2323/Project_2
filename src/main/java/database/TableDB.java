@@ -31,13 +31,13 @@ public class TableDB {
              PreparedStatement ps = conn.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                tableList.add(new Table(
-                        rs.getInt("id"),
-                        rs.getString("table_name"),
-                        rs.getInt("capacity"),
-                        rs.getString("status"),
-                        rs.getInt("floor_number")
-                ));
+                Table table = new Table();
+                table.setId(rs.getInt("id"));
+                table.setTableName(rs.getString("table_name"));
+                table.setCapacity(rs.getInt("capacity"));
+                table.setStatus(rs.getString("status"));
+                table.setFloorNumber(rs.getInt("floor_number"));
+                tableList.add(table);
             }
         } catch (SQLException e) {
             Alert.showAlert("Error: " + e.getMessage());
@@ -69,13 +69,13 @@ public class TableDB {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new Table(
-                            rs.getInt("id"),
-                            rs.getString("table_name"),
-                            rs.getInt("capacity"),
-                            rs.getString("status"),
-                            rs.getInt("floor_number")
-                    );
+                    Table table = new Table();
+                    table.setId(rs.getInt("id"));
+                    table.setTableName(rs.getString("table_name"));
+                    table.setCapacity(rs.getInt("capacity"));
+                    table.setStatus(rs.getString("status"));
+                    table.setFloorNumber(rs.getInt("floor_number"));
+                    return table;
                 }
             }
         } catch (SQLException e) {
@@ -92,13 +92,13 @@ public class TableDB {
             ps.setString(1, name);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new Table(
-                            rs.getInt("id"),
-                            rs.getString("table_name"),
-                            rs.getInt("capacity"),
-                            rs.getString("status"),
-                            rs.getInt("floor_number")
-                    );
+                    Table table = new Table();
+                    table.setId(rs.getInt("id"));
+                    table.setTableName(rs.getString("table_name"));
+                    table.setCapacity(rs.getInt("capacity"));
+                    table.setStatus(rs.getString("status"));
+                    table.setFloorNumber(rs.getInt("floor_number"));
+                    return table;
                 }
             }
         } catch (SQLException e) {
