@@ -43,6 +43,7 @@ public class OrderDB {
                 orderList.add(new Order(orderId, userId, tableId, tableName, orderDate, status, totalPrice, paymentMethod));
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return orderList;
@@ -66,6 +67,7 @@ public class OrderDB {
                 orderList.add(new Order(orderId, userId, tableId, tableName, orderDate, status, totalPrice, paymentMethod));
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return orderList;
@@ -90,6 +92,7 @@ public class OrderDB {
                 }
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -106,20 +109,24 @@ public class OrderDB {
                 Alert.showSuccess("Order created successfully");
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    public void updateOrderStatus(Order order) {
-        String query = "UPDATE `orders` SET status = ? WHERE id = ?";
+    public void updateOrder(Order order) {
+        String query = "UPDATE `orders` SET table_id = ?, status = ?, payment_method = ? WHERE id = ?";
         try (Connection conn = ConnectDatabase.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, order.getStatus());
-            ps.setInt(2, order.getId());
+            ps.setInt(1, order.getTableId());
+            ps.setString(2, order.getStatus());
+            ps.setString(3, order.getPaymentMethod());
+            ps.setInt(4, order.getId());
             if (ps.executeUpdate() > 0) {
                 Alert.showSuccess("Order updated successfully");
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }

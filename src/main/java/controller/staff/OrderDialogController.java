@@ -81,7 +81,7 @@ public class OrderDialogController implements Initializable {
             OrderDB.getInstance().createOrder(new Order(userId, tableId, paymentMethod));
             handleCloseDialog();
         } else {
-            OrderDB.getInstance().updateOrderStatus(new Order(order.getId(), status));
+            OrderDB.getInstance().updateOrder(new Order(order.getId(), tableId, status, paymentMethod));
             handleCloseDialog();
         }
     }

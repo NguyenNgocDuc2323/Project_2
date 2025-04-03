@@ -1,5 +1,6 @@
 package database;
 
+import helper.Alert;
 import helper.ConnectDatabase;
 import model.Product;
 
@@ -33,6 +34,7 @@ public class ProductDB {
                 productList.add(rs.getString("name"));
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return productList;
@@ -58,6 +60,7 @@ public class ProductDB {
                 }
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -83,6 +86,7 @@ public class ProductDB {
                 }
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -99,6 +103,7 @@ public class ProductDB {
                 }
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return null;

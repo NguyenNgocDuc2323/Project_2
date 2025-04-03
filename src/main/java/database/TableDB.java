@@ -40,7 +40,8 @@ public class TableDB {
                 ));
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            Alert.showAlert("Error: " + e.getMessage());
+            e.printStackTrace();
         }
         return tableList;
     }
@@ -55,6 +56,7 @@ public class TableDB {
                 tableList.add(rs.getString("table_name"));
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return tableList;
@@ -77,6 +79,7 @@ public class TableDB {
                 }
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -99,6 +102,7 @@ public class TableDB {
                 }
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -115,6 +119,7 @@ public class TableDB {
                 }
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -132,6 +137,7 @@ public class TableDB {
                 Alert.showSuccess("Table created successfully");
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -149,6 +155,7 @@ public class TableDB {
                 Alert.showSuccess("Table updated successfully");
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -162,6 +169,7 @@ public class TableDB {
                 Alert.showSuccess("Table deleted successfully");
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }

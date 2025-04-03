@@ -39,9 +39,11 @@ public class Order {
         this.paymentMethod = paymentMethod;
     }
 
-    public Order(Integer id, String status) {
+    public Order(Integer id, Integer tableId, String status, String paymentMethod) {
         this.id = id;
+        this.tableId = tableId;
         this.status = status;
+        this.paymentMethod = paymentMethod;
     }
 
     public Integer getId() {
