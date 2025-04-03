@@ -18,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,8 @@ public class OrderController {
     @FXML
     private TableColumn<Order, String> tableNameColumn;
     @FXML
+    private TableColumn<Order, LocalDateTime> orderDateColumn;
+    @FXML
     private TableColumn<Order, String> statusColumn;
     @FXML
     private TableColumn<Order, Double> totalPriceColumn;
@@ -48,6 +51,7 @@ public class OrderController {
         orderIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         userIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
         tableNameColumn.setCellValueFactory(new PropertyValueFactory<>("tableName"));
+        orderDateColumn.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
         paymentMethodColumn.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
@@ -55,8 +59,7 @@ public class OrderController {
     }
 
     public void loadOrdersFromDatabase() {
-        orderObservableList.clear();
-        orderObservableList.addAll(OrderDB.getInstance().getAllOrders());
+        orderObservableList.setAll(OrderDB.getInstance().getAllOrders());
         orderTable.setItems(orderObservableList);
     }
 

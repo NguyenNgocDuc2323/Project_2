@@ -8,34 +8,7 @@ public class OrderDetail {
     private Integer quantity;
     private Double unitPrice;
 
-    public OrderDetail(Integer id, Integer orderId, Integer productId, String productName, Integer quantity, Double unitPrice) {
-        this.id = id;
-        this.orderId = orderId;
-        this.productId = productId;
-        this.productName = productName;
-        this.quantity = quantity;
-        this.unitPrice = unitPrice;
-    }
-
-    public OrderDetail(Integer id, Integer orderId, Integer productId, Integer quantity, Double unitPrice) {
-        this.id = id;
-        this.orderId = orderId;
-        this.productId = productId;
-        this.quantity = quantity;
-        this.unitPrice = unitPrice;
-    }
-
-    public OrderDetail(Integer orderId, Integer productId, Integer quantity) {
-        this.orderId = orderId;
-        this.productId = productId;
-        this.quantity = quantity;
-    }
-
-    public OrderDetail(Integer id, Integer orderId,Integer productId, Integer quantity) {
-        this.id = id;
-        this.orderId = orderId;
-        this.productId = productId;
-        this.quantity = quantity;
+    public OrderDetail() {
     }
 
     public Integer getId() {

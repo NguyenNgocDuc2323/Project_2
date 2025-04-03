@@ -55,6 +55,7 @@
                 <TableColumn fx:id="orderIdColumn" text="Order Id" />
                 <TableColumn fx:id="userIdColumn" text="User Id" />
                 <TableColumn fx:id="tableNameColumn" text="Table" />
+                <TableColumn fx:id="orderDateColumn" text="Order Date" />
                 <TableColumn fx:id="statusColumn" text="Status" />
                 <TableColumn fx:id="totalPriceColumn" text="Total Price" />
                 <TableColumn fx:id="paymentMethodColumn" text="Payment Method" />

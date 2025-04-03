@@ -29,6 +29,7 @@ public class Navigator {
     public static final String ORDER = "/com/example/manage_account/Staff/Order.fxml";
     public static final String ORDER_DIALOG = "/com/example/manage_account/Staff/OrderDialog.fxml";
     public static final String ORDER_DETAIL = "/com/example/manage_account/Staff/OrderDetail.fxml";
+    public static final String ORDER_STATISTIC = "/com/example/manage_account/Staff/OrderStatistic.fxml";
 
     private Navigator() {
     }
@@ -128,5 +129,9 @@ public class Navigator {
         state.setTitle("Order Detail Management");
         state.setScene(new Scene(root));
         state.show();
+    }
+
+    public void gotoOrderStatistic() throws IOException {
+        gotoScene("Order Statistic", ORDER_STATISTIC);
     }
 }

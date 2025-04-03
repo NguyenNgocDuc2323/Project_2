@@ -73,12 +73,21 @@ public class TableDialogController {
             Alert.showAlert("Status must not blank");
             return;
         }
-        if (table == null) {
-            TableDB.getInstance().createTable(new Table(tableName, capacity, status, floorNumber));
-            handleCloseDialog();
+        if (this.table == null) {
+            Table table = new Table();
+            table.setTableName(tableName);
+            table.setCapacity(capacity);
+            table.setStatus(status);
+            table.setFloorNumber(floorNumber);
+            TableDB.getInstance().createTable(table);
         } else {
-            TableDB.getInstance().updateTable(new Table(table.getId(), tableName, capacity, status, floorNumber));
-            handleCloseDialog();
+            Table table = new Table();
+            table.setId(this.table.getId());
+            table.setTableName(tableName);
+            table.setCapacity(capacity);
+            table.setStatus(status);
+            table.setFloorNumber(floorNumber);
+            TableDB.getInstance().updateTable(table);
         }
     }
 

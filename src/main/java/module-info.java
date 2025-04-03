@@ -22,4 +22,6 @@ module com.example.manage_account {
     exports controller.admin;
     exports controller.staff;
 
+    exports model;
+
 }
