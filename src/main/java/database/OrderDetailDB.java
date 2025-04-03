@@ -39,6 +39,7 @@ public class OrderDetailDB {
                 orderDetailList.add(new OrderDetail(id, orderId, productId, quantity, unitPrice));
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return orderDetailList;
@@ -61,6 +62,7 @@ public class OrderDetailDB {
                 }
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return orderDetailList;
@@ -83,6 +85,7 @@ public class OrderDetailDB {
                 }
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -117,6 +120,7 @@ public class OrderDetailDB {
             }
             conn.commit();
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -150,6 +154,7 @@ public class OrderDetailDB {
             }
             conn.commit();
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
