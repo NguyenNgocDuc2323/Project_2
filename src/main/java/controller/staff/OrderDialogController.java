@@ -44,7 +44,7 @@ public class OrderDialogController {
     }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         tableObservableList.setAll(TableDB.getInstance().getAllTablesName());
         tableBox.setItems(tableObservableList);
     }
@@ -78,14 +78,13 @@ public class OrderDialogController {
             Alert.showAlert("Payment method must not blank");
             return;
         }
+        Order order = new Order();
         if (this.order == null) {
-            Order order = new Order();
             order.setUserId(userId);
             order.setTableId(tableId);
             order.setPaymentMethod(paymentMethod);
             OrderDB.getInstance().createOrder(order);
         } else {
-            Order order = new Order();
             order.setId(this.order.getId());
             order.setTableId(tableId);
             order.setStatus(status);

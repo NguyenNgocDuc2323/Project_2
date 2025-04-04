@@ -44,7 +44,7 @@ public class OrderDetailDialogController {
     }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         products.setAll(ProductDB.getInstance().getAllProductsName());
         productBox.setItems(products);
     }
@@ -79,14 +79,13 @@ public class OrderDetailDialogController {
             Alert.showAlert("Quantity must be a number");
             return;
         }
+        OrderDetail orderDetail = new OrderDetail();
         if (this.orderDetail == null) {
-            OrderDetail orderDetail = new OrderDetail();
             orderDetail.setOrderId(orderId);
             orderDetail.setProductId(productId);
             orderDetail.setQuantity(quantity);
             OrderDetailDB.getInstance().createOrderDetailAndUpdateOrder(orderDetail);
         } else {
-            OrderDetail orderDetail = new OrderDetail();
             orderDetail.setId(this.orderDetail.getId());
             orderDetail.setOrderId(orderId);
             orderDetail.setProductId(productId);

@@ -17,6 +17,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static helper.Navigator.ORDER_DETAIL_DIALOG;
+
 public class OrderDetailController {
     @FXML
     private TableView<OrderDetail> orderDetailTable;
@@ -39,17 +41,12 @@ public class OrderDetailController {
     }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         orderDetailIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         orderIdColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         productNameColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         unitPriceColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
-    }
-
-    public void loadOrderDetailFromDatabase() {
-        orderDetailObservableList.setAll(OrderDetailDB.getInstance().getAllOrderDetailByOrderId(this.orderId));
-        orderDetailTable.setItems(orderDetailObservableList);
     }
 
     @FXML
@@ -62,14 +59,8 @@ public class OrderDetailController {
     private void handleUpdateOrderDetail() {
         OrderDetail selected = orderDetailTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            int orderDetailId = selected.getId();
-            OrderDetail orderDetail = OrderDetailDB.getInstance().getOrderDetailById(orderDetailId);
-            if (orderDetail != null) {
-                openDialog("Update Order Detail", orderDetail);
-                loadOrderDetailFromDatabase();
-            } else {
-                Alert.showAlert("Error getting order detail with id: " + orderDetailId);
-            }
+            openDialog("Update Order Detail", selected);
+            loadOrderDetailFromDatabase();
         } else {
             Alert.showAlert("Please select order detail to update");
         }
@@ -78,20 +69,25 @@ public class OrderDetailController {
     @FXML
     private void handleBackToOrder() throws IOException {
         try {
-            Navigator.getInstance().gotoOrder();
+            Navigator.getInstance().gotoOrderManagement();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public void loadOrderDetailFromDatabase() {
+        orderDetailObservableList.setAll(OrderDetailDB.getInstance().getAllOrderDetailByOrderId(this.orderId));
+        orderDetailTable.setItems(orderDetailObservableList);
+    }
+
     private void openDialog(String title, OrderDetail orderDetail) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/Staff/OrderDetailDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(ORDER_DETAIL_DIALOG));
             Parent root = loader.load();
             OrderDetailDialogController controller = loader.getController();
+            controller.setTitle(title);
             controller.setOrderId(this.orderId);
             controller.setOrderDetail(orderDetail);
-            controller.setTitle(title);
             Stage dialog = new Stage();
             dialog.setTitle(title);
             dialog.setScene(new Scene(root));

@@ -20,7 +20,7 @@
             <FlowPane alignment="CENTER">
                 <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0">
                     <font>
-                        <Font size="24.0" />
+                        <Font size="18.0" />
                     </font>
                 </Text>
             <VBox.margin>
@@ -72,8 +72,8 @@
                 <VBox.margin>
                     <Insets />
                 </VBox.margin>
-                <Button fx:id="submitButton" alignment="CENTER" onAction="#handleSubmit" prefWidth="80.0" text="Save" />
-                <Button fx:id="cancelButton" alignment="CENTER" onAction="#handleCloseDialog" prefWidth="80.0" styleClass="button-outlined" text="Cancel" />
+                <Button fx:id="submitButton" alignment="CENTER" onAction="#handleSubmit" text="Save" />
+                <Button fx:id="cancelButton" alignment="CENTER" onAction="#handleCloseDialog" styleClass="outline-button" text="Cancel" />
             </HBox>
         </VBox>
     </center>
