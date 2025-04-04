@@ -21,6 +21,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static helper.Navigator.TABLE_DIALOG;
+
 public class TableController {
     @FXML
     public Button deleteButton;
@@ -42,13 +44,66 @@ public class TableController {
     private final ObservableList<Table> filteredTableObservableList = FXCollections.observableArrayList();
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("tableName"));
         capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         floorColumn.setCellValueFactory(new PropertyValueFactory<>("floorNumber"));
+
         loadTablesFromDatabase();
+    }
+
+    @FXML
+    private void handleFilterByFloor() {
+        Integer selectedFloor = floorFilterComboBox.getValue();
+        if (selectedFloor == null) {
+            tableTable.setItems(tableObservableList);
+        } else {
+            filteredTableObservableList.setAll(tableObservableList.stream()
+                    .filter(table -> Objects.equals(table.getFloorNumber(), selectedFloor))
+                    .collect(Collectors.toList()));
+            tableTable.setItems(filteredTableObservableList);
+        }
+    }
+
+    @FXML
+    private void handleCreate() {
+        openDialog("Create Table", null);
+        loadTablesFromDatabase();
+    }
+
+    @FXML
+    private void handleUpdate() {
+        Table selected = tableTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            openDialog("Update Table", selected);
+            loadTablesFromDatabase();
+        } else {
+            Alert.showAlert("Please select table to update");
+        }
+    }
+
+    @FXML
+    private void handleDelete() {
+        Table selected = tableTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            int tableId = selected.getId();
+            deleteButton.setOnAction(event -> {
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Delete Confirmation");
+                alert.setHeaderText("Are you sure you want to delete this item?");
+                alert.setContentText("This action cannot be reversed");
+                alert.showAndWait().ifPresent(response -> {
+                    if (response.getText().equals("OK")) {
+                        TableDB.getInstance().deleteTable(tableId);
+                        loadTablesFromDatabase();
+                    }
+                });
+            });
+        } else {
+            Alert.showAlert("Please select table to delete");
+        }
     }
 
     private void loadTablesFromDatabase() {
@@ -66,65 +121,13 @@ public class TableController {
         floorFilterComboBox.setItems(floorOptions);
     }
 
-    @FXML
-    private void handleFilterByFloor() {
-        Integer selectedFloor = floorFilterComboBox.getValue();
-        if (selectedFloor == null) {
-            tableTable.setItems(tableObservableList);
-        } else {
-            filteredTableObservableList.setAll(tableObservableList.stream()
-                    .filter(table -> Objects.equals(table.getFloorNumber(), selectedFloor))
-                    .collect(Collectors.toList()));
-            tableTable.setItems(filteredTableObservableList);
-        }
-    }
-
-    @FXML
-    private void handleCreateTable() {
-        openDialog("Create Table", null);
-        loadTablesFromDatabase();
-    }
-
-    @FXML
-    private void handleUpdateTable() {
-        Table selected = tableTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            openDialog("Update Table", selected);
-            loadTablesFromDatabase();
-        } else {
-            Alert.showAlert("Please select table to update.");
-        }
-    }
-
-    @FXML
-    private void handleDeleteTable() {
-        Table selected = tableTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            int tableId = selected.getId();
-            deleteButton.setOnAction(event -> {
-                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Delete Confirmation");
-                alert.setHeaderText("Are you sure you want to delete this item?");
-                alert.setContentText("This action cannot be reversed.");
-                alert.showAndWait().ifPresent(response -> {
-                    if (response.getText().equals("OK")) {
-                        TableDB.getInstance().deleteTable(tableId);
-                        loadTablesFromDatabase();
-                    }
-                });
-            });
-        } else {
-            Alert.showAlert("Please select table to delete.");
-        }
-    }
-
     private void openDialog(String title, Table table) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/Staff/TableDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(TABLE_DIALOG));
             Parent root = loader.load();
             TableDialogController controller = loader.getController();
-            controller.setTable(table);
             controller.setTitle(title);
+            controller.setTable(table);
             Stage dialog = new Stage();
             dialog.setTitle(title);
             dialog.setScene(new Scene(root));

@@ -11,15 +11,18 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="500.0" prefWidth="1000.0" stylesheets="@../../../../assets/styles/styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.staff.OrderStatisticController">
-   <center>
-       <VBox spacing="16.0">
+<BorderPane prefHeight="500.0" prefWidth="1000.0" styleClass="surface-container" stylesheets="@../../../../assets/styles/styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.staff.OrderStatisticController">
+    <left>
+        <fx:include source="Sidebar.fxml" />
+    </left>
+    <center>
+       <VBox spacing="16.0" styleClass="surface">
            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Order Statistic">
               <font>
-                  <Font size="24.0" />
+                  <Font size="18.0" />
               </font>
               <VBox.margin>
-                  <Insets left="16.0" top="16.0" />
+                  <Insets />
               </VBox.margin>
            </Text>
            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="80.0">
@@ -27,20 +30,26 @@
                <children>
                       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Order Count">
                           <font>
-                              <Font name="System Bold" size="13.0" />
+                              <Font name="System Bold" size="14.0" />
                           </font>
                       </Text>
-                      <Text fx:id="totalOrderCount" />
+                      <Text fx:id="totalOrderCount">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Text>
                </children>
             </VBox>
             <VBox alignment="CENTER_LEFT">
                <children>
                       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Revenue">
                           <font>
-                              <Font name="System Bold" size="13.0" />
+                              <Font name="System Bold" size="14.0" />
                           </font>
                       </Text>
-                      <Text fx:id="totalRevenue" />
+                      <Text fx:id="totalRevenue">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Text>
                </children>
             </VBox>
            </HBox>
@@ -87,9 +96,9 @@
                    </TableView>
                </Tab>
            </TabPane>
+         <padding>
+            <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+         </padding>
        </VBox>
    </center>
-   <bottom>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </bottom>
 </BorderPane>

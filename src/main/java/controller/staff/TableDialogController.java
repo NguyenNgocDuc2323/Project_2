@@ -73,15 +73,14 @@ public class TableDialogController {
             Alert.showAlert("Status must not blank");
             return;
         }
+        Table table = new Table();
         if (this.table == null) {
-            Table table = new Table();
             table.setTableName(tableName);
             table.setCapacity(capacity);
             table.setStatus(status);
             table.setFloorNumber(floorNumber);
             TableDB.getInstance().createTable(table);
         } else {
-            Table table = new Table();
             table.setId(this.table.getId());
             table.setTableName(tableName);
             table.setCapacity(capacity);

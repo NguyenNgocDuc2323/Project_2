@@ -73,7 +73,6 @@ public class OrderStatisticController {
         dailyRevenueColumn.setCellValueFactory(new PropertyValueFactory<>("revenue"));
 
         loadOrderStatistic();
-
         loadTotalOrderCountAndTotalRevenue();
     }
 
@@ -88,7 +87,7 @@ public class OrderStatisticController {
         orderDailyStatisticTable.setItems(orderDailyStatisticObservableList);
     }
 
-    public void loadTotalOrderCountAndTotalRevenue() {
+    private void loadTotalOrderCountAndTotalRevenue() {
         OrderStatistic orderStatistic = OrderDB.getInstance().getTotalOrderCountAndTotalRevenue();
         this.totalOrderCount.setText(String.valueOf(orderStatistic.getOrderCount()));
         this.totalRevenue.setText(String.valueOf(orderStatistic.getRevenue()));
