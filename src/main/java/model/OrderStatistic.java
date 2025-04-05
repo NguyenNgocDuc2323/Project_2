@@ -3,7 +3,6 @@ package model;
 public class OrderStatistic {
     private Integer year;
     private Integer month;
-    private Integer week;
     private Integer day;
     private Integer orderCount;
     private Double revenue;
@@ -22,14 +21,6 @@ public class OrderStatistic {
 
     public void setMonth(Integer month) {
         this.month = month;
-    }
-
-    public Integer getWeek() {
-        return week;
-    }
-
-    public void setWeek(Integer week) {
-        this.week = week;
     }
 
     public Integer getDay() {

@@ -157,38 +157,6 @@ public class OrderDB {
         return orderStatisticList;
     }
 
-    public List<OrderStatistic> getOrderWeeklyStatistic() {
-        List<OrderStatistic> orderStatisticList = new ArrayList<>();
-        String query = """
-                SELECT
-                    YEAR(order_date) AS year,
-                    MONTH(order_date) AS month,
-                    WEEK(order_date, 1) AS week,
-                    COUNT(id) AS order_count,
-                    SUM(total_price) AS revenue
-                FROM
-                    orders
-                GROUP BY
-                    YEAR(order_date),
-                    WEEK(order_date, 1)
-                """;
-        try (Connection connection = ConnectDatabase.getConnection(); PreparedStatement ps = connection.prepareStatement(query); ResultSet resultSet = ps.executeQuery(query)) {
-            while (resultSet.next()) {
-                OrderStatistic orderStatistic = new OrderStatistic();
-                orderStatistic.setYear(resultSet.getInt("year"));
-                orderStatistic.setMonth(resultSet.getInt("month"));
-                orderStatistic.setWeek(resultSet.getInt("week"));
-                orderStatistic.setOrderCount(resultSet.getInt("order_count"));
-                orderStatistic.setRevenue(resultSet.getDouble("revenue"));
-                orderStatisticList.add(orderStatistic);
-            }
-        } catch (SQLException e) {
-            Alert.showAlert("Error: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return orderStatisticList;
-    }
-
     public List<OrderStatistic> getOrderDailyStatistic() {
         List<OrderStatistic> orderStatisticList = new ArrayList<>();
         String query = """
