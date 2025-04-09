@@ -31,7 +31,7 @@ public class Navigator {
     public static final String ORDER_DIALOG = "/com/example/manage_account/Staff/OrderDialog.fxml";
     public static final String ORDER_DETAIL_MANAGEMENT = "/com/example/manage_account/Staff/OrderDetail.fxml";
     public static final String ORDER_DETAIL_DIALOG = "/com/example/manage_account/Staff/OrderDetailDialog.fxml";
-    public static final String STATISTIC = "/com/example/manage_account/Staff/OrderStatistic.fxml";
+    public static final String ORDER_STATISTIC = "/com/example/manage_account/Staff/OrderStatistic.fxml";
     public static final String CATEGORY_MANAGEMENT = "/com/example/manage_account/Staff/Category.fxml";
     public static final String CATEGORY_DIALOG = "/com/example/manage_account/Staff/CategoryDialog.fxml";
 
@@ -135,8 +135,8 @@ public class Navigator {
         state.show();
     }
 
-    public void gotoStatistic() throws IOException {
-        gotoScene("Statistic", STATISTIC);
+    public void gotoOrderStatistic() throws IOException {
+        gotoScene("Order Statistic", ORDER_STATISTIC);
     }
 
     public void gotoCategoryManagement() throws IOException {

@@ -15,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import model.OrderStatistic;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class OrderStatisticController {
@@ -128,6 +129,8 @@ public class OrderStatisticController {
     }
 
     private void loadLineChart() {
+        LocalDate currentDate = LocalDate.now();
+
         XYChart.Series<String, Number> monthlyOrderCountSeries = new XYChart.Series<>();
         monthlyOrderCountSeries.setName("Order Count");
 
@@ -149,8 +152,13 @@ public class OrderStatisticController {
             int orderCount = stat.getOrderCount();
             double revenue = stat.getRevenue();
             String yearMonth = year + "/" + month;
-            monthlyOrderCountSeries.getData().add(new XYChart.Data<>(yearMonth, orderCount));
-            monthlyRevenueSeries.getData().add(new XYChart.Data<>(yearMonth, revenue));
+
+            LocalDate monthDate = LocalDate.of(year, month, 1);
+            // Display only the last 12 months in chart
+            if (monthDate.isAfter(currentDate.minusMonths(12))) {
+                monthlyOrderCountSeries.getData().add(new XYChart.Data<>(yearMonth, orderCount));
+                monthlyRevenueSeries.getData().add(new XYChart.Data<>(yearMonth, revenue));
+            }
         }
 
         monthlyOrderLineChart.getData().add(monthlyOrderCountSeries);
@@ -163,8 +171,13 @@ public class OrderStatisticController {
             int orderCount = stat.getOrderCount();
             double revenue = stat.getRevenue();
             String yearMonthDay = year + "/" + month + "/" + day;
-            dailyOrderCountSeries.getData().add(new XYChart.Data<>(yearMonthDay, orderCount));
-            dailyRevenueSeries.getData().add(new XYChart.Data<>(yearMonthDay, revenue));
+
+            LocalDate dayDate = LocalDate.of(year, month, day);
+            // Display only the last 30 days in chart
+            if (dayDate.isAfter(currentDate.minusDays(30))) {
+                dailyOrderCountSeries.getData().add(new XYChart.Data<>(yearMonthDay, orderCount));
+                dailyRevenueSeries.getData().add(new XYChart.Data<>(yearMonthDay, revenue));
+            }
         }
 
         dailyOrderLineChart.getData().add(dailyOrderCountSeries);
