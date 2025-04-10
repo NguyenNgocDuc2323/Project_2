@@ -15,7 +15,7 @@ public class MainApplication extends Application {
             Locale vietnam = new Locale("vn", "VN");
             Translator.setLocale(vietnam);
             Navigator.getInstance().setState(stage);
-            Navigator.getInstance().gotoStatistic();
+            Navigator.getInstance().gotoOrderStatistic();
 
         } catch (IOException e) {
             e.printStackTrace();

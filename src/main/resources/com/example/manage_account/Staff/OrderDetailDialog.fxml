@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="500.0" prefWidth="500.0" stylesheets="@../../../../assets/styles/styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.staff.OrderDetailDialogController">
+<BorderPane prefHeight="500.0" prefWidth="500.0" styleClass="surface" stylesheets="@../../../../assets/styles/styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.staff.OrderDetailDialogController">
     <center>
         <VBox alignment="CENTER" BorderPane.alignment="CENTER">
             <FlowPane alignment="CENTER">

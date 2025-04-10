@@ -7,9 +7,9 @@ import java.io.IOException;
 
 public class SidebarController {
     @FXML
-    private void handleGoToStatistic() throws IOException {
+    private void handleGoToOrderStatistic() throws IOException {
         try {
-            Navigator.getInstance().gotoStatistic();
+            Navigator.getInstance().gotoOrderStatistic();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -81,7 +81,7 @@
   -fx-background-color: -mat-primary-container;
 }
 
-.nav .text-button {
+.sidebar .text-button {
   -fx-background-color: inherit;
   -fx-background-radius: 32px;
   -fx-border-color: transparent;
@@ -92,8 +92,16 @@
   -fx-text-fill: -mat-text-on-surface;
 }
 
-.nav .text-button:pressed {
+.sidebar .text-button:pressed {
   -fx-background-color: -mat-primary-container;
+}
+
+.card {
+  -fx-background-color: -mat-surface-container-lowest;
+  -fx-background-radius: 8px;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 4); /* Shadow effect */
+  -fx-padding: 16px;
+  -fx-spacing: 8px;
 }
 
 .combo-box {
