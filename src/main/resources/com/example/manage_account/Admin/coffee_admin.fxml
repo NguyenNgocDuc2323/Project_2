@@ -14,6 +14,7 @@
                     <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddButton" text="Add Coffee" />
                     <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEditButton" text="Edit Coffee" />
                     <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDeleteButton" text="Delete Coffee" />
+                    <Button fx:id="btn_account_manage" mnemonicParsing="false" onAction="#onSwitchToAccountManage" text="Quản lý tài khoản" />
                 </HBox>
 
                 <TableView fx:id="coffeeTableView" VBox.vgrow="ALWAYS">

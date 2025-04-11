@@ -9,6 +9,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import controller.admin.CoffeeDialogController;
+import javafx.stage.Modality;
+import model.CoffeeShop.Coffee;
+import java.util.function.Consumer;
 
 public class Navigator {
 
@@ -30,6 +34,7 @@ public class Navigator {
     public static final String ORDER_DIALOG = "/com/example/manage_account/Staff/OrderDialog.fxml";
     public static final String ORDER_DETAIL = "/com/example/manage_account/Staff/OrderDetail.fxml";
     public static final String PRODUCT_MANAGE = "/com/example/manage_account/Admin/coffee_admin.fxml";
+    public static final String COFFEE_DIALOG = "/com/example/manage_account/CoffeeShop/add_edit_coffee.fxml";
 
     private Navigator() {
     }
@@ -133,4 +138,33 @@ public class Navigator {
     public void gotoProductManage() throws IOException {
         gotoScene("Product Management", PRODUCT_MANAGE);
     }
+
+    public void gotoCoffeeDialog(String mode, Coffee coffee, Consumer<Boolean> onSavedCallback) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(COFFEE_DIALOG), Translator.getResourceBundle());
+        Parent root = loader.load();
+
+        CoffeeDialogController controller = loader.getController();
+        controller.setMode(mode);
+        if (coffee != null) {
+            controller.setCoffee(coffee);
+        }
+        controller.setOnCoffeeSavedCallback(onSavedCallback);
+
+        Stage dialogStage = new Stage();
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.initOwner(state);
+        dialogStage.setTitle(mode.equals("ADD") ? "Add New Coffee" : "Edit Coffee");
+        dialogStage.setScene(new Scene(root));
+        dialogStage.showAndWait();
+    }
+
+    public void gotoAddCoffee(Consumer<Boolean> onSavedCallback) throws IOException {
+        gotoCoffeeDialog("ADD", null, onSavedCallback);
+    }
+
+    public void gotoEditCoffee(Coffee coffee, Consumer<Boolean> onSavedCallback) throws IOException {
+        gotoCoffeeDialog("EDIT", coffee, onSavedCallback);
+    }
+
+
 }

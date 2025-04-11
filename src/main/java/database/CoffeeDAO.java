@@ -12,7 +12,7 @@ public class CoffeeDAO {
     // Get all coffee items
     public ObservableList<model.CoffeeShop.Coffee> getAllCoffee() {
         ObservableList<Coffee> coffeeList = FXCollections.observableArrayList();
-        String query = "SELECT * FROM coffee";
+        String query = "SELECT * FROM product";
 
         try (Connection conn = ConnectDatabase.getConnection();
              Statement stmt = conn.createStatement();
@@ -40,7 +40,7 @@ public class CoffeeDAO {
 
     // Add new coffee
     public boolean addCoffee(Coffee coffee) {
-        String query = "INSERT INTO coffee (name, category_id, price, quantity, image_url, unit_id, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO product (name, category_id, price, quantity, image_url, unit_id, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectDatabase.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -63,7 +63,7 @@ public class CoffeeDAO {
 
     // Update existing coffee
     public boolean updateCoffee(Coffee coffee) {
-        String query = "UPDATE coffee SET name = ?, category_id = ?, price = ?, quantity = ?, image_url = ?, unit_id = ?, description = ? WHERE id = ?";
+        String query = "UPDATE product SET name = ?, category_id = ?, price = ?, quantity = ?, image_url = ?, unit_id = ?, description = ? WHERE id = ?";
 
         try (Connection conn = ConnectDatabase.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -87,7 +87,7 @@ public class CoffeeDAO {
 
     // Delete coffee
     public boolean deleteCoffee(int coffeeId) {
-        String query = "DELETE FROM coffee WHERE id = ?";
+        String query = "DELETE FROM product WHERE id = ?";
 
         try (Connection conn = ConnectDatabase.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -104,7 +104,7 @@ public class CoffeeDAO {
 
     // Get coffee by ID
     public Coffee getCoffeeById(int coffeeId) {
-        String query = "SELECT * FROM coffee WHERE id = ?";
+        String query = "SELECT * FROM product WHERE id = ?";
 
         try (Connection conn = ConnectDatabase.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {

@@ -188,7 +188,7 @@ public class CoffeeDialogController implements Initializable {
             coffee.setPrice(price);
             coffee.setQuantity(quantity);
             coffee.setDescription(description);
-            coffee.setImage(selectedImageUrl);
+            coffee.setImage(selectedImageUrl);  // Fixed truncated line
 
             success = coffeeDAO.updateCoffee(coffee);
 
@@ -235,7 +235,7 @@ public class CoffeeDialogController implements Initializable {
         }
 
         if (errorMessage.length() > 0) {
-            AlertUtils.showWarning("Validation Error", errorMessage.toString());
+            Alert.showAlert("Validation Error: " + errorMessage.toString());
             return false;
         }
 
@@ -243,5 +243,7 @@ public class CoffeeDialogController implements Initializable {
     }
 
     public void setCoffee(model.CoffeeShop.Coffee selectedCoffee) {
+        this.coffee = selectedCoffee;
+        populateFields();
     }
 }

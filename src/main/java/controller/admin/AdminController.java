@@ -1,6 +1,5 @@
 package controller.admin;
 
-import helper.AccountManager;
 import helper.Navigator;
 import helper.Translator;
 import javafx.collections.FXCollections;
@@ -10,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import model.Account;
+import repository.AccountRepository;
 
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -37,6 +37,9 @@ public class AdminController implements Initializable {
     private Button btn_un_log;
 
     @FXML
+    private Button btn_coffee_manage;
+
+    @FXML
     private TableView<Account> tbl_account;
 
     @FXML
@@ -58,7 +61,7 @@ public class AdminController implements Initializable {
     ObservableList<Account> accountList;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        accountList = FXCollections.observableArrayList(AccountManager.getInstance().getAccounts());
+        accountList = FXCollections.observableArrayList(AccountRepository.getInstance().getAllAccounts());
         tbl_account.setItems(accountList);
         tbl_id.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
         tbl_name.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -173,6 +176,15 @@ public class AdminController implements Initializable {
         try {
             Navigator.getInstance().gotoLogin();
         }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void onSwitchToCoffeeManage(ActionEvent event) {
+        try {
+            Navigator.getInstance().gotoProductManage();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

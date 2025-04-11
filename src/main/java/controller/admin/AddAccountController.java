@@ -89,12 +89,13 @@ public class AddAccountController implements Initializable {
         model.Account newAccount = new model.Account(accNumber + 1, name, email, hashedPassword, type, lockStatus);
         Account.addAccount(newAccount);
 
+        Alert.showSuccess("New account added successfully!");
+        btn_add_new_acc.getScene().getWindow().hide();
         try {
-            Alert.showSuccess("New account added successfully!");
             Navigator.getInstance().gotoAdminHome();
         } catch (IOException e) {
             e.printStackTrace();
-            Alert.showAlert("An error occurred while navigating to Admin Home.");
+            Alert.showAlert("Error returning to admin home page.");
         }
     }
 

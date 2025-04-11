@@ -10,7 +10,7 @@ public class Coffee {
     private final StringProperty image;
     private final IntegerProperty unitId;
     private final StringProperty description;
-    private final IntegerProperty status = null;
+    private final IntegerProperty status;  // Remove the = null initialization
 
     public Coffee(int id, String name, int categoryId, double price, int quantity, String image, int unitId, String description) {
         this.id = new SimpleIntegerProperty(id);
@@ -21,12 +21,12 @@ public class Coffee {
         this.image = new SimpleStringProperty(image);
         this.unitId = new SimpleIntegerProperty(unitId);
         this.description = new SimpleStringProperty(description);
-        this.status = new SimpleIntegerProperty(status);
+        this.status = new SimpleIntegerProperty(1);  // Initialize with a default value (1 for active)
     }
 
     // Add no-args constructor for convenience
     public Coffee() {
-        this(0, "", 0, 0.0, 0, "", 0, "");
+        this(0, "", 0, 0.0, 0, "", 0, "");  // The status will be set to 1 by the main constructor
     }
 
     // Getters for properties (JavaFX binding)

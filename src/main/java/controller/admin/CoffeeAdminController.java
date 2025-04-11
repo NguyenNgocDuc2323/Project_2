@@ -1,6 +1,7 @@
 package controller.admin;
 
 import database.CoffeeDAO;
+import helper.Navigator;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -105,7 +106,7 @@ public class CoffeeAdminController implements Initializable {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/admin/coffee_dialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/CoffeeShop/add_edit_coffee.fxml"));
             Parent root = loader.load();
 
             CoffeeDialogController controller = loader.getController();
@@ -128,10 +129,15 @@ public class CoffeeAdminController implements Initializable {
     }
 
     @FXML
+    void onSwitchToAccountManage(ActionEvent event) throws IOException {
+        Navigator.getInstance().gotoAdminHome();
+    }
+
+    @FXML
     private void handleDeleteButton(ActionEvent event) {
         Coffee selectedCoffee = coffeeTableView.getSelectionModel().getSelectedItem();
         if (selectedCoffee == null) {
-            helper.Alert.showAlert("Selection Required");
+            helper.Alert.showAlert("Please select a coffee to delete.");
             return;
         }
 
@@ -148,7 +154,6 @@ public class CoffeeAdminController implements Initializable {
                     loadCoffeeData();
                     helper.Alert.showSuccess("Coffee deleted successfully");
                 } else {
-                    helper.Alert.showAlert("Coffee deleted successfully");
                     helper.Alert.showAlert("Failed to delete coffee");
                 }
             } catch (Exception e) {

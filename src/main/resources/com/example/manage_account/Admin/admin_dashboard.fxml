@@ -32,6 +32,7 @@
                 <Button fx:id="btn_reset_password" mnemonicParsing="false" onAction="#onResetPassword" prefHeight="33.0" prefWidth="90.0" text="%btn.resetPassword" textFill="#d01a1a" />
                 <Button fx:id="btn_change_password" mnemonicParsing="false" onAction="#onChangePassword" prefHeight="33.0" prefWidth="90.0" text="%btn.changePassword" textFill="#d01a1a" />
                 <Button fx:id="btn_logout" mnemonicParsing="false" onAction="#onLogout" prefHeight="33.0" prefWidth="70.0" text="%btn.log_out" textFill="#d01a1a" />
+                <Button fx:id="btn_coffee_manage" mnemonicParsing="false" onAction="#onSwitchToCoffeeManage" prefHeight="33.0" prefWidth="120.0" text="Quản lý cà phê" textFill="#d01a1a" />
             <Button fx:id="btn_add1" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleChangeLanguage" prefHeight="33.0" prefWidth="70.0" text="%btn.changeLanguage" textFill="#d01a1a">
                <font>
                   <Font size="14.0" />
