@@ -2,94 +2,98 @@ package controller.staff;
 
 import database.TableDB;
 import helper.Alert;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import model.Table;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public class TableController implements Initializable {
+import static helper.Navigator.TABLE_DIALOG;
+
+public class TableController {
     @FXML
     public Button deleteButton;
     @FXML
-    private TreeView<String> tableTreeView;
+    private TableView<Table> tableTable;
+    @FXML
+    private TableColumn<Table, Integer> idColumn;
+    @FXML
+    private TableColumn<Table, String> nameColumn;
+    @FXML
+    private TableColumn<Table, Integer> capacityColumn;
+    @FXML
+    private TableColumn<Table, String> statusColumn;
+    @FXML
+    private TableColumn<Table, Integer> floorColumn;
+    @FXML
+    private ComboBox<Integer> floorFilterComboBox;
+    private final ObservableList<Table> tableObservableList = FXCollections.observableArrayList();
+    private final ObservableList<Table> filteredTableObservableList = FXCollections.observableArrayList();
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    @FXML
+    private void initialize() {
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("tableName"));
+        capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        floorColumn.setCellValueFactory(new PropertyValueFactory<>("floorNumber"));
+
         loadTablesFromDatabase();
     }
 
-    private void loadTablesFromDatabase() {
-        List<Table> tables = TableDB.getInstance().getAllTables();
-        Map<Integer, TreeItem<String>> floorNodes = new HashMap<>();
-        TreeItem<String> root = new TreeItem<>();
-        root.setExpanded(true);
-        for (Table table: tables) {
-            int floorNumber = table.getFloorNumber();
-            TreeItem<String> floorNode = floorNodes.get(floorNumber);
-            if (floorNode == null) {
-                floorNode = new TreeItem<>("Floor " + floorNumber);
-                floorNode.setExpanded(true);
-                floorNodes.put(floorNumber, floorNode);
-                root.getChildren().add(floorNode);
-            }
-            String tableInfo = String.format("%d - %s: %d seats, %s", table.getId(), table.getTableName(), table.getCapacity(), table.getStatus());
-            TreeItem<String> tableItem = new TreeItem<>(tableInfo);
-            floorNode.getChildren().add(tableItem);
+    @FXML
+    private void handleFilterByFloor() {
+        Integer selectedFloor = floorFilterComboBox.getValue();
+        if (selectedFloor == null) {
+            tableTable.setItems(tableObservableList);
+        } else {
+            filteredTableObservableList.setAll(tableObservableList.stream()
+                    .filter(table -> Objects.equals(table.getFloorNumber(), selectedFloor))
+                    .collect(Collectors.toList()));
+            tableTable.setItems(filteredTableObservableList);
         }
-        tableTreeView.setRoot(root);
-        tableTreeView.setShowRoot(false);
     }
 
     @FXML
-    private void handleCreateTable() {
+    private void handleCreate() {
         openDialog("Create Table", null);
         loadTablesFromDatabase();
     }
 
     @FXML
-    private void handleUpdateTable() {
-        TreeItem<String> selected = tableTreeView.getSelectionModel().getSelectedItem();
+    private void handleUpdate() {
+        Table selected = tableTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            String selectedTableValue = selected.getValue();
-            String[] parts = selectedTableValue.split(" ");
-            int tableId = Integer.parseInt(parts[0]);
-            Table table = TableDB.getInstance().getTableById(tableId);
-            if (table != null) {
-                openDialog("Update Table", table);
-                loadTablesFromDatabase();
-            } else {
-                Alert.showAlert("Error getting table with id: " + tableId);
-            }
+            openDialog("Update Table", selected);
+            loadTablesFromDatabase();
         } else {
-            Alert.showAlert("Please select table to update.");
+            Alert.showAlert("Please select table to update");
         }
     }
 
     @FXML
-    private void handleDeleteTable() {
-        TreeItem<String> selected = tableTreeView.getSelectionModel().getSelectedItem();
+    private void handleDelete() {
+        Table selected = tableTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            String selectedTableValue = selected.getValue();
-            String[] parts = selectedTableValue.split(" ");
-            int tableId = Integer.parseInt(parts[0]);
+            int tableId = selected.getId();
             deleteButton.setOnAction(event -> {
                 javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Delete Confirmation");
                 alert.setHeaderText("Are you sure you want to delete this item?");
-                alert.setContentText("This action cannot be reversed.");
+                alert.setContentText("This action cannot be reversed");
                 alert.showAndWait().ifPresent(response -> {
                     if (response.getText().equals("OK")) {
                         TableDB.getInstance().deleteTable(tableId);
@@ -98,17 +102,32 @@ public class TableController implements Initializable {
                 });
             });
         } else {
-            Alert.showAlert("Please select table to delete.");
+            Alert.showAlert("Please select table to delete");
         }
+    }
+
+    private void loadTablesFromDatabase() {
+        tableObservableList.setAll(TableDB.getInstance().getAllTables());
+        tableTable.setItems(tableObservableList);
+        loadFloorFilter();
+    }
+
+    private void loadFloorFilter() {
+        Set<Integer> floorNumbers = tableObservableList.stream()
+                .map(Table::getFloorNumber)
+                .collect(Collectors.toSet());
+        ObservableList<Integer> floorOptions = FXCollections.observableArrayList(floorNumbers);
+        floorOptions.addFirst(null);
+        floorFilterComboBox.setItems(floorOptions);
     }
 
     private void openDialog(String title, Table table) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/Staff/TableDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(TABLE_DIALOG));
             Parent root = loader.load();
             TableDialogController controller = loader.getController();
-            controller.setTable(table);
             controller.setTitle(title);
+            controller.setTable(table);
             Stage dialog = new Stage();
             dialog.setTitle(title);
             dialog.setScene(new Scene(root));

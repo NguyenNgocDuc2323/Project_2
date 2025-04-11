@@ -24,26 +24,6 @@ public class OrderDetailDB {
         return instance;
     }
 
-    public List<OrderDetail> getAllOrderDetail() {
-        List<OrderDetail> orderDetailList = new ArrayList<>();
-        String query = "SELECT * FROM `order_detail`";
-        try (Connection conn = ConnectDatabase.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                int orderId = rs.getInt("order_id");
-                int productId = rs.getInt("product_id");
-                int quantity = rs.getInt("quantity");
-                double unitPrice = rs.getDouble("unit_price");
-                orderDetailList.add(new OrderDetail(id, orderId, productId, quantity, unitPrice));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return orderDetailList;
-    }
-
     public List<OrderDetail> getAllOrderDetailByOrderId(int orderId) {
         List<OrderDetail> orderDetailList = new ArrayList<>();
         String query = "SELECT * FROM `order_detail` WHERE order_id = ?";
@@ -52,15 +32,18 @@ public class OrderDetailDB {
             ps.setInt(1, orderId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    int id = rs.getInt("id");
-                    int productId = rs.getInt("product_id");
-                    int quantity = rs.getInt("quantity");
-                    double unitPrice = rs.getDouble("unit_price");
-                    String productName = ProductDB.getInstance().getProductNameById(productId);
-                    orderDetailList.add(new OrderDetail(id, orderId, productId, productName, quantity, unitPrice));
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setId(rs.getInt("id"));
+                    orderDetail.setOrderId(rs.getInt("order_id"));
+                    orderDetail.setProductId(rs.getInt("product_id"));
+                    orderDetail.setProductName(ProductDB.getInstance().getProductNameById(rs.getInt("product_id")));
+                    orderDetail.setQuantity(rs.getInt("quantity"));
+                    orderDetail.setUnitPrice(rs.getDouble("unit_price"));
+                    orderDetailList.add(orderDetail);
                 }
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return orderDetailList;
@@ -73,16 +56,17 @@ public class OrderDetailDB {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new OrderDetail(
-                            rs.getInt("id"),
-                            rs.getInt("order_id"),
-                            rs.getInt("product_id"),
-                            rs.getInt("quantity"),
-                            rs.getDouble("unit_price")
-                    );
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setId(rs.getInt("id"));
+                    orderDetail.setOrderId(rs.getInt("order_id"));
+                    orderDetail.setProductId(rs.getInt("product_id"));
+                    orderDetail.setQuantity(rs.getInt("quantity"));
+                    orderDetail.setUnitPrice(rs.getDouble("unit_price"));
+                    return orderDetail;
                 }
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -117,6 +101,7 @@ public class OrderDetailDB {
             }
             conn.commit();
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -150,6 +135,7 @@ public class OrderDetailDB {
             }
             conn.commit();
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }

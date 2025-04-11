@@ -7,19 +7,7 @@ public class Table {
     private String status;
     private Integer floorNumber;
 
-    public Table(Integer id, String tableName, Integer capacity, String status, Integer floorNumber) {
-        this.id = id;
-        this.tableName = tableName;
-        this.capacity = capacity;
-        this.status = status;
-        this.floorNumber = floorNumber;
-    }
-
-    public Table(String tableName, Integer capacity, String status, Integer floorNumber) {
-        this.tableName = tableName;
-        this.capacity = capacity;
-        this.status = status;
-        this.floorNumber = floorNumber;
+    public Table() {
     }
 
     public Integer getId() {

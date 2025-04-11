@@ -10,15 +10,7 @@ public class Product {
     private Integer unitId;
     private String description;
 
-    public Product(Integer id, String name, Integer categoryId, Double price, Integer quantity, String image, Integer unitId, String description) {
-        this.id = id;
-        this.name = name;
-        this.categoryId = categoryId;
-        this.price = price;
-        this.quantity = quantity;
-        this.image = image;
-        this.unitId = unitId;
-        this.description = description;
+    public Product() {
     }
 
     public Integer getId() {

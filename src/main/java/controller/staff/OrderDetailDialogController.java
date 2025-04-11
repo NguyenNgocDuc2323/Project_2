@@ -7,17 +7,13 @@ import model.OrderDetail;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class OrderDetailDialogController implements Initializable {
+public class OrderDetailDialogController {
     @FXML
     public Text title;
     @FXML
@@ -47,9 +43,9 @@ public class OrderDetailDialogController implements Initializable {
         this.orderIdField.setText(String.valueOf(orderId));
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        products.addAll(ProductDB.getInstance().getAllProductsName());
+    @FXML
+    private void initialize() {
+        products.setAll(ProductDB.getInstance().getAllProductsName());
         productBox.setItems(products);
     }
 
@@ -66,7 +62,12 @@ public class OrderDetailDialogController implements Initializable {
             Alert.showAlert("Order id must be a number");
             return;
         }
-        int productId = ProductDB.getInstance().getProductByName(productBox.getValue()).getId();
+        String productName = productBox.getValue();
+        if (productName == null || productName.isBlank()) {
+            Alert.showAlert("Product must not blank");
+            return;
+        }
+        int productId = ProductDB.getInstance().getProductByName(productName).getId();
         int quantity;
         try {
             quantity = Integer.parseInt(quantityField.getText());
@@ -78,12 +79,18 @@ public class OrderDetailDialogController implements Initializable {
             Alert.showAlert("Quantity must be a number");
             return;
         }
-        if (orderDetail == null) {
-            OrderDetailDB.getInstance().createOrderDetailAndUpdateOrder(new OrderDetail(orderId, productId, quantity));
-            handleCloseDialog();
+        OrderDetail orderDetail = new OrderDetail();
+        if (this.orderDetail == null) {
+            orderDetail.setOrderId(orderId);
+            orderDetail.setProductId(productId);
+            orderDetail.setQuantity(quantity);
+            OrderDetailDB.getInstance().createOrderDetailAndUpdateOrder(orderDetail);
         } else {
-            OrderDetailDB.getInstance().updateOrderDetailAndOrder(new OrderDetail(orderDetail.getId(), orderId, productId, quantity));
-            handleCloseDialog();
+            orderDetail.setId(this.orderDetail.getId());
+            orderDetail.setOrderId(orderId);
+            orderDetail.setProductId(productId);
+            orderDetail.setQuantity(quantity);
+            OrderDetailDB.getInstance().updateOrderDetailAndOrder(orderDetail);
         }
     }
 

@@ -12,36 +12,7 @@ public class Order {
     private Double totalPrice;
     private String paymentMethod;
 
-    public Order(Integer id, Integer userId, Integer tableId, String tableName, LocalDateTime orderDate, String status, Double totalPrice, String paymentMethod) {
-        this.id = id;
-        this.userId = userId;
-        this.tableId = tableId;
-        this.tableName = tableName;
-        this.orderDate = orderDate;
-        this.status = status;
-        this.totalPrice = totalPrice;
-        this.paymentMethod = paymentMethod;
-    }
-
-    public Order(Integer id, Integer userId, Integer tableId, LocalDateTime orderDate, String status, Double totalPrice, String paymentMethod) {
-        this.id = id;
-        this.userId = userId;
-        this.tableId = tableId;
-        this.orderDate = orderDate;
-        this.status = status;
-        this.totalPrice = totalPrice;
-        this.paymentMethod = paymentMethod;
-    }
-
-    public Order(Integer userId, Integer tableId, String paymentMethod) {
-        this.userId = userId;
-        this.tableId = tableId;
-        this.paymentMethod = paymentMethod;
-    }
-
-    public Order(Integer id, String status) {
-        this.id = id;
-        this.status = status;
+    public Order() {
     }
 
     public Integer getId() {

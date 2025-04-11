@@ -1,21 +1,24 @@
 package model;
 
 public class Category {
-    private int id;
+    private Integer id;
     private String name;
     private String description;
 
-    public Category(int id, String name, String description) {
+    public Category() {
+    }
+
+    public Category(Integer id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -34,9 +37,13 @@ public class Category {
     public void setDescription(String description) {
         this.description = description;
     }
+<<<<<<< HEAD
 
     @Override
     public String toString() {
         return name;
     }
 }
+=======
+}
+>>>>>>> aaf2a3057c2f0572892fa9f328198c5de78106ce

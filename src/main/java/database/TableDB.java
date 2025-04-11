@@ -31,16 +31,17 @@ public class TableDB {
              PreparedStatement ps = conn.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                tableList.add(new Table(
-                        rs.getInt("id"),
-                        rs.getString("table_name"),
-                        rs.getInt("capacity"),
-                        rs.getString("status"),
-                        rs.getInt("floor_number")
-                ));
+                Table table = new Table();
+                table.setId(rs.getInt("id"));
+                table.setTableName(rs.getString("table_name"));
+                table.setCapacity(rs.getInt("capacity"));
+                table.setStatus(rs.getString("status"));
+                table.setFloorNumber(rs.getInt("floor_number"));
+                tableList.add(table);
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            Alert.showAlert("Error: " + e.getMessage());
+            e.printStackTrace();
         }
         return tableList;
     }
@@ -55,6 +56,7 @@ public class TableDB {
                 tableList.add(rs.getString("table_name"));
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return tableList;
@@ -67,16 +69,17 @@ public class TableDB {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new Table(
-                            rs.getInt("id"),
-                            rs.getString("table_name"),
-                            rs.getInt("capacity"),
-                            rs.getString("status"),
-                            rs.getInt("floor_number")
-                    );
+                    Table table = new Table();
+                    table.setId(rs.getInt("id"));
+                    table.setTableName(rs.getString("table_name"));
+                    table.setCapacity(rs.getInt("capacity"));
+                    table.setStatus(rs.getString("status"));
+                    table.setFloorNumber(rs.getInt("floor_number"));
+                    return table;
                 }
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -89,16 +92,17 @@ public class TableDB {
             ps.setString(1, name);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new Table(
-                            rs.getInt("id"),
-                            rs.getString("table_name"),
-                            rs.getInt("capacity"),
-                            rs.getString("status"),
-                            rs.getInt("floor_number")
-                    );
+                    Table table = new Table();
+                    table.setId(rs.getInt("id"));
+                    table.setTableName(rs.getString("table_name"));
+                    table.setCapacity(rs.getInt("capacity"));
+                    table.setStatus(rs.getString("status"));
+                    table.setFloorNumber(rs.getInt("floor_number"));
+                    return table;
                 }
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -115,6 +119,7 @@ public class TableDB {
                 }
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -132,6 +137,7 @@ public class TableDB {
                 Alert.showSuccess("Table created successfully");
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -149,6 +155,7 @@ public class TableDB {
                 Alert.showSuccess("Table updated successfully");
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -162,6 +169,7 @@ public class TableDB {
                 Alert.showSuccess("Table deleted successfully");
             }
         } catch (SQLException e) {
+            Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
