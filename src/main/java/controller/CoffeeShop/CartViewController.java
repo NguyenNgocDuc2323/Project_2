@@ -266,17 +266,17 @@ public class CartViewController implements Initializable {
         VBox content = new VBox(10);
         content.setAlignment(Pos.CENTER_LEFT);
 
-        // Add table selection
+        // Add table selection (optional)
         ComboBox<String> tableComboBox = new ComboBox<>();
-        tableComboBox.setPromptText("Select a table");
+        tableComboBox.setPromptText("Select a table (optional)");
         tableComboBox.getItems().add("Takeaway");
 
         // Load tables from database
         loadTables(tableComboBox);
 
-        // Add payment method selection
+        // Add payment method selection (optional)
         ComboBox<String> paymentMethodComboBox = new ComboBox<>();
-        paymentMethodComboBox.setPromptText("Select payment method");
+        paymentMethodComboBox.setPromptText("Select payment method (optional)");
         paymentMethodComboBox.getItems().addAll("Cash", "Card", "Mobile Payment");
 
         // Calculate the totals
@@ -288,11 +288,10 @@ public class CartViewController implements Initializable {
         Label totalLabel = new Label("Total amount: " + currencyFormat.format(total));
         totalLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-        // Add all controls to the content VBox
         content.getChildren().addAll(
-                new Label("Select Table:"),
+                new Label("Table (optional):"),
                 tableComboBox,
-                new Label("Select Payment Method:"),
+                new Label("Payment Method (optional):"),
                 paymentMethodComboBox,
                 new Separator(),
                 totalLabel
@@ -301,30 +300,15 @@ public class CartViewController implements Initializable {
         // Set the content
         dialog.getDialogPane().setContent(content);
 
-        // Request focus on the table combobox by default
-        tableComboBox.requestFocus();
-
-        // Show the dialog and process the result
+        // Process results
         Optional<ButtonType> result = dialog.showAndWait();
 
         if (result.isPresent() && result.get() == confirmButtonType) {
-            // Get the selected table and payment method
+            // Get the selected table and payment method (can be null)
             String selectedTable = tableComboBox.getValue();
             String paymentMethod = paymentMethodComboBox.getValue();
 
-            if (selectedTable == null) {
-                showAlert(Alert.AlertType.WARNING, "Please select a table.");
-                showCheckoutDialog(); // Show dialog again
-                return;
-            }
-
-            if (paymentMethod == null) {
-                showAlert(Alert.AlertType.WARNING, "Please select a payment method.");
-                showCheckoutDialog(); // Show dialog again
-                return;
-            }
-
-            // Process the order with the selected table and payment method
+            // Process the order - both fields can be null
             processOrder(selectedTable, paymentMethod, total);
         }
     }
@@ -352,10 +336,10 @@ public class CartViewController implements Initializable {
 
             // Insert into orders table
             int orderId;
-            int tableId = -1;
+            Integer tableId = null; // Use Integer to allow null values
 
-            // Get table ID if not takeaway
-            if (!selectedTable.equals("Takeaway")) {
+            // Get table ID only if a specific table was selected (not takeaway or null)
+            if (selectedTable != null && !selectedTable.equals("Takeaway")) {
                 String tableQuery = "SELECT id FROM tables WHERE table_name = ?";
                 try (PreparedStatement tableStmt = conn.prepareStatement(tableQuery)) {
                     tableStmt.setString(1, selectedTable);
@@ -369,16 +353,25 @@ public class CartViewController implements Initializable {
             // Insert the order
             String orderQuery = "INSERT INTO orders (user_id, table_id, status, total_price, payment_method) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement orderStmt = conn.prepareStatement(orderQuery, Statement.RETURN_GENERATED_KEYS)) {
-                // Using user ID 3 as default (you may want to get the actual logged-in user)
+                // Using user ID 3 as default employee
                 orderStmt.setInt(1, 3);
-                if (tableId > 0) {
+
+                // Handle table_id (can be null)
+                if (tableId != null) {
                     orderStmt.setInt(2, tableId);
                 } else {
                     orderStmt.setNull(2, Types.INTEGER);
                 }
+
                 orderStmt.setString(3, "Pending");
                 orderStmt.setDouble(4, total);
-                orderStmt.setString(5, paymentMethod);
+
+                // Handle payment_method (can be null/"Unknown")
+                if (paymentMethod != null) {
+                    orderStmt.setString(5, paymentMethod);
+                } else {
+                    orderStmt.setString(5, "Unknown");
+                }
 
                 orderStmt.executeUpdate();
 
@@ -404,8 +397,8 @@ public class CartViewController implements Initializable {
                 detailStmt.executeBatch();
             }
 
-            // Update table status if not takeaway
-            if (tableId > 0) {
+            // Update table status only if a specific table was selected
+            if (tableId != null) {
                 String updateTableQuery = "UPDATE tables SET status = 'occupied' WHERE id = ?";
                 try (PreparedStatement tableUpdateStmt = conn.prepareStatement(updateTableQuery)) {
                     tableUpdateStmt.setInt(1, tableId);
@@ -442,7 +435,7 @@ public class CartViewController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Error processing order: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            // Reset auto-commit
+            // Reset auto-commit and close connection
             if (conn != null) {
                 try {
                     conn.setAutoCommit(true);
