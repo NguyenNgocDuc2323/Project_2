@@ -69,7 +69,7 @@ public class OrderDetailController {
     @FXML
     private void handleBackToOrder() throws IOException {
         try {
-            Navigator.getInstance().gotoScene("", Navigator.SIDEBAR);
+            Navigator.getInstance().gotoOrderManagement();
         } catch (IOException e) {
             e.printStackTrace();
         }

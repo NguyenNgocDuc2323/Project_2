@@ -16,9 +16,9 @@
 
 <BorderPane prefHeight="500.0" prefWidth="1000.0" stylesheets="@../../../../assets/styles/styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.staff.SidebarController">
    <left>
-      <BorderPane prefHeight="200.0" prefWidth="240.0" styleClass="sidebar" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="sidebar" BorderPane.alignment="CENTER">
          <top>
-              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="The 90s Brew" BorderPane.alignment="CENTER">
+              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Shop Management" BorderPane.alignment="CENTER">
                   <font>
                       <Font name="System Bold" size="24.0" />
                   </font>

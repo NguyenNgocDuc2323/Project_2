@@ -125,6 +125,14 @@ public class Navigator {
         gotoScene("Menu", MENU_SCENE);
     }
 
+    public void gotoTableManagement() throws IOException {
+        gotoScene("Table Management", TABLE_MANAGEMENT);
+    }
+
+    public void gotoOrderManagement() throws IOException {
+        gotoScene("Order Management", ORDER_MANAGEMENT);
+    }
+
     public void gotoOrderDetailManagement(int orderId) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(ORDER_DETAIL_MANAGEMENT));
         Parent root = loader.load();
@@ -165,4 +173,17 @@ public class Navigator {
     public void gotoEditCoffee(Coffee coffee, Consumer<Boolean> onSavedCallback) throws IOException {
         gotoCoffeeDialog("EDIT", coffee, onSavedCallback);
     }
+
+    public void gotoOrderStatistic() throws IOException {
+        gotoScene("Order Statistic", ORDER_STATISTIC);
+    }
+
+    public void gotoCategoryManagement() throws IOException {
+        gotoScene("Category Management", CATEGORY_MANAGEMENT);
+    }
+
+    public void gotoDashboard() throws IOException {
+        gotoScene("Coffee Shop Management", SIDEBAR);
+    }
+
 }

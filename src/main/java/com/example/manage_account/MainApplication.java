@@ -19,7 +19,6 @@ public class MainApplication extends Application {
             Translator.setLocale(vietnam);
             Navigator.getInstance().setState(stage);
             Navigator.getInstance().gotoAdminHome();
-            //Navigator.getInstance().gotoScene("", Navigator.SIDEBAR);
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Lỗi khi load FXML! Kiểm tra đường dẫn.");
