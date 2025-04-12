@@ -9,6 +9,9 @@ public class OrderDetail {
     private Double unitPrice;
     private String categoryName;
 
+    public OrderDetail() {
+    }
+
     public OrderDetail(int id, int orderId, int productId,
                        String productName, String categoryName,
                        int quantity, double unitPrice) {
