@@ -7,6 +7,9 @@ public class OrderStatistic {
     private Integer orderCount;
     private Double revenue;
 
+    public OrderStatistic() {
+    }
+
     public Integer getYear() {
         return year;
     }
