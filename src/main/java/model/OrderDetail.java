@@ -7,8 +7,49 @@ public class OrderDetail {
     private String productName;
     private Integer quantity;
     private Double unitPrice;
+    private String categoryName;
 
-    public OrderDetail() {
+    public OrderDetail(int id, int orderId, int productId,
+                       String productName, String categoryName,
+                       int quantity, double unitPrice) {
+        this.id = id;
+        this.orderId = orderId;
+        this.productId = productId;
+        this.productName = productName;
+        this.categoryName = categoryName;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
+
+
+    public OrderDetail(Integer id, Integer orderId, Integer productId, String productName, Integer quantity, Double unitPrice) {
+        this.id = id;
+        this.orderId = orderId;
+        this.productId = productId;
+        this.productName = productName;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
+
+    public OrderDetail(Integer id, Integer orderId, Integer productId, Integer quantity, Double unitPrice) {
+        this.id = id;
+        this.orderId = orderId;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
+
+    public OrderDetail(Integer orderId, Integer productId, Integer quantity) {
+        this.orderId = orderId;
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+
+    public OrderDetail(Integer id, Integer orderId,Integer productId, Integer quantity) {
+        this.id = id;
+        this.orderId = orderId;
+        this.productId = productId;
+        this.quantity = quantity;
     }
 
     public Integer getId() {
@@ -57,5 +98,13 @@ public class OrderDetail {
 
     public void setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }

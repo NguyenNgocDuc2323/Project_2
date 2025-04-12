@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="pnlOverview" prefHeight="800.0" prefWidth="950.0" style="-fx-background-color: #f8f4f0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.admin.HomeController">
+   <children>
+      <Label layoutX="48.0" layoutY="25.0" prefHeight="24.0" prefWidth="537.0" text="Coffee Shop Dashboard" textFill="#b94444">
+         <font>
+            <Font name="Bodoni MT Bold" size="48.0" />
+         </font>
+      </Label>
+
+      <TextField fx:id="searchField"
+                 onKeyReleased="#onSearchFieldKeyReleased"
+                 layoutX="719.0" layoutY="39.0"
+                 prefHeight="32.0" prefWidth="183.0"
+                 promptText="Search..."
+                 style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: #a87c5f; -fx-padding: 0 0 0 10;" />
+
+
+      <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="875.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../assets/images/Admin/icons8_Search_52px.png" />
+         </image>
+      </ImageView>
+
+      <HBox alignment="CENTER" layoutX="160.0" layoutY="135.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="92.0" prefWidth="661.0" spacing="50.0">
+         <children>
+            <VBox alignment="CENTER" spacing="5">
+               <Label fx:id="total_user" alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="121.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="22000" textAlignment="CENTER" textFill="#7a4c32">
+                  <font>
+                     <Font size="18.0" />
+                  </font></Label>
+               <Label alignment="CENTER" prefHeight="27.0" prefWidth="120.0" text="Total Users" textFill="#c97c48">
+                  <font>
+                     <Font size="18.0" />
+                  </font></Label>
+            </VBox>
+            <VBox alignment="CENTER" spacing="5">
+               <Label fx:id="total_order" alignment="CENTER" prefHeight="35.0" prefWidth="114.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="1500" textFill="#7a4c32">
+                  <font>
+                     <Font size="18.0" />
+                  </font></Label>
+               <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="117.0" text="Total Orders" textFill="#c97c48">
+                  <font>
+                     <Font size="18.0" />
+                  </font></Label>
+            </VBox>
+            <VBox alignment="CENTER" spacing="5">
+               <Label fx:id="total_product" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="1000" textFill="#7a4c32">
+                  <font>
+                     <Font size="18.0" />
+                  </font></Label>
+               <Label text="Total Products" textFill="#c97c48">
+                  <font>
+                     <Font size="18.0" />
+                  </font></Label>
+            </VBox>
+            <VBox alignment="CENTER" spacing="5">
+               <Label fx:id="total_table" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="780" textFill="#7a4c32">
+                  <font>
+                     <Font size="18.0" />
+                  </font></Label>
+               <Label text="Orders on Hold" textFill="#c97c48">
+                  <font>
+                     <Font size="18.0" />
+                  </font></Label>
+            </VBox>
+         </children>
+      </HBox>
+
+      <HBox layoutX="553.0" layoutY="278.0" spacing="10" />
+
+      <TableView fx:id="revenueTable" layoutX="-24.0" layoutY="323.0" prefHeight="477.0" prefWidth="975.0" style="-fx-background-color: #ffffff; -fx-border-color: #d0b8a8;">
+         <columns>
+            <TableColumn fx:id="categoryCol" prefWidth="180.0" text="Category" />
+            <TableColumn fx:id="productCol" prefWidth="203.0" text="Product Name" />
+            <TableColumn fx:id="quantityCol" prefWidth="157.0" text="Quantity" />
+            <TableColumn fx:id="amountCol" prefWidth="188.0" text="Amount" />
+            <TableColumn fx:id="dateCol" prefWidth="225.0" text="Date" />
+         </columns>
+      </TableView>
+      <VBox fx:id="orderContainer" layoutX="20.0" layoutY="820.0" prefWidth="940.0" spacing="10" />
+      <ComboBox fx:id="yearCombo" layoutX="719.0" layoutY="278.0" prefWidth="100" promptText="Year" />
+      <ComboBox fx:id="monthCombo" layoutX="629.0" layoutY="278.0" prefWidth="80" promptText="Month" />
+      <ComboBox fx:id="dayCombo" layoutX="535.0" layoutY="278.0" prefWidth="80" promptText="Day" />
+      <Button layoutX="829.0" layoutY="278.0" onAction="#handdleSearch" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #a87c5f; -fx-text-fill: white; -fx-background-radius: 5;" text="Filter" />
+   </children>
+</Pane>
