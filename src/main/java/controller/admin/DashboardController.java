@@ -26,8 +26,8 @@ public class DashboardController implements Initializable {
     @FXML private StackPane contentArea;
     @FXML private Button menuBtn;
     @FXML private Button tableBtn;
-    @FXML private Button historyBtn;
-    @FXML private Button profileBtn;
+    @FXML private Button categoryBtn;
+    @FXML private Button orderBtn;
     @FXML private Button logoutBtn;
 
     // User information UI elements
@@ -41,8 +41,8 @@ public class DashboardController implements Initializable {
 
         menuBtn.setOnAction(e -> loadView("/com/example/manage_account/Admin/Home.fxml"));
         tableBtn.setOnAction(e -> loadView("/com/example/manage_account/Staff/Table.fxml"));
-        historyBtn.setOnAction(e -> loadView("/com/example/manage_account/CoffeeShop/OrdersView.fxml"));
-        profileBtn.setOnAction(e -> loadView("/com/example/manage_account/CoffeeShop/ProfileView.fxml"));
+        categoryBtn.setOnAction(e -> loadView("/com/example/manage_account/Staff/Category.fxml"));
+        orderBtn.setOnAction(e -> loadView("/com/example/manage_account/Staff/Order.fxml"));
 
         loadUserInfo();
 
@@ -111,17 +111,17 @@ public class DashboardController implements Initializable {
 
             menuBtn.getStyleClass().remove("active");
             tableBtn.getStyleClass().remove("active");
-            historyBtn.getStyleClass().remove("active");
-            profileBtn.getStyleClass().remove("active");
+            categoryBtn.getStyleClass().remove("active");
+            orderBtn.getStyleClass().remove("active");
 
             if (fxmlFile.contains("Home")) {
                 menuBtn.getStyleClass().add("active");
             } else if (fxmlFile.contains("Table")) {
                 tableBtn.getStyleClass().add("active");
-            } else if (fxmlFile.contains("OrdersView")) {
-                historyBtn.getStyleClass().add("active");
-            } else if (fxmlFile.contains("ProfileView")) {
-                profileBtn.getStyleClass().add("active");
+            } else if (fxmlFile.contains("Category")) {
+                categoryBtn.getStyleClass().add("active");
+            } else if (fxmlFile.contains("Order")) {
+                orderBtn.getStyleClass().add("active");
             }
 
         } catch (IOException e) {
