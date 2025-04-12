@@ -78,7 +78,7 @@
 
                      <HBox alignment="CENTER_RIGHT">
                         <children>
-                           <Button onAction="#onResetPassword" styleClass="forgot-password" text="%lb.forgotPassword" />
+                           <Button onAction="#onForgotPassword" styleClass="forgot-password" text="%lb.forgotPassword" />
                         </children>
                      </HBox>
                   </VBox>

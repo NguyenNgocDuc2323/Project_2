@@ -106,9 +106,9 @@ public class LoginUIController implements Initializable {
     }
 
     @FXML
-    void onResetPassword(ActionEvent event) {
+    void onForgotPassword(ActionEvent event) {
         try {
-            Navigator.getInstance().gotoResetPassword();
+            Navigator.getInstance().gotoForgotPassword();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -87,20 +87,8 @@ public class Navigator {
         gotoScene(Translator.translate("title.addNewAccount"), "/com/example/manage_account/Admin/add_new_account.fxml");
     }
 
-    public void gotoResetPassword() throws IOException {
-        gotoScene(Translator.translate("title.resetPassword"), "/com/example/manage_account/Admin/reset_password.fxml");
-    }
-
-    public void gotoStaffDashboard() throws IOException {
-        gotoScene(Translator.translate("title.staffDashboard"), "/com/example/manage_account/Staff/staff_dashboard.fxml");
-    }
-
-    public void gotoRegister() throws IOException {
-        gotoScene(Translator.translate("title.register"), REGISTER_SCENE);
-    }
-
     public void gotoResetPasswordWithAccountId(int accountId) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(RESET_PASSWORD), Translator.getResourceBundle());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/Auth/ResetPassword.fxml"), Translator.getResourceBundle());
         Parent root = loader.load();
         ResetPasswordController controller = loader.getController();
         controller.setAccountId(accountId);
@@ -110,8 +98,19 @@ public class Navigator {
         state.show();
     }
 
+
+
+
+    public void gotoStaffDashboard() throws IOException {
+        gotoScene(Translator.translate("title.staffDashboard"), "/com/example/manage_account/Staff/staff_dashboard.fxml");
+    }
+
+    public void gotoRegister() throws IOException {
+        gotoScene(Translator.translate("title.register"), REGISTER_SCENE);
+    }
+
     public void gotoChangePasswordWithAccountId(int accountId) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(CHANGE_PASSWORD), Translator.getResourceBundle());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(RESET_PASSWORD), Translator.getResourceBundle());
         Parent root = loader.load();
         ChangePasswordController controller = loader.getController();
         controller.setAccountId(accountId);

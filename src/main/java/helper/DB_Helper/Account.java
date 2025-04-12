@@ -78,6 +78,7 @@ public class Account {
         }
         return count;
     }
+
     public static String getEmailByAccountId(int accountId) {
         String email = null;
         String query = "SELECT email FROM account WHERE id = ?";
@@ -96,6 +97,24 @@ public class Account {
 
         return email;
     }
+
+    public static boolean checkEmailExists(String email) {
+        String query = "SELECT * FROM account WHERE email = ?";
+        try (Connection conn = ConnectDatabase.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, email);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static boolean resetPassword(int accountId, String newPassword) {
         String query = "UPDATE account SET password = ? WHERE id = ?";
         try (Connection conn = ConnectDatabase.getConnection();

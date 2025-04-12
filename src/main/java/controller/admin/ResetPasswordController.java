@@ -1,9 +1,9 @@
 package controller.admin;
 
+import helper.Alert;
 import helper.DB_Helper.Account;
 import helper.Navigator;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -11,7 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 
 import java.io.IOException;
-
 public class ResetPasswordController {
     @FXML
     private Button btn_reset_password;
@@ -20,64 +19,51 @@ public class ResetPasswordController {
     private PasswordField txt_confirm_password;
 
     @FXML
-    private TextField txt_email;
+    private TextField txt_email;  // TextField hiển thị email
 
     @FXML
     private PasswordField txt_password;
     private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+
     private int accountId;
 
+    // Phương thức setAccountId nhận accountId và tự lấy email từ DB
     public void setAccountId(int accountId) {
         this.accountId = accountId;
+        // Giả sử bạn có method Account.getEmailByAccountId(accountId) để lấy email
         String email = Account.getEmailByAccountId(accountId);
         txt_email.setText(email);
     }
-    private void fetchAccountIdFromEmail() {
-        if (accountId == 0) {
-            String email = txt_email.getText();
-            if (email != null && !email.isEmpty()) {
-                accountId = Account.getAccountIdByEmail(email);
-            }
-        }
-    }
 
     @FXML
-    public void onResetPassword(javafx.event.ActionEvent event) {
-        fetchAccountIdFromEmail();
+    public void onResetPassword(ActionEvent event) {
         if (accountId == 0) {
-            showAlert(Alert.AlertType.ERROR, "Reset Password", "Invalid email. Please enter a valid email.");
+            Alert.showAlert("Invalid email. Please enter a valid email.");
             return;
         }
 
         String password = txt_password.getText();
         String confirmPassword = txt_confirm_password.getText();
         if (!password.matches(PASSWORD_REGEX)) {
-            showAlert(Alert.AlertType.ERROR, "Reset Password", "Password must be at least 8 characters long, contain at least one letter, one number, and one special character (@$!%*?&).");
-            return;
+            helper.Alert.showAlert("Password ");
         }
         if (!password.equals(confirmPassword)) {
-            showAlert(Alert.AlertType.ERROR, "Reset Password", "Passwords do not match.");
+            Alert.showAlert("Passwords do not match");
             return;
         }
         boolean isResetSuccessful = Account.resetPassword(accountId, password);
         if (isResetSuccessful) {
-            showAlert(Alert.AlertType.INFORMATION, "Reset Password", "Password Reset Successfully.");
+            Alert.showSuccess("Password Reset Successfully.");
             try {
                 Navigator.getInstance().gotoAdminHome();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
-            showAlert(Alert.AlertType.ERROR, "Reset Password", "Something went wrong.");
+            Alert.showAlert("Something went wrong.");
         }
     }
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+
     @FXML
     public void onGoHomePage(ActionEvent event) {
         try {
@@ -87,3 +73,4 @@ public class ResetPasswordController {
         }
     }
 }
+

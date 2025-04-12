@@ -12,7 +12,6 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         try {
-            // Khởi tạo kết nối database
             helper.DatabaseConnection.getInstance().getConnection();
             
             Locale vietnam = new Locale("vi", "VN");

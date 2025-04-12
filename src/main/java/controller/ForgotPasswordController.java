@@ -27,53 +27,39 @@ public class ForgotPasswordController implements Initializable {
     }
 
     @FXML
-    void onResetPassword(ActionEvent event) {
-        String email = emailField.getText();
-        String name = nameField.getText();
-        String newPassword = newPasswordField.getText();
-
-        // Validate email format
-        if (!REGEX.isValidEmail(email)) {
-            Alert.showAlert("Invalid email format!");
-            return;
-        }
-
-        // Validate password format
-        if (!REGEX.isValidPassword(newPassword)) {
-            Alert.showAlert("Password must be at least 8 characters long and contain at least one letter, one number, and one special character.");
-            return;
-        }
-
-        // Get account by email
-        model.Account account = Account.getAccountByEmail(email);
-        if (account == null) {
-            Alert.showAlert("No account found with this email.");
-            return;
-        }
-
-        // Verify name matches
-        if (!account.getName().equals(name)) {
-            Alert.showAlert("Name does not match the account.");
-            return;
-        }
-
-        // Hash the new password
-        String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
-
-        // Update password
-        boolean success = Account.resetPassword(account.getId(), hashedPassword);
-        if (success) {
-            Alert.showSuccess("Password has been reset successfully!");
-            try {
-                Navigator.getInstance().gotoLogin();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Alert.showAlert("Error navigating to login page.");
-            }
-        } else {
-            Alert.showAlert("Failed to reset password. Please try again.");
+    void onLogin(ActionEvent event) {
+        try {
+            Navigator.getInstance().gotoLogin();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert.showAlert("Error navigating to login page.");
         }
     }
+
+    @FXML
+    public void onForgotPassword(javafx.event.ActionEvent event) {
+        String email = emailField.getText().trim();
+
+        if (email.isEmpty()) {
+            System.out.println("Please enter your email.");
+            return;
+        }
+
+        boolean exists = Account.checkEmailExists(email);
+
+        if (exists) {
+            int accountId = Account.getAccountIdByEmail(email);
+            Alert.showSuccess("Email exists. Proceeding to reset password.");
+            try {
+                Navigator.getInstance().gotoResetPasswordWithAccountId(accountId);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Alert.showAlert("Email does not exist in the system.");
+        }
+    }
+
 
     @FXML
     void onBack(ActionEvent event) {
