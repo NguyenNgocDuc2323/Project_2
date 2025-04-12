@@ -37,13 +37,9 @@ public class Category {
     public void setDescription(String description) {
         this.description = description;
     }
-<<<<<<< HEAD
 
     @Override
     public String toString() {
         return name;
     }
 }
-=======
-}
->>>>>>> aaf2a3057c2f0572892fa9f328198c5de78106ce

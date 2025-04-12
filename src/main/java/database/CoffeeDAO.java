@@ -1,6 +1,6 @@
 package database;
 
-import helper.ConnectDatabase;
+import helper.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.CoffeeShop.Coffee;
@@ -14,7 +14,7 @@ public class CoffeeDAO {
         ObservableList<Coffee> coffeeList = FXCollections.observableArrayList();
         String query = "SELECT * FROM product";
 
-        try (Connection conn = ConnectDatabase.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
@@ -25,7 +25,7 @@ public class CoffeeDAO {
                         rs.getInt("category_id"),
                         rs.getDouble("price"),
                         rs.getInt("quantity"),
-                        rs.getString("image_url"),
+                        rs.getString("image"),
                         rs.getInt("unit_id"),
                         rs.getString("description")
                 );
@@ -40,9 +40,9 @@ public class CoffeeDAO {
 
     // Add new coffee
     public boolean addCoffee(Coffee coffee) {
-        String query = "INSERT INTO product (name, category_id, price, quantity, image_url, unit_id, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO product (name, category_id, price, quantity, image, unit_id, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = ConnectDatabase.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, coffee.getName());
@@ -63,9 +63,9 @@ public class CoffeeDAO {
 
     // Update existing coffee
     public boolean updateCoffee(Coffee coffee) {
-        String query = "UPDATE product SET name = ?, category_id = ?, price = ?, quantity = ?, image_url = ?, unit_id = ?, description = ? WHERE id = ?";
+        String query = "UPDATE product SET name = ?, category_id = ?, price = ?, quantity = ?, image = ?, unit_id = ?, description = ? WHERE id = ?";
 
-        try (Connection conn = ConnectDatabase.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, coffee.getName());
@@ -89,7 +89,7 @@ public class CoffeeDAO {
     public boolean deleteCoffee(int coffeeId) {
         String query = "DELETE FROM product WHERE id = ?";
 
-        try (Connection conn = ConnectDatabase.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, coffeeId);
@@ -106,7 +106,7 @@ public class CoffeeDAO {
     public Coffee getCoffeeById(int coffeeId) {
         String query = "SELECT * FROM product WHERE id = ?";
 
-        try (Connection conn = ConnectDatabase.getConnection();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, coffeeId);
@@ -119,7 +119,7 @@ public class CoffeeDAO {
                             rs.getInt("category_id"),
                             rs.getDouble("price"),
                             rs.getInt("quantity"),
-                            rs.getString("image_url"),
+                            rs.getString("image"),
                             rs.getInt("unit_id"),
                             rs.getString("description")
                     );
