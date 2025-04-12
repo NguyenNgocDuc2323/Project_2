@@ -81,21 +81,6 @@
   -fx-background-color: -mat-primary-container;
 }
 
-.sidebar .text-button {
-  -fx-background-color: inherit;
-  -fx-background-radius: 32px;
-  -fx-border-color: transparent;
-  -fx-border-radius: 32px;
-  -fx-font-size: 14px;
-  -fx-font-weight: normal;
-  -fx-padding: 12px 24px 12px 24px;
-  -fx-text-fill: -mat-text-on-surface;
-}
-
-.sidebar .text-button:pressed {
-  -fx-background-color: -mat-primary-container;
-}
-
 .card {
   -fx-background-color: -mat-surface-container-lowest;
   -fx-background-radius: 8px;
@@ -132,6 +117,33 @@
 .scroll-bar .thumb {
   -fx-background-color: gray;
   -fx-background-radius: 8px;
+}
+
+.scroll-pane {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.scroll-pane:focused {
+    -fx-background-insets: 0;
+}
+
+.scroll-pane .corner {
+    -fx-background-insets: 0;
+}
+
+.sidebar {
+  -fx-background-color: -mat-primary;
+}
+
+.sidebar .text-button {
+  -fx-background-color: inherit;
+  -fx-background-radius: 32px;
+  -fx-border-color: transparent;
+  -fx-border-radius: 32px;
+  -fx-font-size: 14px;
+  -fx-padding: 12px 24px 12px 0px;
+  -fx-text-fill: -mat-text-on-primary;
 }
 
 .surface {

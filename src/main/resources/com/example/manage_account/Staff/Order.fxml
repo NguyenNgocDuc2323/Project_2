@@ -12,12 +12,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="500.0" prefWidth="1000.0" styleClass="surface-container" stylesheets="@../../../../assets/styles/styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.staff.OrderController">
-    <left>
-        <fx:include source="Sidebar.fxml" />
-    </left>
+<BorderPane stylesheets="@../../../../assets/styles/styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.staff.OrderController">
     <center>
-        <VBox spacing="16.0" styleClass="surface">
+        <VBox spacing="16.0">
             <BorderPane.margin>
                 <Insets />
             </BorderPane.margin>
@@ -62,7 +59,7 @@
                     <TableColumn fx:id="tableNameColumn" prefWidth="81.0" text="Table" />
                     <TableColumn fx:id="orderDateColumn" prefWidth="131.0" text="Order Date" />
                     <TableColumn fx:id="statusColumn" prefWidth="78.0" text="Status" />
-                    <TableColumn fx:id="totalPriceColumn" prefWidth="119.0" text="Total Price" />
+                    <TableColumn fx:id="totalPriceColumn" prefWidth="90.0" text="Total Price" />
                     <TableColumn fx:id="paymentMethodColumn" prefWidth="138.0" text="Payment Method" />
                 </columns>
                 <columnResizePolicy>
