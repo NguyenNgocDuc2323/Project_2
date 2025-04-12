@@ -169,7 +169,9 @@ public class OrderDB {
                 FROM
                     orders
                 GROUP BY
-                    DATE(order_date)
+                    YEAR(order_date),
+                    MONTH(order_date),
+                    DAY(order_date)
                 """;
         try (Connection connection = ConnectDatabase.getConnection(); PreparedStatement ps = connection.prepareStatement(query); ResultSet resultSet = ps.executeQuery(query)) {
             while (resultSet.next()) {
