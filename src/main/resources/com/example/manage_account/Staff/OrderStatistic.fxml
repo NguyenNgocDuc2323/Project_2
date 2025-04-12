@@ -15,116 +15,111 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="500.0" prefWidth="1000.0" styleClass="surface-container-high" stylesheets="@../../../../assets/styles/styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.staff.OrderStatisticController">
-    <left>
-        <fx:include source="Sidebar.fxml" />
-    </left>
+<BorderPane stylesheets="@../../../../assets/styles/styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.staff.OrderStatisticController">
     <center>
-        <ScrollPane fitToWidth="true">
-            <VBox spacing="16.0" styleClass="surface">
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Order Statistic">
-                   <font>
-                       <Font size="18.0" />
-                   </font>
-                   <VBox.margin>
-                       <Insets />
-                   </VBox.margin>
-                </Text>
-                <HBox alignment="CENTER" prefWidth="200.0" spacing="80.0">
-                    <VBox alignment="CENTER_LEFT" styleClass="card">
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Order Count">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Text>
-                        <Text fx:id="totalOrderCount">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Text>
+        <VBox spacing="16.0" >
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Order Statistic">
+                <font>
+                    <Font size="18.0" />
+                </font>
+                <VBox.margin>
+                    <Insets />
+                </VBox.margin>
+            </Text>
+            <HBox alignment="CENTER" prefWidth="200.0" spacing="80.0">
+                <VBox alignment="CENTER_LEFT" styleClass="card">
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Order Count">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                    </Text>
+                    <Text fx:id="totalOrderCount">
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </Text>
+                </VBox>
+                <VBox alignment="CENTER_LEFT" styleClass="card">
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Revenue">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                    </Text>
+                    <Text fx:id="totalRevenue">
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </Text>
+                </VBox>
+            </HBox>
+            <TabPane tabClosingPolicy="UNAVAILABLE">
+                <Tab closable="false" text="Monthly">
+                    <VBox>
+                        <LineChart fx:id="monthlyOrderLineChart" title="Monthly Order Count">
+                            <xAxis>
+                                <CategoryAxis fx:id="monthlyOrderXAxis" label="Month" side="BOTTOM" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis fx:id="monthlyOrderYAxis" label="Order Count" side="LEFT" />
+                            </yAxis>
+                        </LineChart>
+                        <LineChart fx:id="monthlyRevenueLineChart" title="Monthly Revenue">
+                            <xAxis>
+                                <CategoryAxis fx:id="monthlyRevenueXAxis" label="Month" side="BOTTOM" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis fx:id="monthlyRevenueYAxis" label="Revenue" side="LEFT" />
+                            </yAxis>
+                        </LineChart>
+                        <TableView fx:id="orderMonthlyStatisticTable" prefWidth="600.0">
+                            <columns>
+                                <TableColumn fx:id="monthlyYearColumn" prefWidth="100" text="Year" />
+                                <TableColumn fx:id="monthlyMonthColumn" prefWidth="100" text="Month" />
+                                <TableColumn fx:id="monthlyOrderCountColumn" prefWidth="150" text="Order Count" />
+                                <TableColumn fx:id="monthlyRevenueColumn" prefWidth="150" text="Revenue" />
+                            </columns>
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                            </columnResizePolicy>
+                        </TableView>
                     </VBox>
-                    <VBox alignment="CENTER_LEFT" styleClass="card">
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Revenue">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Text>
-                        <Text fx:id="totalRevenue">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Text>
+                </Tab>
+                <Tab closable="false" text="Daily">
+                    <VBox>
+                        <LineChart fx:id="dailyOrderLineChart" title="Daily Order Count">
+                            <xAxis>
+                                <CategoryAxis fx:id="dailyOrderXAxis" label="Day" side="BOTTOM" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis fx:id="dailyOrderYAxis" label="Order Count" side="LEFT" />
+                            </yAxis>
+                        </LineChart>
+                        <LineChart fx:id="dailyRevenueLineChart" title="Daily Revenue">
+                            <xAxis>
+                                <CategoryAxis fx:id="dailyRevenueXAxis" label="Day" side="BOTTOM" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis fx:id="dailyRevenueYAxis" label="Revenue" side="LEFT" />
+                            </yAxis>
+                        </LineChart>
+                        <TableView fx:id="orderDailyStatisticTable" prefHeight="500.0">
+                            <columns>
+                                <TableColumn fx:id="dailyYearColumn" prefWidth="100" text="Year" />
+                                <TableColumn fx:id="dailyMonthColumn" prefWidth="100" text="Month" />
+                                <TableColumn fx:id="dailyDayColumn" prefWidth="100" text="Day" />
+                                <TableColumn fx:id="dailyOrderCountColumn" prefWidth="150" text="Order Count" />
+                                <TableColumn fx:id="dailyRevenueColumn" prefWidth="150" text="Revenue" />
+                            </columns>
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                            </columnResizePolicy>
+                        </TableView>
                     </VBox>
-                </HBox>
-                <TabPane tabClosingPolicy="UNAVAILABLE">
-                    <Tab closable="false" text="Monthly">
-                        <VBox>
-                            <LineChart fx:id="monthlyOrderLineChart" title="Monthly Order Count">
-                                <xAxis>
-                                    <CategoryAxis fx:id="monthlyOrderXAxis" label="Month" side="BOTTOM" />
-                                </xAxis>
-                                <yAxis>
-                                    <NumberAxis fx:id="monthlyOrderYAxis" label="Order Count" side="LEFT" />
-                                </yAxis>
-                            </LineChart>
-                            <LineChart fx:id="monthlyRevenueLineChart" title="Monthly Revenue">
-                                <xAxis>
-                                    <CategoryAxis fx:id="monthlyRevenueXAxis" label="Month" side="BOTTOM" />
-                                </xAxis>
-                                <yAxis>
-                                    <NumberAxis fx:id="monthlyRevenueYAxis" label="Revenue" side="LEFT" />
-                                </yAxis>
-                            </LineChart>
-                            <TableView fx:id="orderMonthlyStatisticTable" prefWidth="600.0">
-                                <columns>
-                                    <TableColumn fx:id="monthlyYearColumn" prefWidth="100" text="Year" />
-                                    <TableColumn fx:id="monthlyMonthColumn" prefWidth="100" text="Month" />
-                                    <TableColumn fx:id="monthlyOrderCountColumn" prefWidth="150" text="Order Count" />
-                                    <TableColumn fx:id="monthlyRevenueColumn" prefWidth="150" text="Revenue" />
-                                </columns>
-                                <columnResizePolicy>
-                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                </columnResizePolicy>
-                            </TableView>
-                        </VBox>
-                    </Tab>
-                    <Tab closable="false" text="Daily">
-                        <VBox>
-                            <LineChart fx:id="dailyOrderLineChart" title="Daily Order Count">
-                                <xAxis>
-                                    <CategoryAxis fx:id="dailyOrderXAxis" label="Day" side="BOTTOM" />
-                                </xAxis>
-                                <yAxis>
-                                    <NumberAxis fx:id="dailyOrderYAxis" label="Order Count" side="LEFT" />
-                                </yAxis>
-                            </LineChart>
-                            <LineChart fx:id="dailyRevenueLineChart" title="Daily Revenue">
-                                <xAxis>
-                                    <CategoryAxis fx:id="dailyRevenueXAxis" label="Day" side="BOTTOM" />
-                                </xAxis>
-                                <yAxis>
-                                    <NumberAxis fx:id="dailyRevenueYAxis" label="Revenue" side="LEFT" />
-                                </yAxis>
-                            </LineChart>
-                            <TableView fx:id="orderDailyStatisticTable" prefHeight="500.0">
-                                <columns>
-                                    <TableColumn fx:id="dailyYearColumn" prefWidth="100" text="Year" />
-                                    <TableColumn fx:id="dailyMonthColumn" prefWidth="100" text="Month" />
-                                    <TableColumn fx:id="dailyDayColumn" prefWidth="100" text="Day" />
-                                    <TableColumn fx:id="dailyOrderCountColumn" prefWidth="150" text="Order Count" />
-                                    <TableColumn fx:id="dailyRevenueColumn" prefWidth="150" text="Revenue" />
-                                </columns>
-                                <columnResizePolicy>
-                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                </columnResizePolicy>
-                            </TableView>
-                        </VBox>
-                    </Tab>
-                </TabPane>
-                <padding>
-                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                </padding>
-            </VBox>
-        </ScrollPane>
-   </center>
+                </Tab>
+            </TabPane>
+            <padding>
+                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+            </padding>
+        </VBox>
+    </center>
 </BorderPane>

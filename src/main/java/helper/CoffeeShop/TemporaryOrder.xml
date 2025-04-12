@@ -1,18 +1,2 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<cart>
-    
-  <item>
-        
-    <productId>1</productId>
-        
-    <name>Espresso</name>
-        
-    <size>S</size>
-        
-    <quantity>2</quantity>
-        
-    <unitPrice>1.46</unitPrice>
-      
-  </item>
-  
-</cart>
+<cart/>

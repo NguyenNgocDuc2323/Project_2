@@ -54,7 +54,7 @@ public class CategoryController {
     private void handleUpdate() {
         Category selected = categoryTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            openDialog("Update Table", selected);
+            openDialog("Update Category", selected);
             loadCategoryFromDatabase();
         } else {
             Alert.showAlert("Please select category to update");
