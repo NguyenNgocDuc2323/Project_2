@@ -34,24 +34,8 @@
 
     <!-- Cart summary -->
     <VBox spacing="10" styleClass="cart-summary">
-        <HBox alignment="CENTER_LEFT" spacing="10">
-            <Label text="Table Selection:"/>
-            <ComboBox fx:id="tableComboBox" promptText="Select a table"/>
-        </HBox>
 
-        <HBox alignment="CENTER_LEFT" spacing="10">
-            <Label text="Payment Method:"/>
-            <ComboBox fx:id="paymentMethodComboBox" promptText="Select payment method"/>
-        </HBox>
 
-        <HBox alignment="CENTER_LEFT" spacing="10">
-            <Label text="Status Legend:"/>
-            <HBox spacing="5" alignment="CENTER_LEFT">
-                <Label text="Available" styleClass="status-available"/>
-                <Label text="Occupied" styleClass="status-occupied"/>
-                <Label text="Unavailable" styleClass="status-unavailable"/>
-            </HBox>
-        </HBox>
 
 
         <GridPane hgap="10" vgap="10">

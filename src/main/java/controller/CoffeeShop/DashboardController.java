@@ -124,7 +124,7 @@ public class DashboardController implements Initializable {
         cartItemCount.setVisible(true);
     }
 
-    private void loadView(String fxmlFile) {
+    void loadView(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent view = loader.load();

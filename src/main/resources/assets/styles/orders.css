@@ -303,3 +303,70 @@
     -fx-background-color: #f8f5f2;
 }
 
+/* Editable fields in order details */
+.editable-field {
+    -fx-background-color: white;
+    -fx-border-color: #c7a590;
+    -fx-border-radius: 4px;
+    -fx-padding: 2px 5px;
+}
+
+.editable-field:focused {
+    -fx-border-color: #8a5a44;
+}
+
+/* Save button */
+.action-button.save-button {
+    -fx-background-color: #5cb85c;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 20px;
+    -fx-background-radius: 5px;
+}
+
+.action-button.save-button:hover {
+    -fx-background-color: #4cae4c;
+}
+
+/* Order action container */
+.order-actions {
+    -fx-padding: 10px 0;
+}
+
+/* Alert dialog styling */
+.custom-alert {
+    -fx-background-color: #f8f5f2;
+}
+
+.info-dialog {
+    -fx-border-color: #5cb85c;
+}
+
+.warning-dialog {
+    -fx-border-color: #f0ad4e;
+}
+
+.error-dialog {
+    -fx-border-color: #d9534f;
+}
+
+.custom-alert .header-panel {
+    -fx-background-color: #ece0d1;
+}
+
+.custom-alert .content {
+    -fx-padding: 15px;
+    -fx-font-size: 14px;
+}
+
+.custom-alert .button-bar .button {
+    -fx-background-color: #8a5a44;
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+}
+
+.custom-alert .button-bar .button:hover {
+    -fx-background-color: #49281a;
+}
+
+

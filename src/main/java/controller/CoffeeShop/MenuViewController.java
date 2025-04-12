@@ -3,12 +3,12 @@ package controller.CoffeeShop;
 import helper.CoffeeShop.CoffeeItemManager;
 import helper.ConnectDatabase;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import model.CoffeeShop.Coffee;
 
@@ -19,14 +19,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class MenuViewController implements Initializable {
     @FXML private FlowPane coffeeItemsContainer;
     @FXML private ComboBox<String> categoryFilter;
-    @FXML private ComboBox<String> sortOptions;
+    @FXML private TextField searchField;
 
     private List<Coffee> allCoffeeItems = new ArrayList<>();
     private List<String> categories = new ArrayList<>();
@@ -35,9 +34,6 @@ public class MenuViewController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Load categories for the filter
         loadCategories();
-
-        // Set up sort options
-        setupSortOptions();
 
         // Load all coffee items
         allCoffeeItems = CoffeeItemManager.getInstance().getAllCoffeeItems();
@@ -71,28 +67,27 @@ public class MenuViewController implements Initializable {
         }
     }
 
-    private void setupSortOptions() {
-        ObservableList<String> options = FXCollections.observableArrayList(
-                "Default",
-                "Price: High to Low",
-                "Price: Low to High",
-                "Name: A to Z",
-                "Name: Z to A"
-        );
-        sortOptions.setItems(options);
-        sortOptions.getSelectionModel().selectFirst();
-    }
-
     private void setupEventListeners() {
-        categoryFilter.setOnAction(e -> applyFiltersAndSort());
-        sortOptions.setOnAction(e -> applyFiltersAndSort());
+        categoryFilter.setOnAction(e -> applyFilters());
+
+        // Add listener for the search field
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            applyFilters();
+        });
     }
 
-    private void applyFiltersAndSort() {
+    private void applyFilters() {
         String selectedCategory = categoryFilter.getValue();
-        String selectedSortOption = sortOptions.getValue();
+        String searchQuery = searchField.getText().trim().toLowerCase();
 
         List<Coffee> filteredItems = new ArrayList<>(allCoffeeItems);
+
+        // Apply search filter if text is entered
+        if (!searchQuery.isEmpty()) {
+            filteredItems = filteredItems.stream()
+                    .filter(coffee -> coffee.getName().toLowerCase().contains(searchQuery))
+                    .toList();
+        }
 
         // Apply category filter
         if (selectedCategory != null && !selectedCategory.equals("All Categories")) {
@@ -101,26 +96,7 @@ public class MenuViewController implements Initializable {
                     .toList();
         }
 
-        // Apply sorting
-        if (selectedSortOption != null) {
-            filteredItems = new ArrayList<>(filteredItems); // Create a mutable copy
-            switch (selectedSortOption) {
-                case "Price: High to Low":
-                    filteredItems.sort(Comparator.comparing(Coffee::getPrice).reversed());
-                    break;
-                case "Price: Low to High":
-                    filteredItems.sort(Comparator.comparing(Coffee::getPrice));
-                    break;
-                case "Name: A to Z":
-                    filteredItems.sort(Comparator.comparing(Coffee::getName));
-                    break;
-                case "Name: Z to A":
-                    filteredItems.sort(Comparator.comparing(Coffee::getName).reversed());
-                    break;
-            }
-        }
-
-        // Display the filtered and sorted items
+        // Display the filtered items
         displayCoffeeItems(filteredItems);
     }
 

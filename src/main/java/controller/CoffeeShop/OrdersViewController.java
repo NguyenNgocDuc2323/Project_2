@@ -13,13 +13,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.CoffeeShop.OrderDetailMenu;
 import model.CoffeeShop.OrderItem;
-import javafx.beans.binding.Bindings;
 
 import java.net.URL;
 import java.sql.*;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class OrdersViewController implements Initializable {
@@ -37,13 +35,14 @@ public class OrdersViewController implements Initializable {
     @FXML private VBox orderDetailsContainer;
     @FXML private Button closeDetailsBtn;
     @FXML private Label detailsOrderId;
-    @FXML private Label detailsTable;
+    @FXML private ComboBox<String> detailsTableCombo;
     @FXML private Label detailsDate;
-    @FXML private Label detailsStatus;
-    @FXML private Label detailsPayment;
+    @FXML private ComboBox<String> detailsStatusCombo;
+    @FXML private ComboBox<String> detailsPaymentCombo;
     @FXML private Label detailsSubtotal;
     @FXML private Label detailsTax;
     @FXML private Label detailsTotal;
+    @FXML private Button saveChangesBtn;
 
     @FXML private TableView<OrderDetailMenu> orderItemsTable;
     @FXML private TableColumn<OrderDetailMenu, String> itemNameColumn;
@@ -55,6 +54,7 @@ public class OrdersViewController implements Initializable {
     private ObservableList<OrderItem> ordersList = FXCollections.observableArrayList();
     private ObservableList<OrderDetailMenu> orderDetailsListMenu = FXCollections.observableArrayList();
     private DecimalFormat currencyFormat;
+    private OrderItem currentOrder;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -63,6 +63,7 @@ public class OrdersViewController implements Initializable {
         setupOrdersTable();
         setupEventListeners();
         loadOrders();
+        setupEditableControls();
 
         // Set fixed height for the main orders table to show exactly 6 rows
         ordersTable.setFixedCellSize(40);
@@ -86,8 +87,7 @@ public class OrdersViewController implements Initializable {
     private void setupFilters() {
         // Setup status filter
         ObservableList<String> statusOptions = FXCollections.observableArrayList(
-                "All", "Pending", "Processing", "Completed", "Cancelled"
-        );
+                "All", "Pending", "Processing", "Completed", "Cancelled");
         statusFilter.setItems(statusOptions);
         statusFilter.setValue("All");
         statusFilter.setOnAction(e -> applyFilters());
@@ -95,6 +95,42 @@ public class OrdersViewController implements Initializable {
         // Setup date filter
         datePicker.setValue(null);
         datePicker.setOnAction(e -> applyFilters());
+    }
+
+    private void setupEditableControls() {
+        // Setup status dropdown
+        detailsStatusCombo.setItems(FXCollections.observableArrayList(
+                "Pending", "Processing", "Completed", "Cancelled"));
+
+        // Setup payment method dropdown
+        detailsPaymentCombo.setItems(FXCollections.observableArrayList(
+                "Cash", "Card", "Mobile Payment", "Unpaid"));
+
+        // Load available tables
+        loadAvailableTables();
+
+        // Set up save button
+        saveChangesBtn.setOnAction(e -> saveOrderChanges());
+    }
+
+    private void loadAvailableTables() {
+        ObservableList<String> tables = FXCollections.observableArrayList();
+        tables.add("Takeaway"); // Add takeaway option
+
+        try (Connection conn = ConnectDatabase.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT table_name FROM tables ORDER BY table_name")) {
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                tables.add(rs.getString("table_name"));
+            }
+
+            detailsTableCombo.setItems(tables);
+
+        } catch (SQLException e) {
+            showAlert("Error loading tables: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
     }
 
     private void setupOrdersTable() {
@@ -105,10 +141,8 @@ public class OrdersViewController implements Initializable {
         tableColumn.setCellValueFactory(new PropertyValueFactory<>("tableName"));
 
         statusColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getStatus()));
-        totalColumn.setCellValueFactory(param -> {
-            double total = param.getValue().getTotalPrice();
-            return new SimpleStringProperty(currencyFormat.format(total));
-        });
+        totalColumn.setCellValueFactory(param ->
+                new SimpleStringProperty(currencyFormat.format(param.getValue().getTotalPrice())));
 
         // Center alignment for all columns
         centerAlignColumn(orderIdColumn);
@@ -116,7 +150,7 @@ public class OrdersViewController implements Initializable {
         centerAlignColumn(tableColumn);
         centerAlignColumn(totalColumn);
 
-        // Keep the custom cell factory for status column but ensure centering
+        // Custom cell factory for status column with color-coded badges
         statusColumn.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(String status, boolean empty) {
@@ -125,12 +159,17 @@ public class OrdersViewController implements Initializable {
                 if (empty || status == null) {
                     setText(null);
                     setGraphic(null);
+                    setStyle("");
                 } else {
                     Label statusLabel = new Label(status);
-                    statusLabel.getStyleClass().addAll("status-badge", "status-" + status.toLowerCase());
-                    setGraphic(statusLabel);
+                    statusLabel.getStyleClass().add("status-badge");
+                    statusLabel.getStyleClass().add("status-" + status.toLowerCase());
+
+                    HBox centeredBox = new HBox(statusLabel);
+                    centeredBox.setAlignment(Pos.CENTER);
+
+                    setGraphic(centeredBox);
                     setText(null);
-                    setAlignment(Pos.CENTER);
                 }
             }
         });
@@ -158,10 +197,9 @@ public class OrdersViewController implements Initializable {
         });
     }
 
-    // Update action column to be centered
     private void setupActionColumn() {
         actionColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button viewBtn = new Button("View");
+            private final Button viewBtn = new Button("View / Edit");
 
             {
                 viewBtn.getStyleClass().addAll("action-button", "view");
@@ -174,21 +212,17 @@ public class OrdersViewController implements Initializable {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    HBox container = new HBox(5);
+                    HBox container = new HBox(viewBtn);
                     container.setAlignment(Pos.CENTER);
-                    container.getChildren().add(viewBtn);
                     setGraphic(container);
-                    setAlignment(Pos.CENTER);
                 }
             }
         });
     }
 
-    // Setup details table
     private void setupOrderDetailsTableCentered() {
         orderItemsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -196,15 +230,11 @@ public class OrdersViewController implements Initializable {
         itemSizeColumn.setCellValueFactory(new PropertyValueFactory<>("size"));
         itemQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
-        itemUnitPriceColumn.setCellValueFactory(param -> {
-            double unitPrice = param.getValue().getUnitPrice();
-            return new SimpleStringProperty(currencyFormat.format(unitPrice));
-        });
+        itemUnitPriceColumn.setCellValueFactory(param ->
+                new SimpleStringProperty(currencyFormat.format(param.getValue().getUnitPrice())));
 
-        itemSubtotalColumn.setCellValueFactory(param -> {
-            double subtotal = param.getValue().getSubtotal();
-            return new SimpleStringProperty(currencyFormat.format(subtotal));
-        });
+        itemSubtotalColumn.setCellValueFactory(param ->
+                new SimpleStringProperty(currencyFormat.format(param.getValue().getSubtotal())));
 
         // Center align all detail table columns
         centerAlignDetailColumn(itemNameColumn);
@@ -214,7 +244,6 @@ public class OrdersViewController implements Initializable {
         centerAlignDetailColumn(itemSubtotalColumn);
     }
 
-    // Helper method for detail table columns
     private <T> void centerAlignDetailColumn(TableColumn<OrderDetailMenu, T> column) {
         column.setCellFactory(col -> {
             TableCell<OrderDetailMenu, T> cell = new TableCell<>() {
@@ -243,38 +272,33 @@ public class OrdersViewController implements Initializable {
     private void loadOrders() {
         ordersList.clear();
 
-        try (Connection conn = ConnectDatabase.getConnection()) {
-            String query = "SELECT o.id, o.order_date, o.status, o.total_price, o.payment_method, " +
-                    "t.table_name FROM orders o " +
-                    "LEFT JOIN tables t ON o.table_id = t.id " +
-                    "ORDER BY o.order_date DESC";
+        try (Connection conn = ConnectDatabase.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT o.id, o.order_date, o.status, o.total_price, o.payment_method, " +
+                             "IFNULL(t.table_name, 'Takeaway') AS table_name, IFNULL(t.id, -1) AS table_id " +
+                             "FROM orders o " +
+                             "LEFT JOIN tables t ON o.table_id = t.id " +
+                             "ORDER BY o.order_date DESC")) {
 
-            try (PreparedStatement pstmt = conn.prepareStatement(query);
-                 ResultSet rs = pstmt.executeQuery()) {
+            ResultSet rs = stmt.executeQuery();
 
-                while (rs.next()) {
-                    int id = rs.getInt("id");
-                    Timestamp orderDate = rs.getTimestamp("order_date");
-                    String status = rs.getString("status");
-                    double totalPrice = rs.getDouble("total_price");
-                    String paymentMethod = rs.getString("payment_method");
-                    String tableName = rs.getString("table_name");
-
-                    if (tableName == null && rs.wasNull()) {
-                        tableName = "Takeaway";
-                    }
-
-                    OrderItem order = new OrderItem(id, orderDate, status, totalPrice,
-                            paymentMethod, tableName);
-                    ordersList.add(order);
-                }
+            while (rs.next()) {
+                OrderItem order = new OrderItem(
+                        rs.getInt("id"),
+                        rs.getString("order_date"),
+                        rs.getString("status"),
+                        rs.getDouble("total_price"),
+                        rs.getString("payment_method"),
+                        rs.getString("table_name"),
+                        rs.getInt("table_id")
+                );
+                ordersList.add(order);
             }
 
             ordersTable.setItems(ordersList);
 
         } catch (SQLException e) {
-            showAlert("Error loading orders: " + e.getMessage());
-            e.printStackTrace();
+            showAlert("Error loading orders: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
@@ -285,35 +309,31 @@ public class OrdersViewController implements Initializable {
         ObservableList<OrderItem> filteredList = FXCollections.observableArrayList(ordersList);
 
         if (!"All".equals(selectedStatus)) {
-            filteredList = filteredList.filtered(order -> order.getStatus().equals(selectedStatus));
+            filteredList = filteredList.filtered(order ->
+                    order.getStatus().equalsIgnoreCase(selectedStatus));
         }
 
         if (selectedDate != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            String dateStr = selectedDate.format(formatter);
-
+            String dateStr = selectedDate.toString();
             filteredList = filteredList.filtered(order ->
-                    order.getOrderDate().toString().substring(0, 10).equals(dateStr));
+                    order.getOrderDate().startsWith(dateStr));
         }
 
         ordersTable.setItems(filteredList);
     }
 
     private void viewOrderDetails(OrderItem order) {
+        currentOrder = order;
+
         // Set order details
         detailsOrderId.setText(String.valueOf(order.getId()));
-        detailsTable.setText(order.getTableName());
-        detailsDate.setText(order.getOrderDate().toString().replace(".0", ""));
-
-        // Set status with style
-        detailsStatus.setText(order.getStatus());
-        detailsStatus.getStyleClass().removeAll("status-pending", "status-completed",
-                "status-cancelled", "status-processing");
-        detailsStatus.getStyleClass().add("status-" + order.getStatus().toLowerCase());
+        detailsTableCombo.setValue(order.getTableName());
+        detailsDate.setText(order.getOrderDate().replace(".0", ""));
+        detailsStatusCombo.setValue(order.getStatus());
 
         // Set payment method or "Unpaid"
         String payment = order.getPaymentMethod() != null ? order.getPaymentMethod() : "Unpaid";
-        detailsPayment.setText(payment);
+        detailsPaymentCombo.setValue(payment);
 
         // Load order items
         loadOrderItems(order.getId());
@@ -334,51 +354,165 @@ public class OrdersViewController implements Initializable {
     private void loadOrderItems(int orderId) {
         orderDetailsListMenu.clear();
 
+        try (Connection conn = ConnectDatabase.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT od.id, od.product_id, p.name AS product_name, " +
+                             "od.quantity, od.unit_price, " +
+                             "IFNULL(s.symbol, '') AS size " +
+                             "FROM order_detail od " +
+                             "JOIN product p ON od.product_id = p.id " +
+                             "LEFT JOIN sizes s ON s.id = SUBSTRING_INDEX(p.name, '-', -1) " +
+                             "WHERE od.order_id = ?")) {
+
+            stmt.setInt(1, orderId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String productName = rs.getString("product_name");
+                String size = rs.getString("size");
+                int quantity = rs.getInt("quantity");
+                double unitPrice = rs.getDouble("unit_price");
+                double subtotal = quantity * unitPrice;
+
+                OrderDetailMenu item = new OrderDetailMenu(
+                        productName,
+                        size,
+                        quantity,
+                        unitPrice,
+                        subtotal
+                );
+                orderDetailsListMenu.add(item);
+            }
+
+            orderItemsTable.setItems(orderDetailsListMenu);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Error loading order details: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    private void saveOrderChanges() {
+        if (currentOrder == null) return;
+
+        String selectedTable = detailsTableCombo.getValue();
+        String selectedStatus = detailsStatusCombo.getValue();
+        String selectedPayment = detailsPaymentCombo.getValue();
+
+        if (selectedStatus == null || selectedPayment == null) {
+            showAlert("Please select both status and payment method", Alert.AlertType.WARNING);
+            return;
+        }
+
+        if ("Unpaid".equals(selectedPayment)) {
+            selectedPayment = null; // Store as NULL in database
+        }
+
         try (Connection conn = ConnectDatabase.getConnection()) {
-            String query = "SELECT od.quantity, od.unit_price, p.name AS product_name, " +
-                    "s.symbol AS size " +
-                    "FROM order_detail od " +
-                    "JOIN product p ON od.product_id = p.id " +
-                    "LEFT JOIN product_sizes ps ON p.id = ps.product_id " +
-                    "LEFT JOIN sizes s ON ps.size_id = s.id " +
-                    "WHERE od.order_id = ?";
-
-            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-                pstmt.setInt(1, orderId);
-
-                try (ResultSet rs = pstmt.executeQuery()) {
-                    while (rs.next()) {
-                        String productName = rs.getString("product_name");
-                        String size = rs.getString("size");
-                        int quantity = rs.getInt("quantity");
-                        double unitPrice = rs.getDouble("unit_price");
-
-                        OrderDetailMenu detail = new OrderDetailMenu(
-                                productName,
-                                size != null ? size : "-",
-                                quantity,
-                                unitPrice,
-                                quantity * unitPrice
-                        );
-
-                        orderDetailsListMenu.add(detail);
+            // Get table ID from name
+            Integer tableId = null;
+            if (!"Takeaway".equals(selectedTable)) {
+                String tableQuery = "SELECT id FROM tables WHERE table_name = ?";
+                try (PreparedStatement tableStmt = conn.prepareStatement(tableQuery)) {
+                    tableStmt.setString(1, selectedTable);
+                    ResultSet rs = tableStmt.executeQuery();
+                    if (rs.next()) {
+                        tableId = rs.getInt("id");
                     }
                 }
             }
 
-            orderItemsTable.setItems(orderDetailsListMenu);
+            // Update order
+            String updateQuery = "UPDATE orders SET table_id = ?, status = ?, payment_method = ? WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+                if (tableId != null) {
+                    stmt.setInt(1, tableId);
+                } else {
+                    stmt.setNull(1, Types.INTEGER);
+                }
 
+                stmt.setString(2, selectedStatus);
+                stmt.setString(3, selectedPayment);
+                stmt.setInt(4, currentOrder.getId());
+
+                int rowsAffected = stmt.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    // Update table status depending on action
+                    updateTablesStatus(conn, currentOrder.getTableId(), tableId, selectedStatus);
+
+                    // Show success message
+                    showAlert("Order #" + currentOrder.getId() + " updated successfully", Alert.AlertType.INFORMATION);
+
+                    // Reload orders to reflect changes
+                    loadOrders();
+
+                    // Close details view
+                    orderDetailsContainer.setVisible(false);
+                    orderDetailsContainer.setManaged(false);
+                }
+            }
         } catch (SQLException e) {
-            showAlert("Error loading order items: " + e.getMessage());
-            e.printStackTrace();
+            showAlert("Error updating order: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
+    private void updateTablesStatus(Connection conn, int oldTableId, Integer newTableId, String orderStatus)
+            throws SQLException {
+        // Release old table if it exists and is different from new table
+        if (oldTableId > 0 && (newTableId == null || oldTableId != newTableId)) {
+            String updateOldTable = "UPDATE tables SET status = 'available' WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(updateOldTable)) {
+                stmt.setInt(1, oldTableId);
+                stmt.executeUpdate();
+            }
+        }
+
+        // Update new table status if exists and order is not completed or cancelled
+        if (newTableId != null && !("Completed".equals(orderStatus) || "Cancelled".equals(orderStatus))) {
+            String updateNewTable = "UPDATE tables SET status = 'occupied' WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(updateNewTable)) {
+                stmt.setInt(1, newTableId);
+                stmt.executeUpdate();
+            }
+        } else if (newTableId != null) {
+            // Free table if order is completed or cancelled
+            String updateNewTable = "UPDATE tables SET status = 'available' WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(updateNewTable)) {
+                stmt.setInt(1, newTableId);
+                stmt.executeUpdate();
+            }
+        }
+    }
+
+    private void showAlert(String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(alertType == Alert.AlertType.INFORMATION ? "Success" : "Message");
         alert.setHeaderText(null);
         alert.setContentText(message);
+
+        // Apply styling to the dialog
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStyleClass().add("custom-alert");
+
+        // Style based on the alert type
+        switch (alertType) {
+            case INFORMATION:
+                dialogPane.getStyleClass().add("info-dialog");
+                break;
+            case WARNING:
+                dialogPane.getStyleClass().add("warning-dialog");
+                break;
+            case ERROR:
+                dialogPane.getStyleClass().add("error-dialog");
+                break;
+            default:
+                break;
+        }
+
+        // Get the stylesheet from the orders.css file
+        String cssPath = getClass().getResource("/assets/styles/orders.css").toExternalForm();
+        dialogPane.getStylesheets().add(cssPath);
+
         alert.showAndWait();
     }
 }
