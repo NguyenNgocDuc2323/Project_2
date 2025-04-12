@@ -106,8 +106,6 @@ public class OrderStatisticController {
                 }
             }
         });
-        setOrderCountAxis(monthlyOrderYAxis);
-        setOrderCountAxis(dailyOrderYAxis);
 
         loadOrderStatistic();
         loadTotalOrderCountAndTotalRevenue();
@@ -182,12 +180,5 @@ public class OrderStatisticController {
 
         dailyOrderLineChart.getData().add(dailyOrderCountSeries);
         dailyRevenueLineChart.getData().add(dailyRevenueSeries);
-    }
-
-    private void setOrderCountAxis(NumberAxis yAxis) {
-        yAxis.setAutoRanging(false);
-        yAxis.setLowerBound(0);
-        yAxis.setUpperBound(100);
-        yAxis.setTickUnit(10);
     }
 }

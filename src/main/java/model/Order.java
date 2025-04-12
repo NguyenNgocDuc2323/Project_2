@@ -15,7 +15,9 @@ public class Order {
     private String paymentMethod;
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
-    public Order() {}
+    public Order() {
+    }
+
     public Order(Integer id, Integer userId, Integer tableId, String tableName, LocalDateTime orderDate, String status, Double totalPrice, String paymentMethod) {
         this.id = id;
         this.userId = userId;
