@@ -2,57 +2,86 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane styleClass="sidebar" stylesheets="@../../../../assets/styles/styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.staff.SidebarController">
-    <top>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Shop Management">
-            <font>
-                <Font name="System Bold" size="24.0" />
-            </font>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-        </Text>
-    </top>
+<BorderPane prefHeight="500.0" prefWidth="1000.0" stylesheets="@../../../../assets/styles/styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.staff.SidebarController">
+   <left>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="sidebar" BorderPane.alignment="CENTER">
+         <top>
+              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Shop Management" BorderPane.alignment="CENTER">
+                  <font>
+                      <Font name="System Bold" size="24.0" />
+                  </font>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+              </Text>
+         </top>
+         <center>
+              <VBox BorderPane.alignment="CENTER">
+                  <Button fx:id="orderStatisticBtn" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="text-button" text="Order Statistic">
+                      <padding>
+                          <Insets bottom="16.0" left="32.0" right="32.0" top="16.0" />
+                      </padding>
+                  </Button>
+                  <Button fx:id="orderManagementBtn" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="text-button" text="Order Management">
+                      <padding>
+                          <Insets bottom="16.0" left="32.0" right="32.0" top="16.0" />
+                      </padding>
+                  </Button>
+                  <Button fx:id="tableManagementBtn" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="text-button" text="Table Management">
+                      <padding>
+                          <Insets bottom="16.0" left="32.0" right="32.0" top="16.0" />
+                      </padding>
+                  </Button>
+                  <Button fx:id="categoryManagementBtn" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="text-button" text="Category Management">
+                      <padding>
+                          <Insets bottom="16.0" left="32.0" right="32.0" top="16.0" />
+                      </padding>
+                  </Button>
+               <BorderPane.margin>
+                  <Insets top="16.0" />
+               </BorderPane.margin>
+              </VBox>
+         </center>
+         <bottom>
+               <HBox alignment="CENTER_LEFT" spacing="16">
+                   <StackPane onMouseClicked="#handleGoToProfile">
+                       <Circle fx:id="userAvatar" radius="20" styleClass="user-avatar" />
+                       <Label fx:id="userInitialsLabel" styleClass="avatar-initials" text="JD" textFill="WHITE" />
+                   </StackPane>
+                   <VBox alignment="CENTER_LEFT" prefWidth="80.0">
+                       <Label fx:id="userNameLabel" styleClass="user-name" text="..." textFill="WHITE" />
+                       <Label fx:id="userRoleLabel" styleClass="user-role" text="..." textFill="WHITE" />
+                   </VBox>
+                   <Button fx:id="logoutBtn" onAction="#handleSignOut">
+                       <graphic>
+                           <ImageView fitHeight="16" fitWidth="16">
+                               <Image url="@../images/logout.png" />
+                           </ImageView>
+                       </graphic>
+                   </Button>
+               </HBox>
+         </bottom>
+         <padding>
+            <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+         </padding>
+      </BorderPane>
+   </left>
     <center>
-        <VBox>
-            <Button alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleGoToOrderStatistic" styleClass="text-button" text="Order Statistic">
-                <padding>
-                    <Insets bottom="16.0" left="32.0" right="32.0" top="16.0" />
-                </padding>
-            </Button>
-            <Button alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleGoToOrderManagement" styleClass="text-button" text="Order Management">
-                <padding>
-                    <Insets bottom="16.0" left="32.0" right="32.0" top="16.0" />
-                </padding>
-            </Button>
-            <Button alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleGoToTableManagement" styleClass="text-button" text="Table Management">
-                <padding>
-                    <Insets bottom="16.0" left="32.0" right="32.0" top="16.0" />
-                </padding>
-            </Button>
-            <Button alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleGoToCategoryManagement" styleClass="text-button" text="Category Management">
-                <padding>
-                    <Insets bottom="16.0" left="32.0" right="32.0" top="16.0" />
-                </padding>
-            </Button>
-         <BorderPane.margin>
-            <Insets top="16.0" />
-         </BorderPane.margin>
-        </VBox>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="content-scroll">
+            <StackPane fx:id="contentArea" styleClass="surface">
+            </StackPane>
+        </ScrollPane>
     </center>
-    <bottom>
-        <Button alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="text-button" text="My Account">
-            <padding>
-                <Insets bottom="16.0" left="32.0" right="32.0" top="16.0" />
-            </padding>
-        </Button>
-    </bottom>
-   <padding>
-      <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-   </padding>
 </BorderPane>

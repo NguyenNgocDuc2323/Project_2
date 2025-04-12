@@ -15,10 +15,10 @@ public class MainApplication extends Application {
             // Khởi tạo kết nối database
             helper.DatabaseConnection.getInstance().getConnection();
             
-            Locale vietnam = new Locale("vn", "VN");
+            Locale vietnam = new Locale("vi", "VN");
             Translator.setLocale(vietnam);
             Navigator.getInstance().setState(stage);
-            Navigator.getInstance().gotoMenu();
+            Navigator.getInstance().gotoDashboard();
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Lỗi khi load FXML! Kiểm tra đường dẫn.");

@@ -33,7 +33,6 @@ public class Navigator {
     public static final String TABLE_DIALOG = "/com/example/manage_account/Staff/TableDialog.fxml";
     public static final String ORDER_MANAGEMENT = "/com/example/manage_account/Staff/Order.fxml";
     public static final String ORDER_DIALOG = "/com/example/manage_account/Staff/OrderDialog.fxml";
-    public static final String ORDER_DETAIL = "/com/example/manage_account/Staff/OrderDetail.fxml";
     public static final String PRODUCT_MANAGE = "/com/example/manage_account/Admin/coffee_admin.fxml";
     public static final String COFFEE_DIALOG = "/com/example/manage_account/CoffeeShop/add_edit_coffee.fxml";
     public static final String ORDER_DETAIL_MANAGEMENT = "/com/example/manage_account/Staff/OrderDetail.fxml";
@@ -41,6 +40,8 @@ public class Navigator {
     public static final String ORDER_STATISTIC = "/com/example/manage_account/Staff/OrderStatistic.fxml";
     public static final String CATEGORY_MANAGEMENT = "/com/example/manage_account/Staff/Category.fxml";
     public static final String CATEGORY_DIALOG = "/com/example/manage_account/Staff/CategoryDialog.fxml";
+    public static final String PROFILE = "/com/example/manage_account/CoffeeShop/ProfileView.fxml";
+    public static final String SIDEBAR = "/com/example/manage_account/Staff/Sidebar.fxml";
 
     private Navigator() {
     }
@@ -180,4 +181,9 @@ public class Navigator {
     public void gotoCategoryManagement() throws IOException {
         gotoScene("Category Management", CATEGORY_MANAGEMENT);
     }
+
+    public void gotoDashboard() throws IOException {
+        gotoScene("Coffee Shop Management", SIDEBAR);
+    }
+
 }
