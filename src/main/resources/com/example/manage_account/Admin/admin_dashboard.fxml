@@ -56,6 +56,21 @@
                         <Insets top="12" right="15" bottom="12" left="15" />
                     </padding>
                 </Button>
+                <Button fx:id="productBtn" styleClass="nav-button" maxWidth="Infinity">
+                    <graphic>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="24" fitHeight="24" preserveRatio="true">
+                                <image>
+                                    <Image url="@../images/cart-icon.png" />
+                                </image>
+                            </ImageView>
+                            <Label text="Products" styleClass="nav-text" />
+                        </HBox>
+                    </graphic>
+                    <padding>
+                        <Insets top="12" right="15" bottom="12" left="15" />
+                    </padding>
+                </Button>
 
                 <Button fx:id="tableBtn" styleClass="nav-button" maxWidth="Infinity">
                     <graphic>

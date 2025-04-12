@@ -33,7 +33,7 @@ public class Navigator {
     public static final String TABLE_DIALOG = "/com/example/manage_account/Staff/TableDialog.fxml";
     public static final String ORDER_MANAGEMENT = "/com/example/manage_account/Staff/Order.fxml";
     public static final String ORDER_DIALOG = "/com/example/manage_account/Staff/OrderDialog.fxml";
-    public static final String PRODUCT_MANAGE = "/com/example/manage_account/Admin/coffee_admin.fxml";
+    public static final String PRODUCT_MANAGE = "/com/example/manage_account/Admin/Product.fxml";
     public static final String COFFEE_DIALOG = "/com/example/manage_account/CoffeeShop/add_edit_coffee.fxml";
     public static final String ORDER_DETAIL_MANAGEMENT = "/com/example/manage_account/Staff/OrderDetail.fxml";
     public static final String ORDER_DETAIL_DIALOG = "/com/example/manage_account/Staff/OrderDetailDialog.fxml";

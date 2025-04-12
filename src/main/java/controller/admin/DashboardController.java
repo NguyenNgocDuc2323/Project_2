@@ -1,11 +1,8 @@
 package controller.admin;
 
 import helper.Alert;
-import helper.CoffeeShop.CartManager;
 import helper.Navigator;
 import helper.Session;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.util.Duration;
 import model.Account;
 
 import java.io.IOException;
@@ -28,7 +24,7 @@ public class DashboardController implements Initializable {
     @FXML private Button tableBtn;
     @FXML private Button categoryBtn;
     @FXML private Button orderBtn;
-    @FXML private Button logoutBtn;
+    @FXML private Button productBtn;
 
     // User information UI elements
     @FXML private Label userNameLabel;
@@ -43,6 +39,7 @@ public class DashboardController implements Initializable {
         tableBtn.setOnAction(e -> loadView("/com/example/manage_account/Staff/Table.fxml"));
         categoryBtn.setOnAction(e -> loadView("/com/example/manage_account/Staff/Category.fxml"));
         orderBtn.setOnAction(e -> loadView("/com/example/manage_account/Staff/Order.fxml"));
+        productBtn.setOnAction(e -> loadView("/com/example/manage_account/Admin/Product.fxml"));
 
         loadUserInfo();
 
@@ -113,6 +110,7 @@ public class DashboardController implements Initializable {
             tableBtn.getStyleClass().remove("active");
             categoryBtn.getStyleClass().remove("active");
             orderBtn.getStyleClass().remove("active");
+            productBtn.getStyleClass().remove("active");
 
             if (fxmlFile.contains("Home")) {
                 menuBtn.getStyleClass().add("active");
@@ -122,6 +120,8 @@ public class DashboardController implements Initializable {
                 categoryBtn.getStyleClass().add("active");
             } else if (fxmlFile.contains("Order")) {
                 orderBtn.getStyleClass().add("active");
+            }else if (fxmlFile.contains("Product")) {
+                productBtn.getStyleClass().add("active");
             }
 
         } catch (IOException e) {
