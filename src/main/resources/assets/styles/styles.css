@@ -36,7 +36,7 @@
   -mat-surface-container-highest: #e3e2e6;
 }
 
-.button {
+.flat-button {
   -fx-background-color: -mat-primary;
   -fx-background-radius: 32px;
   -fx-border-radius: 32px;
@@ -45,11 +45,11 @@
   -fx-text-fill: -mat-text-on-primary;
 }
 
-.button:hover {
+.flat-button:hover {
   -fx-cursor: hand;
 }
 
-.button:pressed {
+.flat-button:pressed {
   -fx-background-color: rgba(137, 89, 67, 0.8);
 }
 
@@ -132,40 +132,16 @@
     -fx-background-insets: 0;
 }
 
-.sidebar {
-  -fx-background-color: -mat-primary;
-}
-
-.sidebar .text-button {
-  -fx-background-color: inherit;
-  -fx-background-radius: 32px;
-  -fx-border-color: transparent;
-  -fx-border-radius: 32px;
-  -fx-font-size: 14px;
-  -fx-padding: 12px 24px 12px 0px;
-  -fx-text-fill: -mat-text-on-primary;
-}
-
-.surface {
-  -fx-background-color: -mat-surface;
-}
-
-.surface-container {
-  -fx-background-color: -mat-surface-container;
-}
-
 .tab-pane .tab-header-area .tab-header-background {
-  -fx-background-color: -mat-surface;
+  -fx-background-color: inherit;
   -fx-border-color: -mat-border-light;
   -fx-border-width: 0 0 1px 0;
-  -fx-text-fill: -mat-text-on-surface;
 }
 
 .tab {
-  -fx-background-color: -mat-surface;
+  -fx-background-color: inherit;
   -fx-font-weight: bold;
   -fx-padding: 16px 48px 16px 48px;
-  -fx-text-fill: -mat-text-on-surface;
 }
 
 .tab:hover {
@@ -182,16 +158,14 @@
 }
 
 .table-view {
-  -fx-background-color: -mat-surface;
-  -fx-text-background-color: -mat-text-on-surface;
+  -fx-background-color: inherit;
 }
 
 .table-view .column-header {
-  -fx-background-color: -mat-surface;
-  -fx-border-color: -mat-border-light;
-  -fx-border-width: 0 0 1px 0;
+  -fx-border-width: 0;
+  -fx-background-color: -mat-primary;
   -fx-font-weight: bold;
-  -fx-text-background-color: -mat-text-on-surface;
+  -fx-padding: 8px;
 }
 
 .table-view .column-header:hover {
@@ -200,7 +174,8 @@
 
 .table-view .column-header .label {
   -fx-alignment: center-left;
-  -fx-padding: 12px;
+  -fx-text-fill: white;
+  -fx-padding: 8px 8px 8px 0;
 }
 
 .table-view .table-cell {
@@ -208,11 +183,10 @@
 }
 
 .table-view .table-row-cell {
-  -fx-background-color: -mat-surface;
+  -fx-background-color: inherit;
   -fx-border-color: -mat-border-light;
   -fx-border-width: 0 0 1px 0;
-  -fx-padding: 12px;
-  -fx-text-background-color: -mat-text-on-surface;
+  -fx-padding: 8px;
 }
 
 .table-view .table-row-cell:hover {

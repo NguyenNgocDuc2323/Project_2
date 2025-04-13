@@ -1,11 +1,14 @@
 package model;
 
+import java.time.LocalDate;
+
 public class OrderStatistic {
     private Integer year;
     private Integer month;
     private Integer day;
     private Integer orderCount;
     private Double revenue;
+    private LocalDate date;
 
     public OrderStatistic() {
     }
@@ -48,6 +51,14 @@ public class OrderStatistic {
 
     public void setRevenue(Double revenue) {
         this.revenue = revenue;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }
 

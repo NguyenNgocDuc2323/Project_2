@@ -1,13 +1,16 @@
 package controller.staff;
 
 import database.OrderDB;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -16,7 +19,10 @@ import javafx.scene.text.Text;
 import model.OrderStatistic;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class OrderStatisticController {
     @FXML
@@ -32,6 +38,8 @@ public class OrderStatisticController {
     @FXML
     private TableColumn<OrderStatistic, Integer> monthlyMonthColumn;
     @FXML
+    private TableColumn<OrderStatistic, LocalDate> monthlyDateColumn;
+    @FXML
     private TableColumn<OrderStatistic, Integer> monthlyOrderCountColumn;
     @FXML
     private TableColumn<OrderStatistic, Double> monthlyRevenueColumn;
@@ -41,6 +49,8 @@ public class OrderStatisticController {
     private TableColumn<OrderStatistic, Integer> dailyMonthColumn;
     @FXML
     private TableColumn<OrderStatistic, Integer> dailyDayColumn;
+    @FXML
+    private TableColumn<OrderStatistic, LocalDate> dailyDateColumn;
     @FXML
     private TableColumn<OrderStatistic, Integer> dailyOrderCountColumn;
     @FXML
@@ -69,13 +79,73 @@ public class OrderStatisticController {
     private CategoryAxis dailyRevenueXAxis;
     @FXML
     private NumberAxis dailyRevenueYAxis;
-    private final ObservableList<OrderStatistic> orderMonthlyStatisticObservableList = FXCollections.observableArrayList();
-    private final ObservableList<OrderStatistic> orderDailyStatisticObservableList = FXCollections.observableArrayList();
+    @FXML
+    public DatePicker monthlyOrderStatisticDateField;
+    @FXML
+    public DatePicker dailyOrderStatisticDateField;
+    private final ObservableList<OrderStatistic> orderMonthlyOrderStatisticObservableList = FXCollections.observableArrayList();
+    private final ObservableList<OrderStatistic> orderDailyOrderStatisticObservableList = FXCollections.observableArrayList();
+    private final ObservableList<OrderStatistic> filteredMonthlyOrderStatisticObservableList = FXCollections.observableArrayList();
+    private final ObservableList<OrderStatistic> filteredDailyOrderStatisticObservableList = FXCollections.observableArrayList();
+
 
     @FXML
     private void initialize() {
-        monthlyYearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
-        monthlyMonthColumn.setCellValueFactory(new PropertyValueFactory<>("month"));
+        setupMonthlyOrderStatisticTable();
+        setupDailyOrderStatisticTable();
+        loadOrderStatistic();
+        loadTotalOrderCountAndTotalRevenue();
+        loadLineChart();
+    }
+
+    @FXML
+    private void handleMonthlyOrderStatisticFilterByDate(ActionEvent actionEvent) {
+        LocalDate selectedDate = monthlyOrderStatisticDateField.getValue();
+        if (selectedDate == null) {
+            orderMonthlyStatisticTable.setItems(orderMonthlyOrderStatisticObservableList);
+        } else {
+            int selectedYear = selectedDate.getYear();
+            int selectedMonth = selectedDate.getMonthValue();
+
+            filteredMonthlyOrderStatisticObservableList
+                    .setAll(orderMonthlyOrderStatisticObservableList
+                            .stream()
+                            .filter(s -> s.getYear() == selectedYear && s.getMonth() == selectedMonth)
+                            .collect(Collectors.toList()));
+
+            orderMonthlyStatisticTable.setItems(filteredMonthlyOrderStatisticObservableList);
+        }
+    }
+
+    @FXML
+    private void handleDailyOrderStatisticFilterByDate(ActionEvent actionEvent) {
+        LocalDate selectedDate = dailyOrderStatisticDateField.getValue();
+        if (selectedDate == null) {
+            orderDailyStatisticTable.setItems(orderDailyOrderStatisticObservableList);
+        } else {
+            filteredDailyOrderStatisticObservableList
+                    .setAll(orderDailyOrderStatisticObservableList
+                            .stream()
+                            .filter(s -> Objects.equals(s.getDate(), selectedDate))
+                            .collect(Collectors.toList()));
+            orderDailyStatisticTable.setItems(filteredDailyOrderStatisticObservableList);
+        }
+    }
+
+    private void setupMonthlyOrderStatisticTable(){
+        monthlyDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        monthlyDateColumn.setCellFactory(column -> new TableCell<>() {
+            private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+            @Override
+            protected void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.format(formatter));
+                }
+            }
+        });
         monthlyOrderCountColumn.setCellValueFactory(new PropertyValueFactory<>("orderCount"));
         monthlyRevenueColumn.setCellValueFactory(new PropertyValueFactory<>("revenue"));
         monthlyRevenueColumn.setCellFactory(column -> new TableCell<>() {
@@ -89,10 +159,10 @@ public class OrderStatisticController {
                 }
             }
         });
+    }
 
-        dailyYearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
-        dailyMonthColumn.setCellValueFactory(new PropertyValueFactory<>("month"));
-        dailyDayColumn.setCellValueFactory(new PropertyValueFactory<>("day"));
+    private void setupDailyOrderStatisticTable(){
+        dailyDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         dailyOrderCountColumn.setCellValueFactory(new PropertyValueFactory<>("orderCount"));
         dailyRevenueColumn.setCellValueFactory(new PropertyValueFactory<>("revenue"));
         dailyRevenueColumn.setCellFactory(column -> new TableCell<>() {
@@ -106,18 +176,14 @@ public class OrderStatisticController {
                 }
             }
         });
-
-        loadOrderStatistic();
-        loadTotalOrderCountAndTotalRevenue();
-        loadLineChart();
     }
 
     private void loadOrderStatistic() {
-        orderMonthlyStatisticObservableList.setAll(OrderDB.getInstance().getOrderMonthlyStatistic());
-        orderMonthlyStatisticTable.setItems(orderMonthlyStatisticObservableList);
+        orderMonthlyOrderStatisticObservableList.setAll(OrderDB.getInstance().getOrderMonthlyStatistic());
+        orderMonthlyStatisticTable.setItems(orderMonthlyOrderStatisticObservableList);
 
-        orderDailyStatisticObservableList.setAll(OrderDB.getInstance().getOrderDailyStatistic());
-        orderDailyStatisticTable.setItems(orderDailyStatisticObservableList);
+        orderDailyOrderStatisticObservableList.setAll(OrderDB.getInstance().getOrderDailyStatistic());
+        orderDailyStatisticTable.setItems(orderDailyOrderStatisticObservableList);
     }
 
     private void loadTotalOrderCountAndTotalRevenue() {

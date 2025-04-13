@@ -41,7 +41,6 @@ public class Navigator {
     public static final String CATEGORY_MANAGEMENT = "/com/example/manage_account/Staff/Category.fxml";
     public static final String CATEGORY_DIALOG = "/com/example/manage_account/Staff/CategoryDialog.fxml";
     public static final String PROFILE = "/com/example/manage_account/CoffeeShop/ProfileView.fxml";
-    public static final String SIDEBAR = "/com/example/manage_account/Staff/Sidebar.fxml";
 
     private Navigator() {
     }
@@ -129,9 +128,9 @@ public class Navigator {
         Parent root = loader.load();
         OrderDetailController controller = loader.getController();
         controller.setOrderId(orderId);
-        state.setTitle("Order Detail Management");
-        state.setScene(new Scene(root));
-        state.show();
+        Stage dialogStage = new Stage();
+        dialogStage.setScene(new Scene(root));
+        dialogStage.showAndWait();
     }
 
     public void gotoProductManage() throws IOException {

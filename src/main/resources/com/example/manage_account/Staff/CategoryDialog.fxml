@@ -12,34 +12,38 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="500.0" prefWidth="500.0" styleClass="surface" stylesheets="@../../../../assets/styles/styles.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.staff.CategoryDialogController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="500.0"
+            styleClass="surface" stylesheets="@../../../../assets/styles/styles.css"
+            xmlns="http://javafx.com/javafx/20.0.1" fx:controller="controller.staff.CategoryDialogController">
     <center>
         <VBox alignment="CENTER" BorderPane.alignment="CENTER">
             <FlowPane alignment="CENTER">
                 <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0">
                     <font>
-                        <Font size="18.0" />
+                        <Font size="18.0"/>
                     </font>
                 </Text>
             </FlowPane>
             <FlowPane alignment="CENTER" orientation="VERTICAL" prefHeight="300.0" prefWidth="500.0" vgap="8.0">
-                <Label text="Category Name:" />
+                <Label text="Category Name:"/>
                 <TextField fx:id="nameField" prefHeight="30.0" prefWidth="300.0">
                     <FlowPane.margin>
-                        <Insets />
+                        <Insets/>
                     </FlowPane.margin>
                 </TextField>
 
-                <Label text="Description:" />
+                <Label text="Description:"/>
                 <TextArea fx:id="descriptionField" prefHeight="100.0" prefWidth="300.0">
                     <FlowPane.margin>
-                        <Insets />
+                        <Insets/>
                     </FlowPane.margin>
                 </TextArea>
             </FlowPane>
             <HBox alignment="CENTER" spacing="40.0">
-                <Button fx:id="submitButton" alignment="CENTER" onAction="#handleSubmit" prefWidth="80.0" text="Save" />
-                <Button fx:id="cancelButton" alignment="CENTER" onAction="#handleCloseDialog" styleClass="outline-button" text="Cancel" />
+                <Button fx:id="submitButton" alignment="CENTER" onAction="#handleSubmit" prefWidth="80.0"
+                        styleClass="flat-button" text="Save"/>
+                <Button fx:id="cancelButton" alignment="CENTER" onAction="#handleCloseDialog"
+                        styleClass="outline-button" text="Cancel"/>
             </HBox>
         </VBox>
     </center>
