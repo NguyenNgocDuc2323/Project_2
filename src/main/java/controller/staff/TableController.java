@@ -4,9 +4,11 @@ import database.TableDB;
 import helper.Alert;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.Table;
 import javafx.fxml.FXML;
@@ -25,7 +27,11 @@ import static helper.Navigator.TABLE_DIALOG;
 
 public class TableController {
     @FXML
-    public Button deleteButton;
+    private Button deleteButton;
+    @FXML
+    private TextField tableIdField;
+    @FXML
+    private ComboBox<Integer> floorFilterComboBox;
     @FXML
     private TableView<Table> tableTable;
     @FXML
@@ -38,19 +44,12 @@ public class TableController {
     private TableColumn<Table, String> statusColumn;
     @FXML
     private TableColumn<Table, Integer> floorColumn;
-    @FXML
-    private ComboBox<Integer> floorFilterComboBox;
     private final ObservableList<Table> tableObservableList = FXCollections.observableArrayList();
     private final ObservableList<Table> filteredTableObservableList = FXCollections.observableArrayList();
 
     @FXML
     private void initialize() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("tableName"));
-        capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-        floorColumn.setCellValueFactory(new PropertyValueFactory<>("floorNumber"));
-
+        setupTableTable();
         loadTablesFromDatabase();
     }
 
@@ -104,6 +103,25 @@ public class TableController {
         } else {
             Alert.showAlert("Please select table to delete");
         }
+    }
+
+    @FXML
+    private void handleFilterByTableId(ActionEvent actionEvent) {
+        try {
+            int tableId = Integer.parseInt(tableIdField.getText());
+            filteredTableObservableList.setAll(tableObservableList.stream().filter(order -> Objects.equals(order.getId(), tableId)).collect(Collectors.toList()));
+            tableTable.setItems(filteredTableObservableList);
+        } catch (NumberFormatException e) {
+            tableTable.setItems(tableObservableList);
+        }
+    }
+
+    private void setupTableTable() {
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("tableName"));
+        capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        floorColumn.setCellValueFactory(new PropertyValueFactory<>("floorNumber"));
     }
 
     private void loadTablesFromDatabase() {

@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,6 +147,7 @@ public class OrderDB {
                 OrderStatistic orderStatistic = new OrderStatistic();
                 orderStatistic.setYear(resultSet.getInt("year"));
                 orderStatistic.setMonth(resultSet.getInt("month"));
+                orderStatistic.setDate(LocalDate.of(resultSet.getInt("year"), resultSet.getInt("month"), 1));
                 orderStatistic.setOrderCount(resultSet.getInt("order_count"));
                 orderStatistic.setRevenue(resultSet.getDouble("revenue"));
                 orderStatisticList.add(orderStatistic);
@@ -179,6 +181,7 @@ public class OrderDB {
                 orderStatistic.setYear(resultSet.getInt("year"));
                 orderStatistic.setMonth(resultSet.getInt("month"));
                 orderStatistic.setDay(resultSet.getInt("day"));
+                orderStatistic.setDate(LocalDate.of(resultSet.getInt("year"), resultSet.getInt("month"), resultSet.getInt("day")));
                 orderStatistic.setOrderCount(resultSet.getInt("order_count"));
                 orderStatistic.setRevenue(resultSet.getDouble("revenue"));
                 orderStatisticList.add(orderStatistic);

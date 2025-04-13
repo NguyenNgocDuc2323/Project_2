@@ -1,7 +1,6 @@
 package controller.staff;
 
 import database.CategoryDB;
-import database.TableDB;
 import helper.Alert;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,21 +12,24 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Category;
-import model.Table;
 
 import java.io.IOException;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static helper.Navigator.CATEGORY_DIALOG;
-import static helper.Navigator.TABLE_DIALOG;
 
 public class CategoryController {
     @FXML
-    private TableView<Category> categoryTable;
-    @FXML
     private Button deleteButton;
+    @FXML
+    private TextField categoryIdField;
+    @FXML
+    private TableView<Category> categoryTable;
     @FXML
     private TableColumn<Category, Integer> idColumn;
     @FXML
@@ -35,12 +37,11 @@ public class CategoryController {
     @FXML
     private TableColumn<Category, String> descriptionColumn;
     private final ObservableList<Category> categoryObservableList = FXCollections.observableArrayList();
+    private final ObservableList<Category> filteredCategoryObservableList = FXCollections.observableArrayList();
 
     @FXML
     private void initialize(){
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        setupCategoryTable();
         loadCategoryFromDatabase();
     }
 
@@ -81,6 +82,23 @@ public class CategoryController {
         } else {
             Alert.showAlert("Please select category to delete");
         }
+    }
+
+    @FXML
+    private void handleFilterByCategoryId(ActionEvent actionEvent) {
+        try {
+            int categoryId = Integer.parseInt(categoryIdField.getText());
+            filteredCategoryObservableList.setAll(categoryObservableList.stream().filter(order -> Objects.equals(order.getId(), categoryId)).collect(Collectors.toList()));
+            categoryTable.setItems(filteredCategoryObservableList);
+        } catch (NumberFormatException e) {
+            categoryTable.setItems(categoryObservableList);
+        }
+    }
+
+    private void setupCategoryTable() {
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
     }
 
     private void loadCategoryFromDatabase() {

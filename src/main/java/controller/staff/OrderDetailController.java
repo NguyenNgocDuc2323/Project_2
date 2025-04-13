@@ -3,6 +3,8 @@ package controller.staff;
 import database.OrderDetailDB;
 import helper.Alert;
 import helper.Navigator;
+import javafx.event.ActionEvent;
+import javafx.scene.control.TextField;
 import model.OrderDetail;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,10 +18,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static helper.Navigator.ORDER_DETAIL_DIALOG;
 
 public class OrderDetailController {
+    @FXML
+    private TextField orderDetailIdField;
     @FXML
     private TableView<OrderDetail> orderDetailTable;
     @FXML
@@ -34,6 +40,7 @@ public class OrderDetailController {
     private TableColumn<OrderDetail, Double> unitPriceColumn;
     private int orderId;
     private final ObservableList<OrderDetail> orderDetailObservableList = FXCollections.observableArrayList();
+    private final ObservableList<OrderDetail> filteredOrderDetailObservableList = FXCollections.observableArrayList();
 
     public void setOrderId(int orderId) {
         this.orderId = orderId;
@@ -67,11 +74,13 @@ public class OrderDetailController {
     }
 
     @FXML
-    private void handleBackToOrder() throws IOException {
+    private void handleFilterByOrderDetailId(ActionEvent actionEvent) {
         try {
-            Navigator.getInstance().gotoScene("", Navigator.SIDEBAR);
-        } catch (IOException e) {
-            e.printStackTrace();
+            int orderDetailId = Integer.parseInt(orderDetailIdField.getText());
+            filteredOrderDetailObservableList.setAll(orderDetailObservableList.stream().filter(order -> Objects.equals(order.getId(), orderDetailId)).collect(Collectors.toList()));
+            orderDetailTable.setItems(filteredOrderDetailObservableList);
+        } catch (NumberFormatException e) {
+            orderDetailTable.setItems(orderDetailObservableList);
         }
     }
 

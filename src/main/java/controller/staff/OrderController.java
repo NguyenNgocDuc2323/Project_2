@@ -3,6 +3,7 @@ package controller.staff;
 import database.OrderDB;
 import helper.Alert;
 import helper.Navigator;
+import javafx.scene.control.DatePicker;
 import model.Order;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -26,7 +28,11 @@ import static helper.Navigator.ORDER_DIALOG;
 
 public class OrderController {
     @FXML
+    public TextField orderIdField;
+    @FXML
     public TextField userIdField;
+    @FXML
+    public DatePicker orderDateField;
     @FXML
     private TableView<Order> orderTable;
     @FXML
@@ -48,14 +54,7 @@ public class OrderController {
 
     @FXML
     private void initialize() {
-        orderIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        userIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
-        tableNameColumn.setCellValueFactory(new PropertyValueFactory<>("tableName"));
-        orderDateColumn.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-        totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
-        paymentMethodColumn.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
-
+        setupOrderTable();
         loadOrdersFromDatabase();
     }
 
@@ -92,16 +91,46 @@ public class OrderController {
     }
 
     @FXML
-    private void handleSearchByUserId(ActionEvent actionEvent) {
+    private void handleFilterByOrderId(ActionEvent actionEvent) {
         try {
-            int userId = Integer.parseInt(userIdField.getText());
-            filteredOrderObservableList.setAll(orderObservableList.stream()
-                    .filter(order -> Objects.equals(order.getUserId(), userId))
-                    .collect(Collectors.toList()));
+            int orderId = Integer.parseInt(orderIdField.getText());
+            filteredOrderObservableList.setAll(orderObservableList.stream().filter(order -> Objects.equals(order.getId(), orderId)).collect(Collectors.toList()));
             orderTable.setItems(filteredOrderObservableList);
         } catch (NumberFormatException e) {
             orderTable.setItems(orderObservableList);
         }
+    }
+
+    @FXML
+    private void handleFilterByUserId(ActionEvent actionEvent) {
+        try {
+            int userId = Integer.parseInt(userIdField.getText());
+            filteredOrderObservableList.setAll(orderObservableList.stream().filter(order -> Objects.equals(order.getUserId(), userId)).collect(Collectors.toList()));
+            orderTable.setItems(filteredOrderObservableList);
+        } catch (NumberFormatException e) {
+            orderTable.setItems(orderObservableList);
+        }
+    }
+
+    @FXML
+    private void handleFilterByOrderDate(ActionEvent actionEvent) {
+        LocalDate selectedOrderDate = orderDateField.getValue();
+        if (selectedOrderDate == null) {
+            orderTable.setItems(orderObservableList);
+        } else {
+            filteredOrderObservableList.setAll(orderObservableList.stream().filter(order -> Objects.equals(order.getOrderDate().toLocalDate(), selectedOrderDate)).collect(Collectors.toList()));
+            orderTable.setItems(filteredOrderObservableList);
+        }
+    }
+
+    private void setupOrderTable() {
+        orderIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        userIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        tableNameColumn.setCellValueFactory(new PropertyValueFactory<>("tableName"));
+        orderDateColumn.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
+        paymentMethodColumn.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
     }
 
     private void loadOrdersFromDatabase() {
