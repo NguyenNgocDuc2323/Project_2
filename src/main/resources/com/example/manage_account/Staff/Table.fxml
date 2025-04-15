@@ -13,17 +13,16 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../../assets/styles/styles.css"
-            xmlns="http://javafx.com/javafx/20.0.1" fx:controller="controller.staff.TableController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../../../assets/styles/styles.css" fx:controller="controller.staff.TableController">
     <center>
-        <VBox spacing="16.0">
+        <VBox spacing="32.0">
             <BorderPane.margin>
                 <Insets/>
             </BorderPane.margin>
-            <VBox alignment="CENTER_LEFT" spacing="16.0">
+            <VBox alignment="CENTER_LEFT" spacing="32.0">
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Table Management">
                     <font>
-                        <Font name="System Bold" size="18.0"/>
+                        <Font name="System Bold" size="24.0"/>
                     </font>
                     <VBox.margin>
                         <Insets/>
@@ -33,17 +32,24 @@
                     <VBox.margin>
                         <Insets/>
                     </VBox.margin>
-                    <Button fx:id="createButton" onAction="#handleCreate" styleClass="flat-button" text="Create Table"/>
-                    <Button fx:id="updateButton" onAction="#handleUpdate" styleClass="flat-button" text="Update Table"/>
-                    <Button fx:id="deleteButton" onAction="#handleDelete" styleClass="flat-button" text="Delete Table"/>
+                    <Button onAction="#handleCreate" styleClass="flat-button" text="Create Table"/>
+                    <Button onAction="#handleUpdate" styleClass="flat-button" text="Update Table"/>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="16.0">
                     <HBox alignment="CENTER_LEFT" spacing="8.0">
-                        <Label text="Filter by Table Id:"/>
+                        <Label text="Filter by Table Id:">
+                            <font>
+                                <Font size="14.0"/>
+                            </font>
+                        </Label>
                         <TextField fx:id="tableIdField" onAction="#handleFilterByTableId" prefWidth="100.0"/>
                     </HBox>
                     <HBox alignment="CENTER_LEFT" spacing="8.0">
-                        <Label text="Filter by Floor:"/>
+                        <Label text="Filter by Floor:">
+                            <font>
+                                <Font size="14.0"/>
+                            </font>
+                        </Label>
                         <ComboBox fx:id="floorFilterComboBox" onAction="#handleFilterByFloor" promptText="None"/>
                     </HBox>
                     <VBox.margin>
@@ -51,21 +57,20 @@
                     </VBox.margin>
                 </HBox>
             </VBox>
-            <TableView fx:id="tableTable">
-                <columns>
-                    <TableColumn fx:id="idColumn" prefWidth="100.0" text="Table Id"/>
-                    <TableColumn fx:id="nameColumn" prefWidth="177.0" text="Table Name"/>
-                    <TableColumn fx:id="capacityColumn" prefWidth="125.0" text="Capacity"/>
-                    <TableColumn fx:id="statusColumn" prefWidth="142.0" text="Status"/>
-                    <TableColumn fx:id="floorColumn" prefWidth="167.0" text="Floor Number"/>
-                </columns>
-                <columnResizePolicy>
-                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                </columnResizePolicy>
-                <VBox.margin>
-                    <Insets/>
-                </VBox.margin>
-            </TableView>
+            <VBox styleClass="card">
+                <TableView fx:id="tableTable">
+                    <columns>
+                        <TableColumn fx:id="idColumn" prefWidth="100.0" text="Table Id"/>
+                        <TableColumn fx:id="nameColumn" prefWidth="177.0" text="Table Name"/>
+                        <TableColumn fx:id="capacityColumn" prefWidth="125.0" text="Capacity"/>
+                        <TableColumn fx:id="statusColumn" prefWidth="142.0" text="Status"/>
+                        <TableColumn fx:id="floorColumn" prefWidth="167.0" text="Floor Number"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
+            </VBox>
             <padding>
                 <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
             </padding>
