@@ -91,6 +91,11 @@ public class OrderController {
     }
 
     @FXML
+    private void handleGoToOrderStatistic() throws IOException {
+        Navigator.getInstance().gotoOrderStatistic();
+    }
+
+    @FXML
     private void handleFilterByOrderId(ActionEvent actionEvent) {
         try {
             int orderId = Integer.parseInt(orderIdField.getText());
