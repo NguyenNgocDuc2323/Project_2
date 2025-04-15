@@ -65,6 +65,22 @@ public class Account {
         return name.get();
     }
 
+    public String getTypeProperty() {
+        return typeProperty.get();
+    }
+
+    public StringProperty typePropertyProperty() {
+        return typeProperty;
+    }
+
+    public String getLockedProperty() {
+        return lockedProperty.get();
+    }
+
+    public StringProperty lockedPropertyProperty() {
+        return lockedProperty;
+    }
+
     public StringProperty nameProperty() {
         return name;
     }
@@ -133,5 +149,8 @@ public class Account {
 
     public StringProperty lockedAsStringProperty() {
         return lockedProperty;
+    }
+    public void setName(String name) {
+        this.name.set(name);
     }
 }

@@ -120,6 +120,22 @@
                     </padding>
                 </Button>
 
+                <Button fx:id="userBtn" styleClass="nav-button" maxWidth="Infinity">
+                    <graphic>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="24" fitHeight="24" preserveRatio="true">
+                                <image>
+                                    <Image url="@../images/profile-icon.png" />
+                                </image>
+                            </ImageView>
+                            <Label text="User" styleClass="nav-text" />
+                        </HBox>
+                    </graphic>
+                    <padding>
+                        <Insets top="12" right="15" bottom="12" left="15" />
+                    </padding>
+                </Button>
+
                 <VBox.margin>
                     <Insets bottom="20" />
                 </VBox.margin>

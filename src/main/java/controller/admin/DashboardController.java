@@ -25,6 +25,7 @@ public class DashboardController implements Initializable {
     @FXML private Button categoryBtn;
     @FXML private Button orderBtn;
     @FXML private Button productBtn;
+    @FXML private Button userBtn;
 
     // User information UI elements
     @FXML private Label userNameLabel;
@@ -40,6 +41,7 @@ public class DashboardController implements Initializable {
         categoryBtn.setOnAction(e -> loadView("/com/example/manage_account/Staff/Category.fxml"));
         orderBtn.setOnAction(e -> loadView("/com/example/manage_account/Staff/Order.fxml"));
         productBtn.setOnAction(e -> loadView("/com/example/manage_account/Admin/Product.fxml"));
+        userBtn.setOnAction(e -> loadView("/com/example/manage_account/Admin/UserManagement.fxml"));
 
         loadUserInfo();
 
@@ -111,8 +113,9 @@ public class DashboardController implements Initializable {
             categoryBtn.getStyleClass().remove("active");
             orderBtn.getStyleClass().remove("active");
             productBtn.getStyleClass().remove("active");
+            userBtn.getStyleClass().remove("active");
 
-            if (fxmlFile.contains("Home")) {
+            if (fxmlFile.contains("OrderStatistic")) {
                 menuBtn.getStyleClass().add("active");
             } else if (fxmlFile.contains("Table")) {
                 tableBtn.getStyleClass().add("active");
@@ -122,6 +125,9 @@ public class DashboardController implements Initializable {
                 orderBtn.getStyleClass().add("active");
             }else if (fxmlFile.contains("Product")) {
                 productBtn.getStyleClass().add("active");
+            }
+            else if (fxmlFile.contains("UserManagement")) {
+                userBtn.getStyleClass().add("active");
             }
 
         } catch (IOException e) {

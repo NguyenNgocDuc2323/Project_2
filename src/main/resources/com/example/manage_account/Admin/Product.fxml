@@ -4,31 +4,53 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.admin.CoffeeAdminController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.admin.CoffeeAdminController"
+            style="-fx-background-color: #f8f4f0; -fx-padding: 15;">
     <children>
-        <VBox spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+        <VBox spacing="15.0"
+              AnchorPane.bottomAnchor="15.0"
+              AnchorPane.leftAnchor="15.0"
+              AnchorPane.rightAnchor="15.0"
+              AnchorPane.topAnchor="15.0"
+              style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #d7ccc8; -fx-border-width: 1; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 2);">
             <children>
-                <HBox alignment="CENTER_LEFT" spacing="10.0">
-                    <Label text="Coffee Management" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+
+                <!-- Header -->
+                <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-padding: 10 15;">
+                    <Label text="☕ Coffee Management"
+                           style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #5D4037; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0.5, 0, 1);" />
                     <Region HBox.hgrow="ALWAYS" />
-                    <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddButton" text="Add Coffee" />
-                    <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEditButton" text="Edit Coffee" />
-                    <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDeleteButton" text="Delete Coffee" />
-                    <Button fx:id="btn_account_manage" mnemonicParsing="false" onAction="#onSwitchToAccountManage" text="Quản lý tài khoản" />
+                    <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddButton" text="Add Coffee"
+                            style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-background-radius: 5; -fx-padding: 8 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0.5, 0, 1);" />
+                    <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEditButton" text="Edit Coffee"
+                            style="-fx-background-color: #8D6E63; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-background-radius: 5; -fx-padding: 8 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0.5, 0, 1);" />
+                    <Button fx:id="btn_account_manage" mnemonicParsing="false" onAction="#onSwitchToAccountManage" text="Account Management"
+                            style="-fx-background-color: #A1887F; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-background-radius: 5; -fx-padding: 8 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0.5, 0, 1);" />
                 </HBox>
 
-                <TableView fx:id="coffeeTableView" VBox.vgrow="ALWAYS">
+                <!-- Table -->
+                <TableView fx:id="coffeeTableView" VBox.vgrow="ALWAYS"
+                           style="-fx-border-color: #BCAAA4; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-background-color: #ffffff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0.5, 0, 1);">
                     <columns>
-                        <TableColumn fx:id="idColumn" prefWidth="50.0" text="ID" />
-                        <TableColumn fx:id="nameColumn" prefWidth="200.0" text="Name" />
-                        <TableColumn fx:id="categoryColumn" prefWidth="100.0" text="Category" />
-                        <TableColumn fx:id="priceColumn" prefWidth="100.0" text="Price" />
-                        <TableColumn fx:id="quantityColumn" prefWidth="100.0" text="Quantity" />
+                        <TableColumn fx:id="idColumn" prefWidth="50.0" text="ID"
+                                     style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037; -fx-alignment: CENTER;" />
+                        <TableColumn fx:id="nameColumn" prefWidth="200.0" text="Name"
+                                     style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037;" />
+                        <TableColumn fx:id="categoryColumn" prefWidth="150.0" text="Category"
+                                     style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037; -fx-alignment: CENTER;" />
+                        <TableColumn fx:id="priceColumn" prefWidth="120.0" text="Price ($)"
+                                     style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037; -fx-alignment: CENTER-RIGHT;" />
+                        <TableColumn fx:id="quantityColumn" prefWidth="120.0" text="Quantity"
+                                     style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037; -fx-alignment: CENTER;" />
                     </columns>
                 </TableView>
+
             </children>
             <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
             </padding>
         </VBox>
     </children>

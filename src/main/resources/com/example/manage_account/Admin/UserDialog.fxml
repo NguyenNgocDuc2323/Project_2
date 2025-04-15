@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="500.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.admin.UserDialogController"
+            style="-fx-background-color: #f3e5ab;">
+    <children>
+        <VBox spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+            <children>
+                <Label fx:id="titleLabel" text="Add New User"
+                       style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #3e2f1c;" />
+
+                <GridPane hgap="15.0" vgap="15.0">
+                    <columnConstraints>
+                        <ColumnConstraints prefWidth="150.0" />
+                        <ColumnConstraints prefWidth="300.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label text="ID:" GridPane.rowIndex="0" style="-fx-text-fill: #5d4037; -fx-font-weight: bold;" />
+                        <TextField fx:id="idField" disable="true" promptText="Auto-generated" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                   style="-fx-background-color: #fff8dc; -fx-border-color: #bcaaa4; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6 10; -fx-text-fill: #3e2f1c;" />
+
+                        <Label text="Full Name:" GridPane.rowIndex="1" style="-fx-text-fill: #5d4037; -fx-font-weight: bold;" />
+                        <TextField fx:id="fullNameField" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                   style="-fx-background-color: #fff8dc; -fx-border-color: #bcaaa4; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6 10; -fx-text-fill: #3e2f1c;" />
+
+                        <Label text="Email:" GridPane.rowIndex="2" style="-fx-text-fill: #5d4037; -fx-font-weight: bold;" />
+                        <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                   style="-fx-background-color: #fff8dc; -fx-border-color: #bcaaa4; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6 10; -fx-text-fill: #3e2f1c;" />
+
+                        <Label text="Password:" GridPane.rowIndex="3" style="-fx-text-fill: #5d4037; -fx-font-weight: bold;" />
+                        <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                                       style="-fx-background-color: #fff8dc; -fx-border-color: #bcaaa4; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6 10; -fx-text-fill: #3e2f1c;" />
+
+                        <Label text="User Type:" GridPane.rowIndex="4" style="-fx-text-fill: #5d4037; -fx-font-weight: bold;" />
+                        <ComboBox fx:id="userTypeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4"
+                                  style="-fx-background-color: #fff8dc; -fx-border-color: #bcaaa4; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 4 10; -fx-text-fill: #3e2f1c;" />
+
+                        <Label text="Lock Status:" GridPane.rowIndex="5" style="-fx-text-fill: #5d4037; -fx-font-weight: bold;" />
+                        <ComboBox fx:id="lockStatusComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5"
+                                  style="-fx-background-color: #fff8dc; -fx-border-color: #bcaaa4; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 4 10; -fx-text-fill: #3e2f1c;" />
+                    </children>
+                </GridPane>
+
+                <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                    <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="Cancel"
+                            style="-fx-background-color: #a1887f; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 16; -fx-font-weight: bold;" />
+                    <Button fx:id="saveButton" defaultButton="true" mnemonicParsing="false" onAction="#handleSave" text="Save"
+                            style="-fx-background-color: #6d4c41; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 16; -fx-font-weight: bold;" />
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
