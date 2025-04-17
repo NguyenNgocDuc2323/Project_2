@@ -6,6 +6,7 @@ module com.example.manage_account {
     requires jbcrypt;
 
     opens com.example.manage_account to javafx.base, javafx.graphics, javafx.fxml;
+    opens helper to javafx.base, javafx.graphics, javafx.fxml;
 
     opens controller to javafx.fxml;
     opens controller.admin to javafx.fxml;
@@ -21,6 +22,10 @@ module com.example.manage_account {
     exports controller;
     exports controller.admin;
     exports controller.staff;
-
+    exports com.example.manage_account;
+    exports helper;
+    exports helper.DB_Helper;
+    exports helper.CoffeeShop;
     exports model;
+    exports database;
 }

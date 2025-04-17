@@ -27,8 +27,6 @@
                             style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-background-radius: 5; -fx-padding: 8 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0.5, 0, 1);" />
                     <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEditButton" text="Edit Coffee"
                             style="-fx-background-color: #8D6E63; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-background-radius: 5; -fx-padding: 8 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0.5, 0, 1);" />
-                    <Button fx:id="btn_account_manage" mnemonicParsing="false" onAction="#onSwitchToAccountManage" text="Account Management"
-                            style="-fx-background-color: #A1887F; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-background-radius: 5; -fx-padding: 8 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0.5, 0, 1);" />
                 </HBox>
 
                 <!-- Table -->
@@ -43,7 +41,7 @@
                                      style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037; -fx-alignment: CENTER;" />
                         <TableColumn fx:id="priceColumn" prefWidth="120.0" text="Price ($)"
                                      style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037; -fx-alignment: CENTER-RIGHT;" />
-                        <TableColumn fx:id="quantityColumn" prefWidth="120.0" text="Quantity"
+                        <TableColumn fx:id="statusColumn" prefWidth="120.0" text="Status"
                                      style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037; -fx-alignment: CENTER;" />
                     </columns>
                 </TableView>

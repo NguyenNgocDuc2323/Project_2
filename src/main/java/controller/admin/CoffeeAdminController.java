@@ -2,6 +2,7 @@ package controller.admin;
 
 import database.CoffeeDAO;
 import helper.Navigator;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,7 +14,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.Category;
 import model.CoffeeShop.Coffee;
+import database.CategoryDAO;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,13 +35,13 @@ public class CoffeeAdminController implements Initializable {
     private TableColumn<Coffee, String> nameColumn;
 
     @FXML
-    private TableColumn<Coffee, Integer> categoryColumn;
+    private TableColumn<Coffee, String> categoryColumn;
 
     @FXML
     private TableColumn<Coffee, Double> priceColumn;
 
     @FXML
-    private TableColumn<Coffee, Integer> quantityColumn;
+    private TableColumn<Coffee, String> statusColumn;
 
     @FXML
     private Button addButton;
@@ -56,9 +59,22 @@ public class CoffeeAdminController implements Initializable {
         coffeeDAO = new CoffeeDAO();
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("categoryId"));
+        
+        // Hiển thị tên category thay vì số
+        categoryColumn.setCellValueFactory(cellData -> {
+            int categoryId = cellData.getValue().getCategoryId();
+            CategoryDAO categoryDAO = new CategoryDAO();
+            Category category = categoryDAO.getCategoryById(categoryId);
+            return new SimpleStringProperty(category != null ? category.getName() : "");
+        });
+        
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        
+        // Hiển thị status thay vì quantity
+        statusColumn.setCellValueFactory(cellData -> {
+            int status = cellData.getValue().getStatus();
+            return new SimpleStringProperty(status == 1 ? "Active" : "Inactive");
+        });
 
         loadCoffeeData();
     }
@@ -128,10 +144,7 @@ public class CoffeeAdminController implements Initializable {
         }
     }
 
-    @FXML
-    void onSwitchToAccountManage(ActionEvent event) throws IOException {
-        Navigator.getInstance().gotoAdminHome();
-    }
+    // Đã xóa phương thức onSwitchToAccountManage vì đã xóa nút tương ứng trong giao diện
 
     @FXML
     private void handleDeleteButton(ActionEvent event) {
