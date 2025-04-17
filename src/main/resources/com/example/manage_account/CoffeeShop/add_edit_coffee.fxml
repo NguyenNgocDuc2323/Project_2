@@ -33,8 +33,8 @@
                         <Label text="Price:" GridPane.rowIndex="2" />
                         <TextField fx:id="priceField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                        <Label text="Quantity:" GridPane.rowIndex="3" />
-                        <TextField fx:id="quantityField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label text="Status:" GridPane.rowIndex="3" />
+                        <ComboBox fx:id="statusComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
                         <Label text="Description:" GridPane.rowIndex="4" />
                         <TextArea fx:id="descriptionArea" prefHeight="100.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
@@ -45,7 +45,10 @@
                     <Label text="Image:" />
                     <HBox spacing="10.0">
                         <ImageView fx:id="coffeeImageView" fitHeight="150.0" fitWidth="200.0" preserveRatio="true" />
-                        <Button fx:id="browseImageButton" mnemonicParsing="false" onAction="#handleBrowseImage" text="Browse..." />
+                        <VBox spacing="10.0">
+                            <ComboBox fx:id="imageComboBox" prefWidth="200.0" promptText="Select from database..." />
+                            <Button fx:id="browseImageButton" mnemonicParsing="false" onAction="#handleBrowseImage" text="Browse from computer..." />
+                        </VBox>
                     </HBox>
                 </VBox>
 
