@@ -130,6 +130,7 @@ public class Navigator {
         controller.setOrderId(orderId);
         Stage dialogStage = new Stage();
         dialogStage.setScene(new Scene(root));
+        dialogStage.setTitle("Order Detail");
         dialogStage.showAndWait();
     }
 
@@ -162,5 +163,14 @@ public class Navigator {
 
     public void gotoEditCoffee(Coffee coffee, Consumer<Boolean> onSavedCallback) throws IOException {
         gotoCoffeeDialog("EDIT", coffee, onSavedCallback);
+    }
+
+    public void gotoOrderStatistic() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ORDER_STATISTIC));
+        Parent root = loader.load();
+        Stage dialogStage = new Stage();
+        dialogStage.setScene(new Scene(root));
+        dialogStage.setTitle("Order Statistic");
+        dialogStage.showAndWait();
     }
 }

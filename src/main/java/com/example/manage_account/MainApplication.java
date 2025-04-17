@@ -12,10 +12,9 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         try {
-            helper.DatabaseConnection.getInstance().getConnection();
-            
+            Locale us = new Locale("en", "US");
             Locale vietnam = new Locale("vi", "VN");
-            Translator.setLocale(vietnam);
+            Translator.setLocale(us);
             Navigator.getInstance().setState(stage);
             Navigator.getInstance().gotoAdminHome();
         } catch (IOException e) {
