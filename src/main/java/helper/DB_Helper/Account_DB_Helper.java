@@ -1,9 +1,10 @@
 package helper.DB_Helper;
 
 import helper.ConnectDatabase;
-import model.Account;
+import model.Admin.CustomerPurchase;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,5 +127,61 @@ public class Account_DB_Helper {
             exception.printStackTrace();
         }
         return null;
+    }
+    public static int getTotalCustomers() throws SQLException {
+        String query = "SELECT COUNT(DISTINCT user_id) FROM orders";
+        try (Connection conn = ConnectDatabase.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            return rs.next() ? rs.getInt(1) : 0;
+        }
+    }
+    public static List<CustomerPurchase> getCustomerData(String sortBy, String sortOrder) throws SQLException {
+        List<CustomerPurchase> customers = new ArrayList<>();
+
+        String validSortBy;
+        switch (sortBy != null ? sortBy.toLowerCase() : "") {
+            case "name":
+                validSortBy = "name";
+                break;
+            case "order_count":
+                validSortBy = "order_count";
+                break;
+            case "total_spent":
+                validSortBy = "total_spent";
+                break;
+            case "last_order_date":
+                validSortBy = "last_order_date";
+                break;
+            default:
+                validSortBy = "user_id";
+        }
+
+        String validSortOrder = (sortOrder != null && sortOrder.equalsIgnoreCase("DESC")) ? "DESC" : "ASC";
+
+        String query = "SELECT a.id AS customer_id, a.full_name AS name, " +
+                "COUNT(o.id) AS order_count, COALESCE(SUM(o.total_price), 0) AS total_spent, " +
+                "MAX(o.order_date) AS last_order_date " +
+                "FROM account a LEFT JOIN orders o ON a.id = o.user_id " +
+                "GROUP BY a.id, a.full_name " +
+                "ORDER BY " + validSortBy + " " + validSortOrder;
+
+        try (Connection conn = ConnectDatabase.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                Timestamp timestamp = rs.getTimestamp("last_order_date");
+                LocalDateTime lastOrderDate = (timestamp != null) ? timestamp.toLocalDateTime() : null;
+
+                customers.add(new CustomerPurchase(
+                        rs.getInt("customer_id"),
+                        rs.getString("name"),
+                        rs.getInt("order_count"),
+                        rs.getDouble("total_spent"),
+                        lastOrderDate
+                ));
+            }
+        }
+        return customers;
     }
 }

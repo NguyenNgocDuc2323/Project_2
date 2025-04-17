@@ -1,6 +1,7 @@
 package helper.DB_Helper;
 
 import helper.ConnectDatabase;
+import model.Admin.OrderDetailDisplay;
 import model.Order;
 import model.OrderDetail;
 
@@ -81,6 +82,47 @@ public class Order_DB_Helper {
 
         return orders;
     }
+    public static double getTotalRevenue() throws SQLException {
+        String query = "SELECT SUM(total_price) FROM orders WHERE status = 'completed'";
+        try (Connection conn = ConnectDatabase.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            return rs.next() ? rs.getDouble(1) : 0;
+        }
+    }
 
+    public static int getTotalProductsSold() throws SQLException {
+        String query = "SELECT SUM(quantity) FROM order_detail";
+        try (Connection conn = ConnectDatabase.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            return rs.next() ? rs.getInt(1) : 0;
+        }
+    }
 
+    public static List<OrderDetailDisplay> getRevenueData(String sortBy, String sortOrder) throws SQLException {
+        List<OrderDetailDisplay> displayList = new ArrayList<>();
+        List<Order> orders = getAllOrdersWithDetails();
+        for (Order order : orders) {
+            for (OrderDetail detail : order.getOrderDetails()) {
+                displayList.add(new OrderDetailDisplay(
+                        detail.getCategoryName(),
+                        detail.getProductName(),
+                        detail.getQuantity(),
+                        detail.getUnitPrice() * detail.getQuantity(),
+                        order.getOrderDate()
+                ));
+            }
+        }
+        if ("amount".equals(sortBy)) {
+            displayList.sort((a, b) -> "ASC".equals(sortOrder) ?
+                    Double.compare(a.getAmount(), b.getAmount()) :
+                    Double.compare(b.getAmount(), a.getAmount()));
+        } else if ("date".equals(sortBy)) {
+            displayList.sort((a, b) -> "ASC".equals(sortOrder) ?
+                    a.getDate().compareTo(b.getDate()) :
+                    b.getDate().compareTo(a.getDate()));
+        }
+        return displayList;
+    }
 }
