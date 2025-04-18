@@ -56,6 +56,7 @@
                         <Insets top="12" right="15" bottom="12" left="15" />
                     </padding>
                 </Button>
+
                 <Button fx:id="productBtn" styleClass="nav-button" maxWidth="Infinity">
                     <graphic>
                         <HBox spacing="10" alignment="CENTER_LEFT">
@@ -129,6 +130,22 @@
                                 </image>
                             </ImageView>
                             <Label text="User" styleClass="nav-text" />
+                        </HBox>
+                    </graphic>
+                    <padding>
+                        <Insets top="12" right="15" bottom="12" left="15" />
+                    </padding>
+                </Button>
+
+                <Button fx:id="comboBtn" styleClass="nav-button" maxWidth="Infinity">
+                    <graphic>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="24" fitHeight="24" preserveRatio="true">
+                                <image>
+                                    <Image url="@../images/menu-icon.png" />
+                                </image>
+                            </ImageView>
+                            <Label text="Combo" styleClass="nav-text" />
                         </HBox>
                     </graphic>
                     <padding>

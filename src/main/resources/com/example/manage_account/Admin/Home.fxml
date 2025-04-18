@@ -97,16 +97,16 @@
 
         <HBox layoutX="100.0" layoutY="250.0" spacing="20.0">
             <children>
-                <Button fx:id="btnRevenue" text="Tổng doanh thu" onAction="#showRevenueLayout" style="-fx-font-size: 14; -fx-font-weight: bold;" />
-                <Button fx:id="btnCustomers" text="Số khách mua" onAction="#showCustomerLayout" style="-fx-font-size: 14; -fx-font-weight: bold;" />
-                <Button fx:id="btnProducts" text="Số sản phẩm bán" onAction="#showProductLayout" style="-fx-font-size: 14; -fx-font-weight: bold;" />
+                <Button fx:id="btnRevenue" text="Total Revenue" onAction="#showRevenueLayout" style="-fx-font-size: 14; -fx-font-weight: bold;" />
+                <Button fx:id="btnCustomers" text="Number Customers" onAction="#showCustomerLayout" style="-fx-font-size: 14; -fx-font-weight: bold;" />
+                <Button fx:id="btnProducts" text="Number Products" onAction="#showProductLayout" style="-fx-font-size: 14; -fx-font-weight: bold;" />
             </children>
         </HBox>
 
         <StackPane fx:id="popupRevenue" visible="false" style="-fx-background-color: rgba(0,0,0,0.5);">
             <children>
                 <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: white; -fx-padding: 20; -fx-border-radius: 10; -fx-background-radius: 10;">
-                    <Label text="Tổng Doanh Thu" style="-fx-font-size: 16; -fx-font-weight: bold;" />
+                    <Label text="Total Revenue" style="-fx-font-size: 16; -fx-font-weight: bold;" />
                     <Label fx:id="revenueInfo" />
                     <HBox fx:id="sortBoxRevenueHidden" spacing="10" alignment="CENTER" >
                         <ComboBox fx:id="revenueSortField" promptText="Sắp xếp theo" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
@@ -121,7 +121,7 @@
                             <TableColumn fx:id="dateColPopup" prefWidth="100" text="Date" />
                         </columns>
                     </TableView>
-                    <Button text="Đóng" onAction="#closePopupRevenue" style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14; -fx-font-weight: bold;" />
+                    <Button text="Close" onAction="#closePopupRevenue" style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14; -fx-font-weight: bold;" />
                 </VBox>
             </children>
         </StackPane>
@@ -129,7 +129,7 @@
         <StackPane fx:id="popupCustomers" visible="false" style="-fx-background-color: rgba(0,0,0,0.5);">
             <children>
                 <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: white; -fx-padding: 20; -fx-border-radius: 10; -fx-background-radius: 10;">
-                    <Label text="Số Khách Mua" style="-fx-font-size: 16; -fx-font-weight: bold;" />
+                    <Label text="Number Of Customers" style="-fx-font-size: 16; -fx-font-weight: bold;" />
                     <Label fx:id="customerInfo" />
                     <HBox fx:id="sortBoxCustomerHidden" spacing="10" alignment="center">
                         <ComboBox fx:id="customerSortField" promptText="Sắp xếp theo" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
@@ -137,10 +137,10 @@
                     </HBox>
                     <TableView fx:id="customerTable" prefHeight="300" prefWidth="600">
                         <columns>
-                            <TableColumn fx:id="customerIdCol" text="Mã KH" prefWidth="80" />
-                            <TableColumn fx:id="customerNameCol" text="Tên KH" prefWidth="200" />
-                            <TableColumn fx:id="orderCountCol" text="Số đơn" prefWidth="100" />
-                            <TableColumn fx:id="totalSpentCol" text="Tổng chi" prefWidth="150" />
+                            <TableColumn fx:id="customerIdCol" text="Customer Code" prefWidth="80" />
+                            <TableColumn fx:id="customerNameCol" text="Customer Name" prefWidth="200" />
+                            <TableColumn fx:id="orderCountCol" text="Number Orders" prefWidth="100" />
+                                <TableColumn fx:id="totalSpentCol" text="Total Expenses" prefWidth="150" />
                         </columns>
                     </TableView>
                     <Button text="Close" onAction="#closePopupCustomers" style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14; -fx-font-weight: bold;" />
@@ -151,7 +151,7 @@
         <StackPane fx:id="popupProducts" visible="false" style="-fx-background-color: rgba(0,0,0,0.5);">
             <children>
                 <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: white; -fx-padding: 20; -fx-border-radius: 10; -fx-background-radius: 10;">
-                    <Label text="Số Sản Phẩm Bán" style="-fx-font-size: 16; -fx-font-weight: bold;" />
+                    <Label text="Number Of Products" style="-fx-font-size: 16; -fx-font-weight: bold;" />
                     <Label fx:id="productInfo" />
                     <HBox fx:id="sortBoxProductHidden" spacing="10" alignment="center" >
                         <ComboBox fx:id="productSortField" promptText="Sắp xếp theo" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
@@ -159,11 +159,11 @@
                     </HBox>
                     <TableView fx:id="productTable" prefHeight="300" prefWidth="600">
                         <columns>
-                            <TableColumn fx:id="productIdCol" text="Mã SP" prefWidth="80" />
-                            <TableColumn fx:id="productNameCol" text="Tên SP" prefWidth="200" />
-                            <TableColumn fx:id="productCategoryCol" text="Danh mục" prefWidth="150" />
-                            <TableColumn fx:id="quantitySoldCol" text="Số lượng" prefWidth="100" />
-                            <TableColumn fx:id="productRevenueCol" text="Doanh thu" prefWidth="150" />
+                            <TableColumn fx:id="productIdCol" text="Product Code" prefWidth="80" />
+                            <TableColumn fx:id="productNameCol" text="Product Name" prefWidth="200" />
+                            <TableColumn fx:id="productCategoryCol" text="Category Name" prefWidth="150" />
+                            <TableColumn fx:id="quantitySoldCol" text="Number" prefWidth="100" />
+                            <TableColumn fx:id="productRevenueCol" text="Revenue" prefWidth="150" />
                         </columns>
                     </TableView>
                     <Button text="Close" onAction="#closePopupProducts" style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14; -fx-font-weight: bold;" />

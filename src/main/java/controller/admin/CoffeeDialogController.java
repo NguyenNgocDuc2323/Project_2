@@ -92,16 +92,10 @@ public class CoffeeDialogController implements Initializable {
             e.printStackTrace();
         }
     }
-    
-    /**
-     * Tải hình ảnh từ đường dẫn và xử lý các trường hợp lỗi
-     * @param imagePath Đường dẫn hình ảnh
-     * @return Đối tượng Image đã tải
-     */
+
     private Image loadImage(String imagePath) {
         Image image = null;
-        
-        // Kiểm tra đường dẫn null hoặc rỗng
+
         if (imagePath == null || imagePath.trim().isEmpty()) {
             System.err.println("Warning: Empty or null image path provided");
             return loadDefaultImage();
@@ -109,21 +103,18 @@ public class CoffeeDialogController implements Initializable {
         
         try {
             System.out.println("Attempting to load image from: " + imagePath);
-            
-            // Thử tải hình ảnh từ đường dẫn tương đối trong resources
+
             if (!imagePath.startsWith("file:") && !imagePath.startsWith("http")) {
                 String resourcePath = "/assets/images/CoffeeItem/" + imagePath;
                 System.out.println("Trying resource path: " + resourcePath);
                 image = new Image(getClass().getResourceAsStream(resourcePath));
             }
-            
-            // Nếu không tìm thấy trong resources hoặc là đường dẫn tuyệt đối, thử tải trực tiếp
+
             if (image == null || image.isError()) {
                 System.out.println("Resource not found, trying direct path: " + imagePath);
                 image = new Image(imagePath);
             }
-            
-            // Nếu hình ảnh vẫn lỗi, sử dụng hình ảnh mặc định
+
             if (image == null || image.isError()) {
                 System.err.println("Failed to load image from path: " + imagePath);
                 return loadDefaultImage();
@@ -135,11 +126,7 @@ public class CoffeeDialogController implements Initializable {
         
         return image;
     }
-    
-    /**
-     * Tải hình ảnh mặc định
-     * @return Hình ảnh mặc định
-     */
+
     private Image loadDefaultImage() {
         try {
             String defaultImagePath = "/assets/images/CoffeeItem/default.jpg";
@@ -215,7 +202,6 @@ public class CoffeeDialogController implements Initializable {
                 } catch (Exception e) {
                     e.printStackTrace();
                     try {
-                        // Sử dụng hình ảnh mặc định khi có lỗi
                         String defaultImagePath = "/assets/images/CoffeeItem/default.jpg";
                         Image defaultImage = new Image(getClass().getResourceAsStream(defaultImagePath));
                         coffeeImageView.setImage(defaultImage);

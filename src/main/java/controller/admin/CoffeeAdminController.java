@@ -1,7 +1,6 @@
 package controller.admin;
 
 import database.CoffeeDAO;
-import helper.Navigator;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -59,8 +58,7 @@ public class CoffeeAdminController implements Initializable {
         coffeeDAO = new CoffeeDAO();
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        
-        // Hiển thị tên category thay vì số
+
         categoryColumn.setCellValueFactory(cellData -> {
             int categoryId = cellData.getValue().getCategoryId();
             CategoryDAO categoryDAO = new CategoryDAO();
@@ -69,8 +67,7 @@ public class CoffeeAdminController implements Initializable {
         });
         
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        
-        // Hiển thị status thay vì quantity
+
         statusColumn.setCellValueFactory(cellData -> {
             int status = cellData.getValue().getStatus();
             return new SimpleStringProperty(status == 1 ? "Active" : "Inactive");
@@ -92,7 +89,7 @@ public class CoffeeAdminController implements Initializable {
     @FXML
     private void handleAddButton(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/CoffeeShop/add_edit_coffee.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/CoffeeShop/StoreProduct.fxml"));
             Parent root = loader.load();
 
             CoffeeDialogController controller = loader.getController();
@@ -122,7 +119,7 @@ public class CoffeeAdminController implements Initializable {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/CoffeeShop/add_edit_coffee.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/CoffeeShop/StoreProduct.fxml"));
             Parent root = loader.load();
 
             CoffeeDialogController controller = loader.getController();
@@ -144,7 +141,6 @@ public class CoffeeAdminController implements Initializable {
         }
     }
 
-    // Đã xóa phương thức onSwitchToAccountManage vì đã xóa nút tương ứng trong giao diện
 
     @FXML
     private void handleDeleteButton(ActionEvent event) {

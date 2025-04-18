@@ -405,11 +405,11 @@
                 int totalCustomers = Account_DB_Helper.getTotalCustomers();
                 int totalProductsSold = Order_DB_Helper.getTotalProductsSold();
 
-                revenueInfo.setText("Tổng doanh thu: " + currencyFormat.format(totalRevenue));
-                customerInfo.setText("Tổng số khách hàng: " + numberFormat.format(totalCustomers));
-                productInfo.setText("Tổng sản phẩm đã bán: " + numberFormat.format(totalProductsSold));
+                revenueInfo.setText("Total revenue:" + currencyFormat.format(totalRevenue));
+                customerInfo.setText("Total number of customers:" + numberFormat.format(totalCustomers));
+                productInfo.setText("Total products sold:" + numberFormat.format(totalProductsSold));
             } catch (SQLException e) {
-                showAlert("Lỗi", "Không thể tải dữ liệu tổng quan", e.getMessage());
+                showAlert("Error", "Unable to load overview data.", e.getMessage());
             }
         }
 
@@ -428,7 +428,7 @@
                 popupRevenue.setVisible(true);
                 popupRevenue.toFront();
             } catch (SQLException e) {
-                showAlert("Lỗi", "Không thể tải dữ liệu doanh thu", e.getMessage());
+                showAlert("Error", "Unable to load overview data.", e.getMessage());
             }
         }
 
@@ -476,7 +476,7 @@
                 popupCustomers.setVisible(true);
                 popupCustomers.toFront();
             } catch (SQLException e) {
-                showAlert("Lỗi", "Không thể tải dữ liệu khách hàng", e.getMessage());
+                showAlert("Error", "Unable to load customer data.", e.getMessage());
             }
         }
         @FXML
@@ -493,7 +493,7 @@
                 popupProducts.setVisible(true);
                 popupProducts.toFront();
             } catch (SQLException e) {
-                showAlert("Lỗi", "Không thể tải dữ liệu sản phẩm", e.getMessage());
+                showAlert("Error", "Unable to load product data.", e.getMessage());
             }
         }
 

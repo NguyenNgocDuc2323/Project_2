@@ -1,12 +1,7 @@
 package controller.admin;
 
-import database.CoffeeDAO;
-import database.ComboDAO;
 import helper.Alert;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,14 +13,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.CoffeeShop.Coffee;
 import model.CoffeeShop.ComboProduct;
 import service.ComboService;
 
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ComboManagementController implements Initializable {
@@ -68,11 +61,9 @@ public class ComboManagementController implements Initializable {
         comboService = new ComboService();
         decimalFormat = new DecimalFormat("#,##0.00");
 
-        // Thiết lập các cột cho bảng
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        
-        // Hiển thị giá gốc với định dạng tiền tệ
+
         originalPriceColumn.setCellValueFactory(cellData -> cellData.getValue().originalPriceProperty().asObject());
         originalPriceColumn.setCellFactory(column -> new TableCell<ComboProduct, Double>() {
             @Override
@@ -85,8 +76,7 @@ public class ComboManagementController implements Initializable {
                 }
             }
         });
-        
-        // Hiển thị phần trăm giảm giá
+
         discountPercentColumn.setCellValueFactory(cellData -> cellData.getValue().discountPercentProperty().asObject());
         discountPercentColumn.setCellFactory(column -> new TableCell<ComboProduct, Double>() {
             @Override
@@ -99,8 +89,7 @@ public class ComboManagementController implements Initializable {
                 }
             }
         });
-        
-        // Hiển thị giá cuối cùng với định dạng tiền tệ
+
         finalPriceColumn.setCellValueFactory(cellData -> cellData.getValue().finalPriceProperty().asObject());
         finalPriceColumn.setCellFactory(column -> new TableCell<ComboProduct, Double>() {
             @Override
@@ -113,14 +102,12 @@ public class ComboManagementController implements Initializable {
                 }
             }
         });
-        
-        // Hiển thị trạng thái
+
         statusColumn.setCellValueFactory(cellData -> {
             int status = cellData.getValue().getStatus();
             return new SimpleStringProperty(status == 1 ? "Active" : "Inactive");
         });
 
-        // Tải dữ liệu combo
         loadComboData();
     }
 
@@ -137,7 +124,7 @@ public class ComboManagementController implements Initializable {
     @FXML
     private void handleAddButton(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/CoffeeShop/combo_dialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/CoffeeShop/ComboDialog.fxml"));
             Parent root = loader.load();
 
             ComboDialogController controller = loader.getController();
@@ -153,7 +140,7 @@ public class ComboManagementController implements Initializable {
             stage.setScene(new Scene(root));
             stage.showAndWait();
         } catch (IOException e) {
-            Alert.showAlert("Không thể mở dialog thêm combo: " + e.getMessage());
+            Alert.showAlert("Unable to open the add combo dialog: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -162,12 +149,12 @@ public class ComboManagementController implements Initializable {
     private void handleEditButton(ActionEvent event) {
         ComboProduct selectedCombo = comboTableView.getSelectionModel().getSelectedItem();
         if (selectedCombo == null) {
-            Alert.showAlert("Vui lòng chọn một combo để chỉnh sửa");
+            Alert.showAlert("Please select a combo to edit.");
             return;
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/CoffeeShop/combo_dialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/CoffeeShop/ComboDialog.fxml"));
             Parent root = loader.load();
 
             ComboDialogController controller = loader.getController();
@@ -180,11 +167,11 @@ public class ComboManagementController implements Initializable {
 
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Chỉnh Sửa Combo");
+            stage.setTitle("Edit Combo");
             stage.setScene(new Scene(root));
             stage.showAndWait();
         } catch (IOException e) {
-            Alert.showAlert("Không thể mở dialog chỉnh sửa combo: " + e.getMessage());
+            Alert.showAlert("Unable to open the edit combo dialog: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -193,22 +180,22 @@ public class ComboManagementController implements Initializable {
     private void handleDeleteButton(ActionEvent event) {
         ComboProduct selectedCombo = comboTableView.getSelectionModel().getSelectedItem();
         if (selectedCombo == null) {
-            Alert.showAlert("Vui lòng chọn một combo để xóa");
+            Alert.showAlert("Please select a combo to delete.");
             return;
         }
 
-        boolean confirmed = helper.Alert.confirm("Bạn có chắc chắn muốn xóa combo " + selectedCombo.getName() + "?");
+        boolean confirmed = helper.Alert.confirm("Are you sure you want to delete the combo? " + selectedCombo.getName() + "?");
         if (confirmed) {
             try {
                 boolean deleted = comboService.deleteCombo(selectedCombo.getId());
                 if (deleted) {
                     loadComboData();
-                    Alert.showSuccess("Xóa combo thành công");
+                    Alert.showSuccess("Combo deleted successfully.");
                 } else {
-                    Alert.showAlert("Không thể xóa combo");
+                    Alert.showAlert("Unable to delete the combo.");
                 }
             } catch (Exception e) {
-                Alert.showAlert("Lỗi khi xóa combo: " + e.getMessage());
+                Alert.showAlert("Unable to delete the combo. " + e.getMessage());
                 e.printStackTrace();
             }
         }

@@ -13,13 +13,12 @@ public class MainApplication extends Application {
     public void start(Stage stage) throws IOException {
         try {
             Locale us = new Locale("en", "US");
-            Locale vietnam = new Locale("vi", "VN");
             Translator.setLocale(us);
             Navigator.getInstance().setState(stage);
-            Navigator.getInstance().gotoAdminHome();
+            Navigator.getInstance().gotoLogin();
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Lỗi khi load FXML! Kiểm tra đường dẫn.");
+            System.err.println("The error when loading FXML! Please check the path.");
         }
     }
 

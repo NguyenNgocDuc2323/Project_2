@@ -23,18 +23,18 @@ public class Navigator {
     public static final String ADMIN_MENU = "/com/example/manage_account/AdminMenuUI.fxml";
     public static final String LOGIN_SCENE = "/com/example/manage_account/Auth/LoginUI.fxml";
     public static final String REGISTER_SCENE = "/com/example/manage_account/Auth/RegisterUI.fxml";
-    public static final String ADMIN_HOME = "/com/example/manage_account/Admin/admin_dashboard.fxml";
+    public static final String ADMIN_HOME = "/com/example/manage_account/Admin/AdminDashboard.fxml";
     public static final String CALCULATE_HOME = "/com/example/manage_account/CalculateUI.fxml";
     public static final String RESET_PASSWORD = "/com/example/manage_account/Admin/reset_password.fxml";
     public static final String FORGOT_PASSWORD = "/com/example/manage_account/Auth/ForgotPassword.fxml";
-    public static final String CHANGE_PASSWORD = "/com/example/manage_account/Admin/change_password.fxml";
+    public static final String CHANGE_PASSWORD = "/com/example/manage_account/Admin/ChangePassword.fxml";
     public static final String MENU_SCENE = "/com/example/manage_account/CoffeeShop/Dashboard.fxml";
     public static final String TABLE_MANAGEMENT = "/com/example/manage_account/Staff/Table.fxml";
     public static final String TABLE_DIALOG = "/com/example/manage_account/Staff/TableDialog.fxml";
     public static final String ORDER_MANAGEMENT = "/com/example/manage_account/Staff/Order.fxml";
     public static final String ORDER_DIALOG = "/com/example/manage_account/Staff/OrderDialog.fxml";
     public static final String PRODUCT_MANAGE = "/com/example/manage_account/Admin/Product.fxml";
-    public static final String COFFEE_DIALOG = "/com/example/manage_account/CoffeeShop/add_edit_coffee.fxml";
+    public static final String COFFEE_DIALOG = "/com/example/manage_account/CoffeeShop/StoreProduct.fxml";
     public static final String ORDER_DETAIL_MANAGEMENT = "/com/example/manage_account/Staff/OrderDetail.fxml";
     public static final String ORDER_DETAIL_DIALOG = "/com/example/manage_account/Staff/OrderDetailDialog.fxml";
     public static final String ORDER_STATISTIC = "/com/example/manage_account/Staff/OrderStatistic.fxml";
@@ -83,7 +83,7 @@ public class Navigator {
     }
 
     public void gotoAddNewAccount() throws IOException {
-        gotoScene(Translator.translate("title.addNewAccount"), "/com/example/manage_account/Admin/add_new_account.fxml");
+        gotoScene(Translator.translate("title.addNewAccount"), "/com/example/manage_account/Admin/AddNewAccount.fxml");
     }
 
     public void gotoResetPasswordWithAccountId(int accountId) throws IOException {
@@ -101,7 +101,7 @@ public class Navigator {
 
 
     public void gotoStaffDashboard() throws IOException {
-        gotoScene(Translator.translate("title.staffDashboard"), "/com/example/manage_account/Staff/staff_dashboard.fxml");
+        gotoScene(Translator.translate("title.staffDashboard"), "/com/example/manage_account/Staff/StaffDashboard.fxml");
     }
 
     public void gotoRegister() throws IOException {
