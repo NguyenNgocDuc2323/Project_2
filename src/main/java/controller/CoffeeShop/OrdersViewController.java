@@ -368,7 +368,7 @@ public class OrdersViewController implements Initializable {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                String productName = rs.getString("product_name");
+                String productName = rs.getString("name");
                 String size = rs.getString("size");
                 int quantity = rs.getInt("quantity");
                 double unitPrice = rs.getDouble("unit_price");

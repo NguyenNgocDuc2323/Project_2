@@ -2,14 +2,13 @@ package helper.DB_Helper;
 
 import helper.ConnectDatabase;
 import model.Admin.OrderDetailDisplay;
+import model.Admin.RevenueSummary;
 import model.Order;
 import model.OrderDetail;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class Order_DB_Helper {
     public static int countOrder() {
@@ -100,29 +99,79 @@ public class Order_DB_Helper {
         }
     }
 
-    public static List<OrderDetailDisplay> getRevenueData(String sortBy, String sortOrder) throws SQLException {
-        List<OrderDetailDisplay> displayList = new ArrayList<>();
-        List<Order> orders = getAllOrdersWithDetails();
-        for (Order order : orders) {
-            for (OrderDetail detail : order.getOrderDetails()) {
-                displayList.add(new OrderDetailDisplay(
-                        detail.getCategoryName(),
-                        detail.getProductName(),
-                        detail.getQuantity(),
-                        detail.getUnitPrice() * detail.getQuantity(),
-                        order.getOrderDate()
-                ));
+    public static List<OrderDetailDisplay> getRevenueData(String groupBy, Integer day, Integer month, Integer year) throws SQLException {
+        List<OrderDetailDisplay> details = new ArrayList<>();
+
+        String dateFormat;
+        switch (groupBy != null ? groupBy.toLowerCase() : "day") {
+            case "day":
+                dateFormat = "DATE_FORMAT(o.order_date, '%Y-%m-%d')";
+                break;
+            case "month":
+                dateFormat = "DATE_FORMAT(o.order_date, '%Y-%m')";
+                break;
+            case "year":
+                dateFormat = "DATE_FORMAT(o.order_date, '%Y')";
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid groupBy value: " + groupBy);
+        }
+
+        StringBuilder query = new StringBuilder(
+                "SELECT c.category_name, " +
+                        "SUM(od.unit_price * od.quantity) AS total_amount, " +
+                        "MAX(o.order_date) AS last_order_date " +
+                        "FROM order_detail od " +
+                        "JOIN orders o ON od.order_id = o.id " +
+                        "JOIN product p ON od.product_id = p.id " +
+                        "JOIN category c ON p.category_id = c.id " +
+                        "WHERE o.order_date IS NOT NULL "
+        );
+
+        // Thêm điều kiện lọc theo day, month, year
+        List<String> conditions = new ArrayList<>();
+        List<Object> parameters = new ArrayList<>();
+        if (day != null) {
+            conditions.add("DAY(o.order_date) = ?");
+            parameters.add(day);
+        }
+        if (month != null) {
+            conditions.add("MONTH(o.order_date) = ?");
+            parameters.add(month);
+        }
+        if (year != null) {
+            conditions.add("YEAR(o.order_date) = ?");
+            parameters.add(year);
+        }
+        if (!conditions.isEmpty()) {
+            query.append(" AND ").append(String.join(" AND ", conditions));
+        }
+
+        query.append(" GROUP BY c.category_name, ").append(dateFormat)
+                .append(" ORDER BY total_amount DESC");
+
+        try (Connection conn = ConnectDatabase.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query.toString())) {
+            // Gán giá trị cho các tham số
+            for (int i = 0; i < parameters.size(); i++) {
+                stmt.setObject(i + 1, parameters.get(i));
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Timestamp timestamp = rs.getTimestamp("last_order_date");
+                    LocalDateTime lastOrderDate = timestamp != null ? timestamp.toLocalDateTime() : null;
+
+                    details.add(new OrderDetailDisplay(
+                            rs.getString("category_name"),
+                            null, // productName không cần
+                            0,    // quantity không cần
+                            rs.getDouble("total_amount"),
+                            lastOrderDate
+                    ));
+                }
             }
         }
-        if ("amount".equals(sortBy)) {
-            displayList.sort((a, b) -> "ASC".equals(sortOrder) ?
-                    Double.compare(a.getAmount(), b.getAmount()) :
-                    Double.compare(b.getAmount(), a.getAmount()));
-        } else if ("date".equals(sortBy)) {
-            displayList.sort((a, b) -> "ASC".equals(sortOrder) ?
-                    a.getDate().compareTo(b.getDate()) :
-                    b.getDate().compareTo(a.getDate()));
-        }
-        return displayList;
+        return details;
     }
 }

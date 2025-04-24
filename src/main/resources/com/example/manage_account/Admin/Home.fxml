@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <Pane fx:id="pnlOverview" prefHeight="800.0" prefWidth="950.0" style="-fx-background-color: #f8f4f0; -fx-padding: 20;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.admin.HomeController">
     <children>
-        <Label layoutX="48.0" layoutY="25.0" prefHeight="24.0" prefWidth="537.0" text="Coffee Shop Dashboard" textFill="#5D4037" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0.5, 0, 1);">
+        <Label layoutX="48.0" layoutY="25.0" prefHeight="24.0" prefWidth="537.0" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0.5, 0, 1);" text="Coffee Shop Dashboard" textFill="#5D4037">
             <font>
                 <Font name="Bodoni MT Bold" size="48.0" />
             </font>
         </Label>
 
-        <TextField fx:id="searchField" onKeyReleased="#onSearchFieldKeyReleased" layoutX="719.0" layoutY="39.0" prefHeight="32.0" prefWidth="183.0" promptText="Search..." style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: #A1887F; -fx-padding: 0 0 0 10; -fx-background-color: #FFFFFF; -fx-border-width: 1.5; -fx-font-size: 14;" />
+        <TextField fx:id="searchField" layoutX="719.0" layoutY="39.0" onKeyReleased="#onSearchFieldKeyReleased" prefHeight="32.0" prefWidth="183.0" promptText="Search..." style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: #A1887F; -fx-padding: 0 0 0 10; -fx-background-color: #FFFFFF; -fx-border-width: 1.5; -fx-font-size: 14;" />
 
         <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="875.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0.5, 0, 0);">
             <image>
@@ -29,7 +38,7 @@
                             <Font size="18.0" />
                         </font>
                     </Label>
-                    <Label alignment="CENTER" prefHeight="27.0" prefWidth="120.0" text="Total Users" textFill="#8D6E63" style="-fx-font-weight: bold;">
+                    <Label alignment="CENTER" prefHeight="27.0" prefWidth="120.0" style="-fx-font-weight: bold;" text="Total Users" textFill="#8D6E63">
                         <font>
                             <Font size="18.0" />
                         </font>
@@ -41,7 +50,7 @@
                             <Font size="18.0" />
                         </font>
                     </Label>
-                    <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="117.0" text="Total Orders" textFill="#8D6E63" style="-fx-font-weight: bold;">
+                    <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="117.0" style="-fx-font-weight: bold;" text="Total Orders" textFill="#8D6E63">
                         <font>
                             <Font size="18.0" />
                         </font>
@@ -53,7 +62,7 @@
                             <Font size="18.0" />
                         </font>
                     </Label>
-                    <Label text="Total Products" textFill="#8D6E63" style="-fx-font-weight: bold;">
+                    <Label style="-fx-font-weight: bold;" text="Total Products" textFill="#8D6E63">
                         <font>
                             <Font size="18.0" />
                         </font>
@@ -65,7 +74,7 @@
                             <Font size="18.0" />
                         </font>
                     </Label>
-                    <Label text="Orders on Hold" textFill="#8D6E63" style="-fx-font-weight: bold;">
+                    <Label style="-fx-font-weight: bold;" text="Orders on Hold" textFill="#8D6E63">
                         <font>
                             <Font size="18.0" />
                         </font>
@@ -74,101 +83,112 @@
             </children>
         </HBox>
 
-        <HBox layoutX="535.0" layoutY="278.0" spacing="10" style="-fx-background-color: #EFEBE9; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D7CCC8; -fx-padding: 5 15;">
+        <HBox layoutX="545.0" layoutY="356.0" spacing="10" style="-fx-background-color: #EFEBE9; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D7CCC8; -fx-padding: 5 15;">
             <children>
                 <ComboBox fx:id="dayCombo" prefWidth="80" promptText="Day" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
                 <ComboBox fx:id="monthCombo" prefWidth="80" promptText="Month" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
-                <ComboBox fx:id="yearCombo" prefWidth="100" promptText="Year" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
+                <ComboBox fx:id="yearCombo" prefHeight="32.0" prefWidth="98.0" promptText="Year" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
                 <Button onAction="#handdleSearch" prefHeight="25.0" prefWidth="71.0" style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14; -fx-font-weight: bold; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0.5, 0, 1);" text="Filter" />
             </children>
         </HBox>
 
-        <TableView fx:id="revenueTable" layoutX="20.0" layoutY="323.0" prefHeight="477.0" prefWidth="910.0" style="-fx-background-color: #ffffff; -fx-border-color: #D7CCC8; -fx-border-radius: 10; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 2);">
-            <columns>
-                <TableColumn fx:id="categoryCol" prefWidth="180.0" text="Category" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037;" />
-                <TableColumn fx:id="productCol" prefWidth="203.0" text="Product Name" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037;" />
-                <TableColumn fx:id="quantityCol" prefWidth="157.0" text="Quantity" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037;" />
-                <TableColumn fx:id="amountCol" prefWidth="188.0" text="Amount" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037;" />
-                <TableColumn fx:id="dateCol" prefWidth="225.0" text="Date" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037;" />
-            </columns>
-        </TableView>
-
-        <VBox fx:id="orderContainer" layoutX="20.0" layoutY="820.0" prefWidth="940.0" spacing="10" />
-
-        <HBox layoutX="100.0" layoutY="250.0" spacing="20.0">
+        <HBox layoutX="29.0" layoutY="278.0" prefHeight="44.0" prefWidth="284.0" spacing="20.0" style="-fx-background-color: #EFEBE9; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D7CCC8; -fx-padding: 5 15;">
             <children>
-                <Button fx:id="btnRevenue" text="Total Revenue" onAction="#showRevenueLayout" style="-fx-font-size: 14; -fx-font-weight: bold;" />
-                <Button fx:id="btnCustomers" text="Number Customers" onAction="#showCustomerLayout" style="-fx-font-size: 14; -fx-font-weight: bold;" />
-                <Button fx:id="btnProducts" text="Number Products" onAction="#showProductLayout" style="-fx-font-size: 14; -fx-font-weight: bold;" />
+                <Button fx:id="btnRevenue" onAction="#showRevenueLayout" prefHeight="30.0" prefWidth="251.0" style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14; -fx-font-weight: bold;" text="Revenue" />
             </children>
         </HBox>
 
-        <StackPane fx:id="popupRevenue" visible="false" style="-fx-background-color: rgba(0,0,0,0.5);">
+        <HBox layoutX="332.0" layoutY="278.0" prefHeight="44.0" prefWidth="275.0" spacing="20.0" style="-fx-background-color: #EFEBE9; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D7CCC8; -fx-padding: 5 15;">
+            <children>
+                <Button fx:id="btnCustomers" onAction="#showCustomerLayout" prefHeight="30.0" prefWidth="237.0" style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14; -fx-font-weight: bold;" text="Customers" />
+            </children>
+        </HBox>
+
+        <HBox layoutX="625.0" layoutY="278.0" prefHeight="44.0" prefWidth="275.0" spacing="20.0" style="-fx-background-color: #EFEBE9; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D7CCC8; -fx-padding: 5 15;">
+         <children>
+                <Button fx:id="btnProducts" onAction="#showProductLayout" prefHeight="30.0" prefWidth="241.0" style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14; -fx-font-weight: bold;" text="Products" />
+         </children>
+        </HBox>
+
+        <TableView fx:id="revenueTable" layoutX="20.0" layoutY="419.0" prefHeight="361.0" prefWidth="910.0" style="-fx-background-color: #ffffff; -fx-border-color: #D7CCC8; -fx-border-radius: 10; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 2);">
+            <columns>
+                <TableColumn fx:id="categoryCol" prefWidth="180.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037;" text="Category" />
+                <TableColumn fx:id="productCol" prefWidth="203.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037;" text="Product Name" />
+                <TableColumn fx:id="quantityCol" prefWidth="157.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037;" text="Quantity" />
+                <TableColumn fx:id="amountCol" prefWidth="188.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037;" text="Amount" />
+                <TableColumn fx:id="dateCol" prefWidth="225.0" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #5D4037;" text="Date" />
+            </columns>
+        </TableView>
+
+        <StackPane fx:id="popupRevenue" style="-fx-background-color: rgba(0,0,0,0.5);" visible="false">
             <children>
                 <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: white; -fx-padding: 20; -fx-border-radius: 10; -fx-background-radius: 10;">
-                    <Label text="Total Revenue" style="-fx-font-size: 16; -fx-font-weight: bold;" />
+                    <Label style="-fx-font-size: 16; -fx-font-weight: bold;" text="Total Revenue" />
                     <Label fx:id="revenueInfo" />
-                    <HBox fx:id="sortBoxRevenueHidden" spacing="10" alignment="CENTER" >
-                        <ComboBox fx:id="revenueSortField" promptText="Sắp xếp theo" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
-                        <ComboBox fx:id="revenueSortOrder" promptText="Thứ tự" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
-                    </HBox>
+                    <ComboBox fx:id="revenueGroupByPopupCombo" promptText="Gộp theo" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
                     <TableView fx:id="revenueTablePopup" prefHeight="300" prefWidth="600">
                         <columns>
-                            <TableColumn fx:id="categoryColPopup" prefWidth="150" text="Category" />
-                            <TableColumn fx:id="productColPopup" prefWidth="150" text="Product Name" />
-                            <TableColumn fx:id="quantityColPopup" prefWidth="100" text="Quantity" />
-                            <TableColumn fx:id="amountColPopup" prefWidth="100" text="Amount" />
-                            <TableColumn fx:id="dateColPopup" prefWidth="100" text="Date" />
+                            <TableColumn fx:id="categoryColPopup" prefWidth="200" text="Category" />
+                            <TableColumn fx:id="amountColPopup" prefWidth="200" text="Amount" />
+                            <TableColumn fx:id="dateColPopup" prefWidth="200" text="Date" />
                         </columns>
+                        <placeholder>
+                            <Label style="-fx-font-size: 14; -fx-text-fill: #888;" text="Không có dữ liệu doanh thu." />
+                        </placeholder>
                     </TableView>
-                    <Button text="Close" onAction="#closePopupRevenue" style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14; -fx-font-weight: bold;" />
+                    <Button onAction="#closePopupRevenue" style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14; -fx-font-weight: bold;" text="Close" />
                 </VBox>
             </children>
         </StackPane>
 
-        <StackPane fx:id="popupCustomers" visible="false" style="-fx-background-color: rgba(0,0,0,0.5);">
+        <StackPane fx:id="popupCustomers" style="-fx-background-color: rgba(0,0,0,0.5);" visible="false">
             <children>
-                <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: white; -fx-padding: 20; -fx-border-radius: 10; -fx-background-radius: 10;">
-                    <Label text="Number Of Customers" style="-fx-font-size: 16; -fx-font-weight: bold;" />
+                <VBox fx:id="customerContainer" alignment="CENTER" spacing="10.0" style="-fx-background-color: white; -fx-padding: 20; -fx-border-radius: 10; -fx-background-radius: 10;">
+                    <Label style="-fx-font-size: 16; -fx-font-weight: bold;" text="Number Of Customers" />
                     <Label fx:id="customerInfo" />
-                    <HBox fx:id="sortBoxCustomerHidden" spacing="10" alignment="center">
-                        <ComboBox fx:id="customerSortField" promptText="Sắp xếp theo" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
-                        <ComboBox fx:id="customerSortOrder" promptText="Thứ tự" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
-                    </HBox>
+                    <ComboBox fx:id="customerGroupByPopupCombo" promptText="Gộp theo" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
                     <TableView fx:id="customerTable" prefHeight="300" prefWidth="600">
                         <columns>
-                            <TableColumn fx:id="customerIdCol" text="Customer Code" prefWidth="80" />
-                            <TableColumn fx:id="customerNameCol" text="Customer Name" prefWidth="200" />
-                            <TableColumn fx:id="orderCountCol" text="Number Orders" prefWidth="100" />
-                                <TableColumn fx:id="totalSpentCol" text="Total Expenses" prefWidth="150" />
+                            <TableColumn fx:id="customerIdCol" prefWidth="80" text="Customer Code" />
+                            <TableColumn fx:id="customerNameCol" prefWidth="150" text="Customer Name" />
+                            <TableColumn fx:id="orderCountCol" prefWidth="100" text="Number Orders" />
+                            <TableColumn fx:id="totalSpentCol" prefWidth="120" text="Total Expenses" />
+                            <TableColumn fx:id="lastOrderDateCol" prefWidth="150" text="Last Order Date" />
                         </columns>
+                        <placeholder>
+                            <Label style="-fx-font-size: 14; -fx-text-fill: #888;" text="Không có dữ liệu khách hàng." />
+                        </placeholder>
                     </TableView>
-                    <Button text="Close" onAction="#closePopupCustomers" style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14; -fx-font-weight: bold;" />
+                    <Button onAction="#closePopupCustomers" style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14; -fx-font-weight: bold;" text="Close" />
                 </VBox>
             </children>
         </StackPane>
 
-        <StackPane fx:id="popupProducts" visible="false" style="-fx-background-color: rgba(0,0,0,0.5);">
+        <StackPane fx:id="popupProducts" style="-fx-background-color: rgba(0,0,0,0.5);" visible="false">
             <children>
                 <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: white; -fx-padding: 20; -fx-border-radius: 10; -fx-background-radius: 10;">
-                    <Label text="Number Of Products" style="-fx-font-size: 16; -fx-font-weight: bold;" />
+                    <Label style="-fx-font-size: 16; -fx-font-weight: bold;" text="Number Of Products" />
                     <Label fx:id="productInfo" />
-                    <HBox fx:id="sortBoxProductHidden" spacing="10" alignment="center" >
-                        <ComboBox fx:id="productSortField" promptText="Sắp xếp theo" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
-                        <ComboBox fx:id="productSortOrder" promptText="Thứ tự" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
-                    </HBox>
+                    <ComboBox fx:id="productGroupByPopupCombo" promptText="Gộp theo" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
                     <TableView fx:id="productTable" prefHeight="300" prefWidth="600">
                         <columns>
-                            <TableColumn fx:id="productIdCol" text="Product Code" prefWidth="80" />
-                            <TableColumn fx:id="productNameCol" text="Product Name" prefWidth="200" />
-                            <TableColumn fx:id="productCategoryCol" text="Category Name" prefWidth="150" />
-                            <TableColumn fx:id="quantitySoldCol" text="Number" prefWidth="100" />
-                            <TableColumn fx:id="productRevenueCol" text="Revenue" prefWidth="150" />
+                            <TableColumn fx:id="timeCol" prefWidth="100" text="Time" />
+                            <TableColumn fx:id="productIdCol" prefWidth="80" text="Product Code" />
+                            <TableColumn fx:id="productNameCol" prefWidth="150" text="Product Name" />
+                            <TableColumn fx:id="productCategoryCol" prefWidth="120" text="Category Name" />
+                            <TableColumn fx:id="quantitySoldCol" prefWidth="80" text="Number" />
+                            <TableColumn fx:id="productRevenueCol" prefWidth="100" text="Revenue" />
                         </columns>
+                        <placeholder>
+                            <Label style="-fx-font-size: 14; -fx-text-fill: #888;" text="Không có dữ liệu sản phẩm." />
+                        </placeholder>
                     </TableView>
-                    <Button text="Close" onAction="#closePopupProducts" style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14; -fx-font-weight: bold;" />
+                    <Button onAction="#closePopupProducts" style="-fx-background-color: #6D4C41; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-size: 14; -fx-font-weight: bold;" text="Close" />
                 </VBox>
             </children>
         </StackPane>
+          <ComboBox fx:id="revenueGroupByCombo" layoutX="50.0" layoutY="363.0" prefHeight="32.0" prefWidth="20.0" promptText="Group By" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
+          <ComboBox fx:id="customerGroupByCombo" layoutX="50.0" layoutY="365.0" prefHeight="32.0" prefWidth="5.0" promptText="Group By" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
+          <ComboBox fx:id="productGroupByCombo" layoutX="50.0" layoutY="365.0" prefHeight="32.0" prefWidth="0.0" promptText="Group By" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
     </children>
 </Pane>

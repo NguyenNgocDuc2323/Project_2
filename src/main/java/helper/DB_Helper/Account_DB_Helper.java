@@ -136,52 +136,65 @@ public class Account_DB_Helper {
             return rs.next() ? rs.getInt(1) : 0;
         }
     }
-    public static List<CustomerPurchase> getCustomerData(String sortBy, String sortOrder) throws SQLException {
+    public static List<CustomerPurchase> getCustomerData(String groupBy, Integer day, Integer month, Integer year) throws SQLException {
         List<CustomerPurchase> customers = new ArrayList<>();
+        String query;
 
-        String validSortBy;
-        switch (sortBy != null ? sortBy.toLowerCase() : "") {
-            case "name":
-                validSortBy = "name";
+        switch (groupBy.toLowerCase()) {
+            case "month":
+                query = "SELECT c.id, c.full_name, COUNT(o.id) as order_count, " +
+                        "SUM(o.total_price) as total_spent, MAX(o.order_date) as last_order_date " +
+                        "FROM account c LEFT JOIN orders o ON c.id = o.user_id " +
+                        "WHERE o.order_date IS NOT NULL " +
+                        (year != null ? "AND YEAR(o.order_date) = ? " : "") +
+                        (month != null ? "AND MONTH(o.order_date) = ? " : "") +
+                        "GROUP BY c.id, c.full_name, YEAR(o.order_date), MONTH(o.order_date)";
                 break;
-            case "order_count":
-                validSortBy = "order_count";
-                break;
-            case "total_spent":
-                validSortBy = "total_spent";
-                break;
-            case "last_order_date":
-                validSortBy = "last_order_date";
+            case "year":
+                query = "SELECT c.id, c.full_name, COUNT(o.id) as order_count, " +
+                        "SUM(o.total_price) as total_spent, MAX(o.order_date) as last_order_date " +
+                        "FROM account c LEFT JOIN orders o ON c.id = o.user_id " +
+                        "WHERE o.order_date IS NOT NULL " +
+                        (year != null ? "AND YEAR(o.order_date) = ? " : "") +
+                        "GROUP BY c.id, c.full_name, YEAR(o.order_date)";
                 break;
             default:
-                validSortBy = "user_id";
+                query = "SELECT c.id, c.full_name, COUNT(o.id) as order_count, " +
+                        "SUM(o.total_price) as total_spent, MAX(o.order_date) as last_order_date " +
+                        "FROM account c LEFT JOIN orders o ON c.id = o.user_id " +
+                        "WHERE o.order_date IS NOT NULL " +
+                        (year != null ? "AND YEAR(o.order_date) = ? " : "") +
+                        (month != null ? "AND MONTH(o.order_date) = ? " : "") +
+                        (day != null ? "AND DAY(o.order_date) = ? " : "") +
+                        "GROUP BY c.id, c.full_name, DATE(o.order_date)";
+                break;
         }
 
-        String validSortOrder = (sortOrder != null && sortOrder.equalsIgnoreCase("DESC")) ? "DESC" : "ASC";
+        try (Connection conn = ConnectDatabase.getConnection(); // Assume getConnection() is defined
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            int paramIndex = 1;
+            if (year != null) {
+                stmt.setInt(paramIndex++, year);
+            }
+            if (month != null) {
+                stmt.setInt(paramIndex++, month);
+            }
+            if (day != null && groupBy.equalsIgnoreCase("day")) {
+                stmt.setInt(paramIndex, day);
+            }
 
-        String query = "SELECT a.id AS customer_id, a.full_name AS name, " +
-                "COUNT(o.id) AS order_count, COALESCE(SUM(o.total_price), 0) AS total_spent, " +
-                "MAX(o.order_date) AS last_order_date " +
-                "FROM account a LEFT JOIN orders o ON a.id = o.user_id " +
-                "GROUP BY a.id, a.full_name " +
-                "ORDER BY " + validSortBy + " " + validSortOrder;
-
-        try (Connection conn = ConnectDatabase.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                Timestamp timestamp = rs.getTimestamp("last_order_date");
-                LocalDateTime lastOrderDate = (timestamp != null) ? timestamp.toLocalDateTime() : null;
-
                 customers.add(new CustomerPurchase(
-                        rs.getInt("customer_id"),
-                        rs.getString("name"),
+                        rs.getInt("id"),
+                        rs.getString("full_name"),
                         rs.getInt("order_count"),
                         rs.getDouble("total_spent"),
-                        lastOrderDate
+                        rs.getTimestamp("last_order_date") != null ? rs.getTimestamp("last_order_date").toLocalDateTime() : null
                 ));
             }
         }
+
         return customers;
     }
 }
