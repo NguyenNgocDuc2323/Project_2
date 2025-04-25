@@ -66,23 +66,21 @@ public class CategoryController {
     private void handleDelete() {
         Category selected = categoryTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            int categoryId = selected.getId();
-            deleteButton.setOnAction(event -> {
-                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Delete Confirmation");
-                alert.setHeaderText("Are you sure you want to delete this item?");
-                alert.setContentText("This action cannot be reversed");
-                alert.showAndWait().ifPresent(response -> {
-                    if (response.getText().equals("OK")) {
-                        CategoryDB.getInstance().deleteCategory(categoryId);
-                        loadCategoryFromDatabase();
-                    }
-                });
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Confirmation");
+            alert.setHeaderText("Are you sure you want to delete this item?");
+            alert.setContentText("This action cannot be reversed");
+            alert.showAndWait().ifPresent(response -> {
+                if (response.getText().equals("OK")) {
+                    CategoryDB.getInstance().deleteCategory(selected.getId());
+                    loadCategoryFromDatabase();
+                }
             });
         } else {
             Alert.showAlert("Please select category to delete");
         }
     }
+
 
     @FXML
     private void handleFilterByCategoryId(ActionEvent actionEvent) {
@@ -104,7 +102,12 @@ public class CategoryController {
     private void loadCategoryFromDatabase() {
         categoryObservableList.setAll(CategoryDB.getInstance().getAllCategory());
         categoryTable.setItems(categoryObservableList);
+
+        if (!categoryObservableList.isEmpty()) {
+            categoryTable.getSelectionModel().selectLast();
+        }
     }
+
 
     private void openDialog(String title, Category category) {
         try {

@@ -161,16 +161,37 @@ public class TableDB {
     }
 
     public void deleteTable(int id) {
-        String query = "DELETE FROM `tables` WHERE id = ?";
-        try (Connection conn = ConnectDatabase.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, id);
-            if (ps.executeUpdate() > 0) {
-                Alert.showSuccess("Table deleted successfully");
+        String checkQuery = "SELECT COUNT(*) AS order_count FROM `orders` WHERE table_id = ?";
+        String deleteQuery = "DELETE FROM `tables` WHERE id = ?";
+
+        try (Connection conn = ConnectDatabase.getConnection()) {
+            try (PreparedStatement checkStmt = conn.prepareStatement(checkQuery)) {
+                checkStmt.setInt(1, id);
+                try (ResultSet rs = checkStmt.executeQuery()) {
+                    if (rs.next()) {
+                        int count = rs.getInt("order_count");
+                        if (count > 0) {
+                            Alert.showAlert("Cannot delete this table because it is being used in " + count + " order(s).");
+                            return;
+                        }
+                    }
+                }
             }
+
+            try (PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery)) {
+                deleteStmt.setInt(1, id);
+                int rowsAffected = deleteStmt.executeUpdate();
+                if (rowsAffected > 0) {
+                    Alert.showSuccess("Table deleted successfully");
+                } else {
+                    Alert.showAlert("No table was deleted. It may not exist.");
+                }
+            }
+
         } catch (SQLException e) {
             Alert.showAlert("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 }

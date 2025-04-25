@@ -55,7 +55,7 @@ public class ResetPasswordController {
         if (isResetSuccessful) {
             Alert.showSuccess("Password Reset Successfully.");
             try {
-                Navigator.getInstance().gotoAdminHome();
+                Navigator.getInstance().gotoLogin();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

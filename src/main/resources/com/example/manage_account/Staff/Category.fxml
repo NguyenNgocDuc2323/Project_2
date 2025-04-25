@@ -33,7 +33,7 @@
                     </VBox.margin>
                     <Button onAction="#handleCreate" styleClass="flat-button" text="Create Category" />
                     <Button onAction="#handleUpdate" styleClass="flat-button" text="Update Category" />
-               <Button onAction="#handleUpdate" styleClass="flat-button" text="Delete Category" />
+                    <Button fx:id="deleteButton" onAction="#handleDelete" styleClass="flat-button" text="Delete Category" />
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="16.0">
                     <HBox alignment="CENTER_LEFT" spacing="8.0">
