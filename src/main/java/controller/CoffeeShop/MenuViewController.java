@@ -1,6 +1,7 @@
 package controller.CoffeeShop;
 
 import helper.CoffeeShop.CoffeeItemManager;
+import helper.CoffeeShop.ComboManager;
 import helper.ConnectDatabase;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import model.CoffeeShop.Coffee;
+import model.CoffeeShop.ComboProduct;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,27 +23,32 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class MenuViewController implements Initializable {
     @FXML private FlowPane coffeeItemsContainer;
+    @FXML private FlowPane comboItemsContainer;
     @FXML private ComboBox<String> categoryFilter;
+    @FXML private ComboBox<String> comboTypeFilter;
     @FXML private TextField searchField;
+    @FXML private TextField comboSearchField;
 
     private List<Coffee> allCoffeeItems = new ArrayList<>();
+    private List<ComboProduct> allComboItems = new ArrayList<>();
     private List<String> categories = new ArrayList<>();
+    private List<String> comboTypes = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Load categories for the filter
         loadCategories();
+        loadComboTypes();
 
-        // Load all coffee items
         allCoffeeItems = CoffeeItemManager.getInstance().getAllCoffeeItems();
+        allComboItems = ComboManager.getInstance().getAllComboProducts();
 
-        // Display coffee items
         displayCoffeeItems(allCoffeeItems);
+        displayComboItems(allComboItems);
 
-        // Setup event listeners
         setupEventListeners();
     }
 
@@ -54,8 +61,7 @@ public class MenuViewController implements Initializable {
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                String categoryName = resultSet.getString("category_name");
-                categories.add(categoryName);
+                categories.add(resultSet.getString("category_name"));
             }
 
             categoryFilter.setItems(FXCollections.observableArrayList(categories));
@@ -63,17 +69,38 @@ public class MenuViewController implements Initializable {
 
         } catch (SQLException e) {
             System.err.println("Error loading categories: " + e.getMessage());
-            e.printStackTrace();
+        }
+    }
+
+    private void loadComboTypes() {
+        comboTypes.add("All Types");
+
+        try (Connection connection = ConnectDatabase.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT DISTINCT combo_type FROM combo_products WHERE combo_type IS NOT NULL ORDER BY combo_type");
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                String comboType = resultSet.getString("combo_type");
+                if (comboType != null && !comboType.trim().isEmpty()) {
+                    comboTypes.add(comboType);
+                }
+            }
+
+            comboTypeFilter.setItems(FXCollections.observableArrayList(comboTypes));
+            comboTypeFilter.getSelectionModel().selectFirst();
+
+        } catch (SQLException e) {
+            System.err.println("Error loading combo types: " + e.getMessage());
         }
     }
 
     private void setupEventListeners() {
         categoryFilter.setOnAction(e -> applyFilters());
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> applyFilters());
 
-        // Add listener for the search field
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            applyFilters();
-        });
+        comboTypeFilter.setOnAction(e -> applyComboFilters());
+        comboSearchField.textProperty().addListener((observable, oldValue, newValue) -> applyComboFilters());
     }
 
     private void applyFilters() {
@@ -82,22 +109,43 @@ public class MenuViewController implements Initializable {
 
         List<Coffee> filteredItems = new ArrayList<>(allCoffeeItems);
 
-        // Apply search filter if text is entered
         if (!searchQuery.isEmpty()) {
             filteredItems = filteredItems.stream()
                     .filter(coffee -> coffee.getName().toLowerCase().contains(searchQuery))
-                    .toList();
+                    .collect(Collectors.toList());
         }
 
-        // Apply category filter
         if (selectedCategory != null && !selectedCategory.equals("All Categories")) {
             filteredItems = filteredItems.stream()
                     .filter(coffee -> getCategoryName(coffee.getCategoryId()).equals(selectedCategory))
-                    .toList();
+                    .collect(Collectors.toList());
         }
 
-        // Display the filtered items
         displayCoffeeItems(filteredItems);
+    }
+
+    private void applyComboFilters() {
+        String selectedType = comboTypeFilter.getValue();
+        String searchQuery = comboSearchField.getText().trim().toLowerCase();
+
+        List<ComboProduct> filteredItems = new ArrayList<>(allComboItems);
+
+        if (!searchQuery.isEmpty()) {
+            filteredItems = filteredItems.stream()
+                    .filter(combo -> combo.getName().toLowerCase().contains(searchQuery))
+                    .collect(Collectors.toList());
+        }
+
+        if (selectedType != null && !selectedType.equals("All Types")) {
+            filteredItems = filteredItems.stream()
+                    .filter(combo -> {
+                        String comboType = combo.getComboType();
+                        return comboType != null && comboType.equals(selectedType);
+                    })
+                    .collect(Collectors.toList());
+        }
+
+        displayComboItems(filteredItems);
     }
 
     private String getCategoryName(int categoryId) {
@@ -130,8 +178,25 @@ public class MenuViewController implements Initializable {
 
                 coffeeItemsContainer.getChildren().add(coffeeItem);
             } catch (IOException e) {
-                e.printStackTrace();
                 System.err.println("Could not load coffee item: " + e.getMessage());
+            }
+        }
+    }
+
+    private void displayComboItems(List<ComboProduct> comboItems) {
+        comboItemsContainer.getChildren().clear();
+
+        for (ComboProduct combo : comboItems) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/manage_account/CoffeeShop/ComboItem.fxml"));
+                Node comboItem = loader.load();
+
+                ComboItemController controller = loader.getController();
+                controller.setCombo(combo);
+
+                comboItemsContainer.getChildren().add(comboItem);
+            } catch (IOException e) {
+                System.err.println("Could not load combo item: " + e.getMessage());
             }
         }
     }

@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
 
-<ScrollPane fitToWidth="true" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CoffeeShop.ComboViewController">
-    <content>
-        <VBox fx:id="comboContainer" spacing="15">
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
-        </VBox>
-    </content>
-</ScrollPane>
+<VBox spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.CoffeeShop.ComboViewController"
+      stylesheets="@../../../../assets/styles/dashboard.css, @../../../../assets/styles/coffee-menu.css">
+
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30" />
+    </padding>
+
+    <!-- Header Section -->
+    <HBox alignment="CENTER_LEFT" styleClass="section-header">
+        <Label text="Today's Combo Deals" styleClass="section-title" />
+        <Region HBox.hgrow="ALWAYS" />
+
+        <!-- Search and Filter -->
+        <HBox spacing="8" alignment="CENTER_RIGHT" styleClass="filter-box">
+            <TextField fx:id="searchField" promptText="Search combos..." styleClass="search-field" />
+            <ComboBox fx:id="statusFilter" promptText="All Status" styleClass="combo-filter" />
+        </HBox>
+    </HBox>
+
+    <!-- Combo Items Container -->
+    <ScrollPane fitToWidth="true" styleClass="coffee-scroll-pane">
+        <FlowPane fx:id="comboContainer" hgap="25" vgap="25" styleClass="combo-item-container" />
+    </ScrollPane>
+</VBox>

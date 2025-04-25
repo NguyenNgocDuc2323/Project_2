@@ -61,7 +61,25 @@ CREATE TABLE `orders` (
                           FOREIGN KEY (`user_id`) REFERENCES `account`(`id`) ON DELETE CASCADE,
                           FOREIGN KEY (`table_id`) REFERENCES `tables`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- Bảng Combo
+CREATE TABLE combos (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(100) NOT NULL,
+                        description VARCHAR(255),
+                        original_price DECIMAL(10, 2) NOT NULL,
+                        discount_percent DECIMAL(5, 2) NOT NULL,
+                        final_price DECIMAL(10, 2) NOT NULL,
+                        status TINYINT NOT NULL DEFAULT 1 COMMENT '1=active (visible), 0=inactive (hidden)'
+);
 
+CREATE TABLE combo_products (
+                                id INT AUTO_INCREMENT PRIMARY KEY,
+                                combo_id INT NOT NULL,
+                                product_id INT NOT NULL,
+                                combo_type VARCHAR(50);
+                                FOREIGN KEY (combo_id) REFERENCES combos(id) ON DELETE CASCADE,
+                                FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
+);
 -- Bảng Sizes (Kích thước sản phẩm)
 CREATE TABLE `sizes` (
                          `id` int NOT NULL AUTO_INCREMENT,

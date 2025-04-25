@@ -79,20 +79,33 @@ public class AccountDAO {
         }
     }
 
-    // Delete account
-    public boolean deleteAccount(int accountId) {
-        String query = "DELETE FROM account WHERE id = ?";
+    public boolean deleteAccount(int accountId) throws SQLException {
+        String checkAdminQuery = "SELECT type FROM account WHERE id = ?";
 
-        try (Connection conn = ConnectDatabase.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = ConnectDatabase.getConnection()) {
+            try (PreparedStatement checkAdminStmt = conn.prepareStatement(checkAdminQuery)) {
+                checkAdminStmt.setInt(1, accountId);
+                ResultSet rsAdmin = checkAdminStmt.executeQuery();
+                if (rsAdmin.next() && rsAdmin.getInt("type") == 1) {
+                    throw new SQLException("Cannot delete user because they are an admin.");
+                }
+            }
 
-            stmt.setInt(1, accountId);
+            String checkOrdersQuery = "SELECT COUNT(*) FROM orders WHERE user_id = ?";
+            try (PreparedStatement checkOrdersStmt = conn.prepareStatement(checkOrdersQuery)) {
+                checkOrdersStmt.setInt(1, accountId);
+                ResultSet rsOrders = checkOrdersStmt.executeQuery();
+                if (rsOrders.next() && rsOrders.getInt(1) > 0) {
+                    throw new SQLException("Cannot delete user because they have associated orders.");
+                }
+            }
 
-            int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            String deleteQuery = "DELETE FROM account WHERE id = ?";
+            try (PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery)) {
+                deleteStmt.setInt(1, accountId);
+                int rowsAffected = deleteStmt.executeUpdate();
+                return rowsAffected > 0;
+            }
         }
     }
 

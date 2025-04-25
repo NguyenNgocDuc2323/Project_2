@@ -1,6 +1,7 @@
 package service;
 
 import database.ComboDAO;
+import helper.Alert;
 import javafx.collections.ObservableList;
 import model.CoffeeShop.Coffee;
 import model.CoffeeShop.ComboProduct;
@@ -8,7 +9,7 @@ import model.CoffeeShop.ComboProduct;
 import java.util.List;
 
 public class ComboService {
-    private ComboDAO comboDAO;
+    private final ComboDAO comboDAO;
     
     public ComboService() {
         comboDAO = new ComboDAO();
@@ -19,7 +20,16 @@ public class ComboService {
      * @return Danh sách combo
      */
     public ObservableList<ComboProduct> getAllCombos() {
-        return comboDAO.getAllCombos();
+        try {
+            ObservableList<ComboProduct> combos = comboDAO.getAllCombos();
+            System.out.println("\nLoaded " + combos.size() + " combos from database");
+            return combos;
+        } catch (Exception e) {
+            System.err.println("Error getting all combos: " + e.getMessage());
+            e.printStackTrace();
+            Alert.showAlert("Error loading combos: " + e.getMessage());
+            return null;
+        }
     }
     
     /**
@@ -27,7 +37,16 @@ public class ComboService {
      * @return Danh sách combo active
      */
     public ObservableList<ComboProduct> getActiveCombos() {
-        return comboDAO.getActiveCombos();
+        try {
+            ObservableList<ComboProduct> activeCombos = comboDAO.getActiveCombos();
+            System.out.println("\nLoaded " + activeCombos.size() + " active combos");
+            return activeCombos;
+        } catch (Exception e) {
+            System.err.println("Error getting active combos: " + e.getMessage());
+            e.printStackTrace();
+            Alert.showAlert("Error loading active combos: " + e.getMessage());
+            return null;
+        }
     }
     
     /**
@@ -36,10 +55,26 @@ public class ComboService {
      * @return true nếu thành công, false nếu thất bại
      */
     public boolean addCombo(ComboProduct combo) {
-        if (!validateCombo(combo)) {
+        try {
+            System.out.println("\nAttempting to add new combo:");
+            System.out.println("Name: " + combo.getName());
+            System.out.println("Discount: " + combo.getDiscountPercent() + "%");
+            System.out.println("Products count: " + combo.getProducts().size());
+
+            if (!validateCombo(combo)) {
+                System.out.println("Combo validation failed");
+                return false;
+            }
+
+            boolean success = comboDAO.addCombo(combo);
+            System.out.println("Add combo result: " + (success ? "Success" : "Failed"));
+            return success;
+        } catch (Exception e) {
+            System.err.println("Error adding combo: " + e.getMessage());
+            e.printStackTrace();
+            Alert.showAlert("Error adding combo: " + e.getMessage());
             return false;
         }
-        return comboDAO.addCombo(combo);
     }
     
     /**
@@ -48,10 +83,23 @@ public class ComboService {
      * @return true nếu thành công, false nếu thất bại
      */
     public boolean updateCombo(ComboProduct combo) {
-        if (!validateCombo(combo)) {
+        try {
+            System.out.println("\nAttempting to update combo ID " + combo.getId());
+            
+            if (!validateCombo(combo)) {
+                System.out.println("Combo validation failed");
+                return false;
+            }
+
+            boolean success = comboDAO.updateCombo(combo);
+            System.out.println("Update combo result: " + (success ? "Success" : "Failed"));
+            return success;
+        } catch (Exception e) {
+            System.err.println("Error updating combo: " + e.getMessage());
+            e.printStackTrace();
+            Alert.showAlert("Error updating combo: " + e.getMessage());
             return false;
         }
-        return comboDAO.updateCombo(combo);
     }
     
     /**
@@ -60,7 +108,17 @@ public class ComboService {
      * @return true nếu thành công, false nếu thất bại
      */
     public boolean deleteCombo(int comboId) {
-        return comboDAO.deleteCombo(comboId);
+        try {
+            System.out.println("\nAttempting to delete combo ID " + comboId);
+            boolean success = comboDAO.deleteCombo(comboId);
+            System.out.println("Delete combo result: " + (success ? "Success" : "Failed"));
+            return success;
+        } catch (Exception e) {
+            System.err.println("Error deleting combo: " + e.getMessage());
+            e.printStackTrace();
+            Alert.showAlert("Error deleting combo: " + e.getMessage());
+            return false;
+        }
     }
     
     /**
@@ -69,25 +127,19 @@ public class ComboService {
      * @return Đối tượng combo
      */
     public ComboProduct getComboById(int comboId) {
-        return comboDAO.getComboById(comboId);
-    }
-    
-    /**
-     * Thêm sản phẩm vào combo
-     * @param combo Combo cần thêm sản phẩm
-     * @param product Sản phẩm cần thêm
-     */
-    public void addProductToCombo(ComboProduct combo, Coffee product) {
-        combo.addProduct(product);
-    }
-    
-    /**
-     * Xóa sản phẩm khỏi combo
-     * @param combo Combo cần xóa sản phẩm
-     * @param product Sản phẩm cần xóa
-     */
-    public void removeProductFromCombo(ComboProduct combo, Coffee product) {
-        combo.removeProduct(product);
+        try {
+            System.out.println("\nGetting combo by ID: " + comboId);
+            ComboProduct combo = comboDAO.getComboById(comboId);
+            if (combo != null) {
+                System.out.println("Found combo: " + combo.getName());
+            }
+            return combo;
+        } catch (Exception e) {
+            System.err.println("Error getting combo by ID: " + e.getMessage());
+            e.printStackTrace();
+            Alert.showAlert("Error getting combo: " + e.getMessage());
+            return null;
+        }
     }
     
     /**
@@ -96,24 +148,41 @@ public class ComboService {
      * @return true nếu hợp lệ, false nếu không hợp lệ
      */
     private boolean validateCombo(ComboProduct combo) {
-        // Kiểm tra tên combo
-        if (combo.getName() == null || combo.getName().trim().isEmpty()) {
+        try {
+            System.out.println("\nValidating combo:");
+            
+            // Kiểm tra tên combo
+            if (combo.getName() == null || combo.getName().trim().isEmpty()) {
+                System.out.println("Invalid: Empty name");
+                Alert.showAlert("Combo name cannot be empty");
+                return false;
+            }
+            
+            // Kiểm tra phần trăm giảm giá (5-15%)
+            double discountPercent = combo.getDiscountPercent();
+            if (discountPercent < 5.0 || discountPercent > 15.0) {
+                System.out.println("Invalid: Discount percent out of range: " + discountPercent);
+                Alert.showAlert("Discount must be between 5% and 15%");
+                return false;
+            }
+            
+            // Kiểm tra danh sách sản phẩm (ít nhất 2 sản phẩm)
+            List<Coffee> products = combo.getProducts();
+            if (products == null || products.size() < 2) {
+                System.out.println("Invalid: Insufficient products count: " + 
+                    (products == null ? 0 : products.size()));
+                Alert.showAlert("Combo must contain at least 2 products");
+                return false;
+            }
+            
+            System.out.println("Combo validation passed");
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error validating combo: " + e.getMessage());
+            e.printStackTrace();
+            Alert.showAlert("Error validating combo: " + e.getMessage());
             return false;
         }
-        
-        // Kiểm tra phần trăm giảm giá (5-15%)
-        double discountPercent = combo.getDiscountPercent();
-        if (discountPercent < 5.0 || discountPercent > 15.0) {
-            return false;
-        }
-        
-        // Kiểm tra danh sách sản phẩm (ít nhất 2 sản phẩm)
-        List<Coffee> products = combo.getProducts();
-        if (products == null || products.size() < 2) {
-            return false;
-        }
-        
-        return true;
     }
     
     /**
@@ -122,18 +191,38 @@ public class ComboService {
      * @param cartManager Đối tượng quản lý giỏ hàng
      */
     public void addComboToCart(ComboProduct combo, helper.CoffeeShop.CartManager cartManager) {
-        // Thêm combo vào giỏ hàng với giá đã giảm
-        for (Coffee product : combo.getProducts()) {
-            // Thêm từng sản phẩm trong combo vào giỏ hàng
-            // Sử dụng giá đã giảm cho từng sản phẩm
-            double discountedPrice = calculateDiscountedPrice(product.getPrice(), combo.getDiscountPercent());
-            cartManager.addToCart(
-                product.getId(),
-                product.getName() + " (Combo: " + combo.getName() + ")",
-                "Regular", // Giả sử size mặc định
-                1, // Số lượng
-                discountedPrice // Giá đã giảm
-            );
+        try {
+            System.out.println("\nAdding combo to cart:");
+            System.out.println("Combo ID: " + combo.getId());
+            System.out.println("Combo Name: " + combo.getName());
+            
+            if (!combo.isActive()) {
+                System.out.println("Cannot add inactive combo to cart");
+                Alert.showAlert("This combo is currently not available");
+                return;
+            }
+
+            // Tính tổng giá gốc
+            double originalPrice = combo.getProducts().stream()
+                                     .mapToDouble(Coffee::getPrice)
+                                     .sum();
+            
+            // Tính giá sau giảm giá
+            double finalPrice = calculateDiscountedPrice(originalPrice, combo.getDiscountPercent());
+            
+            System.out.println("Original Price: $" + originalPrice);
+            System.out.println("Discount: " + combo.getDiscountPercent() + "%");
+            System.out.println("Final Price: $" + finalPrice);
+
+            // Thêm combo như một item duy nhất
+            cartManager.addComboToCart(combo);
+            
+            System.out.println("Successfully added combo to cart");
+            
+        } catch (Exception e) {
+            System.err.println("Error adding combo to cart: " + e.getMessage());
+            e.printStackTrace();
+            Alert.showAlert("Error adding combo to cart: " + e.getMessage());
         }
     }
     

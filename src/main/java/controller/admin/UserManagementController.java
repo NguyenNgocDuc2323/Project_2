@@ -1,6 +1,7 @@
 package controller.admin;
 
 import helper.Alert;
+import helper.ConnectDatabase;
 import helper.Navigator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +16,10 @@ import model.Account;
 import database.AccountDAO;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class UserManagementController {
@@ -144,11 +149,11 @@ public class UserManagementController {
                     loadUsers();
                     Alert.showSuccess("User deleted successfully");
                 } else {
-                    Alert.showAlert("Failed to delete user");
+                    Alert.showAlert("Failed to delete user for an unknown reason.");
                 }
-            } catch (Exception e) {
-                Alert.showAlert("Failed to delete user: " + e.getMessage());
-                e.printStackTrace();
+            } catch (SQLException e) {
+                Alert.showAlert(e.getMessage());
+                Navigator.getInstance().gotoUserManagement();
             }
         }
     }

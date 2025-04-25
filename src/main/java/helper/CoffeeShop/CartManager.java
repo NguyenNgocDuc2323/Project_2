@@ -1,6 +1,7 @@
 package helper.CoffeeShop;
 
 import model.CoffeeShop.CartItem;
+import model.CoffeeShop.ComboProduct;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -21,6 +22,8 @@ import java.util.List;
 public class CartManager {
     private static CartManager instance;
     private final String cartFile = "src/main/java/helper/CoffeeShop/TemporaryOrder.xml";
+    private static final String COMBO_SIZE = "COMBO";
+    private static final String COMBO_TYPE = "COMBO";
 
     private CartManager() {
         // Initialize the cart file if it doesn't exist
@@ -266,4 +269,198 @@ public class CartManager {
         }
     }
 
+    public void addComboToCart(ComboProduct combo) {
+        try {
+            // Sử dụng phương thức isComboInCart để kiểm tra
+            if (isComboInCart(combo.getId())) {
+                // Nếu combo đã tồn tại, cập nhật số lượng
+                Document doc = loadDocument();
+                NodeList items = doc.getElementsByTagName("item");
+
+                for (int i = 0; i < items.getLength(); i++) {
+                    Element item = (Element) items.item(i);
+                    String productId = item.getElementsByTagName("productId").item(0).getTextContent();
+                    String size = item.getElementsByTagName("size").item(0).getTextContent();
+                    String type = item.getElementsByTagName("type").item(0).getTextContent();
+
+                    if (productId.equals(String.valueOf(combo.getId())) &&
+                            size.equals(COMBO_SIZE) &&
+                            type.equals(COMBO_TYPE)) {
+                        int existingQuantity = Integer.parseInt(item.getElementsByTagName("quantity").item(0).getTextContent());
+                        item.getElementsByTagName("quantity").item(0).setTextContent(String.valueOf(existingQuantity + 1));
+                        saveDocument(doc);
+                        return;
+                    }
+                }
+            }
+
+            // Thêm combo mới vào giỏ hàng
+            Document doc = loadDocument();
+            Element itemElement = doc.createElement("item");
+
+            Element productIdElement = doc.createElement("productId");
+            productIdElement.setTextContent(String.valueOf(combo.getId()));
+
+            Element nameElement = doc.createElement("name");
+            nameElement.setTextContent(combo.getName());
+
+            Element sizeElement = doc.createElement("size");
+            sizeElement.setTextContent(COMBO_SIZE);
+
+            Element quantityElement = doc.createElement("quantity");
+            quantityElement.setTextContent("1");
+
+            Element priceElement = doc.createElement("unitPrice");
+            priceElement.setTextContent(String.valueOf(combo.getFinalPrice()));
+
+            Element typeElement = doc.createElement("type");
+            typeElement.setTextContent(COMBO_TYPE);
+
+            itemElement.appendChild(productIdElement);
+            itemElement.appendChild(nameElement);
+            itemElement.appendChild(sizeElement);
+            itemElement.appendChild(quantityElement);
+            itemElement.appendChild(priceElement);
+            itemElement.appendChild(typeElement);
+
+            doc.getDocumentElement().appendChild(itemElement);
+            saveDocument(doc);
+        } catch (Exception e) {
+            System.err.println("Error adding combo to cart: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public List<CartItem> getComboItems() {
+        List<CartItem> items = new ArrayList<>();
+        try {
+            Document doc = loadDocument();
+            NodeList itemNodes = doc.getElementsByTagName("item");
+
+            for (int i = 0; i < itemNodes.getLength(); i++) {
+                Element itemElement = (Element) itemNodes.item(i);
+                NodeList typeNodes = itemElement.getElementsByTagName("type");
+
+                if (typeNodes.getLength() > 0 && typeNodes.item(0).getTextContent().equals(COMBO_TYPE)) {
+                    int productId = Integer.parseInt(itemElement.getElementsByTagName("productId").item(0).getTextContent());
+                    String name = itemElement.getElementsByTagName("name").item(0).getTextContent();
+                    int quantity = Integer.parseInt(itemElement.getElementsByTagName("quantity").item(0).getTextContent());
+                    double unitPrice = Double.parseDouble(itemElement.getElementsByTagName("unitPrice").item(0).getTextContent());
+
+                    items.add(new CartItem(productId, name, COMBO_SIZE, quantity, unitPrice));
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error getting combo items: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public void removeComboFromCart(int comboId) {
+        removeFromCart(comboId, COMBO_SIZE);
+    }
+
+    public void updateComboQuantity(int comboId, int newQuantity) {
+        updateItemQuantity(comboId, COMBO_SIZE, newQuantity);
+    }
+
+    public int getComboItemCount() {
+        try {
+            Document doc = loadDocument();
+            NodeList items = doc.getElementsByTagName("item");
+            int count = 0;
+
+            for (int i = 0; i < items.getLength(); i++) {
+                Element item = (Element) items.item(i);
+                NodeList typeNodes = item.getElementsByTagName("type");
+
+                if (typeNodes.getLength() > 0 && typeNodes.item(0).getTextContent().equals(COMBO_TYPE)) {
+                    int quantity = Integer.parseInt(item.getElementsByTagName("quantity").item(0).getTextContent());
+                    count += quantity;
+                }
+            }
+
+            return count;
+        } catch (Exception e) {
+            System.err.println("Error counting combo items: " + e.getMessage());
+            return 0;
+        }
+    }
+
+    public boolean isComboInCart(int comboId) {
+        try {
+            Document doc = loadDocument();
+            NodeList items = doc.getElementsByTagName("item");
+
+            for (int i = 0; i < items.getLength(); i++) {
+                Element item = (Element) items.item(i);
+                String productId = item.getElementsByTagName("productId").item(0).getTextContent();
+                String size = item.getElementsByTagName("size").item(0).getTextContent();
+                NodeList typeNodes = item.getElementsByTagName("type");
+
+                if (typeNodes.getLength() > 0 &&
+                        typeNodes.item(0).getTextContent().equals(COMBO_TYPE) &&
+                        size.equals(COMBO_SIZE) &&
+                        productId.equals(String.valueOf(comboId))) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error checking combo in cart: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public double getTotalPrice() {
+        double total = 0.0;
+        try {
+            Document doc = loadDocument();
+            NodeList items = doc.getElementsByTagName("item");
+
+            for (int i = 0; i < items.getLength(); i++) {
+                Element item = (Element) items.item(i);
+                double unitPrice = Double.parseDouble(item.getElementsByTagName("unitPrice").item(0).getTextContent());
+                int quantity = Integer.parseInt(item.getElementsByTagName("quantity").item(0).getTextContent());
+                total += unitPrice * quantity;
+            }
+        } catch (Exception e) {
+            System.err.println("Error calculating total price: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return total;
+    }
+
+    public int getTotalItems() {
+        return getCartItemCount() + getComboItemCount();
+    }
+
+    public void clearComboItems() {
+        try {
+            Document doc = loadDocument();
+            NodeList items = doc.getElementsByTagName("item");
+            List<Element> itemsToRemove = new ArrayList<>();
+
+            // First, identify all combo items
+            for (int i = 0; i < items.getLength(); i++) {
+                Element item = (Element) items.item(i);
+                NodeList typeNodes = item.getElementsByTagName("type");
+
+                if (typeNodes.getLength() > 0 && typeNodes.item(0).getTextContent().equals(COMBO_TYPE)) {
+                    itemsToRemove.add(item);
+                }
+            }
+
+            // Then remove them
+            for (Element item : itemsToRemove) {
+                doc.getDocumentElement().removeChild(item);
+            }
+
+            saveDocument(doc);
+        } catch (Exception e) {
+            System.err.println("Error clearing combo items: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

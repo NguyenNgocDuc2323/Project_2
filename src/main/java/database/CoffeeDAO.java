@@ -88,22 +88,27 @@ public class CoffeeDAO {
     }
 
     // Delete coffee
-    public boolean deleteCoffee(int coffeeId) {
-        String query = "DELETE FROM product WHERE id = ?";
+    public boolean deleteCoffee(int coffeeId) throws SQLException {
+        String checkOrderDetailQuery = "SELECT COUNT(*) FROM order_detail WHERE product_id = ?";
 
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = DatabaseConnection.getInstance().getConnection()) {
+            try (PreparedStatement checkOrderStmt = conn.prepareStatement(checkOrderDetailQuery)) {
+                checkOrderStmt.setInt(1, coffeeId);
+                ResultSet rsOrder = checkOrderStmt.executeQuery();
+                if (rsOrder.next() && rsOrder.getInt(1) > 0) {
+                    throw new SQLException("Cannot delete coffee because it is associated with an order.");
+                }
+            }
 
-            stmt.setInt(1, coffeeId);
-
-            int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            // Nếu không thuộc danh mục và không có trong order_detail, tiến hành xóa
+            String deleteQuery = "DELETE FROM product WHERE id = ?";
+            try (PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery)) {
+                deleteStmt.setInt(1, coffeeId);
+                int rowsAffected = deleteStmt.executeUpdate();
+                return rowsAffected > 0;
+            }
         }
     }
-
     // Get coffee by ID
     public Coffee getCoffeeById(int coffeeId) {
         String query = "SELECT * FROM product WHERE id = ?";

@@ -26,7 +26,6 @@ public class DashboardController implements Initializable {
     @FXML private Button orderBtn;
     @FXML private Button productBtn;
     @FXML private Button userBtn;
-    @FXML private Button comboBtn;
 
     // User information UI elements
     @FXML private Label userNameLabel;
@@ -43,7 +42,6 @@ public class DashboardController implements Initializable {
         orderBtn.setOnAction(e -> loadView("/com/example/manage_account/Staff/Order.fxml"));
         productBtn.setOnAction(e -> loadView("/com/example/manage_account/Admin/Product.fxml"));
         userBtn.setOnAction(e -> loadView("/com/example/manage_account/Admin/UserManagement.fxml"));
-        comboBtn.setOnAction(e -> loadView("/com/example/manage_account/CoffeeShop/ComboManagement.fxml"));
 
         loadUserInfo();
 
@@ -116,7 +114,6 @@ public class DashboardController implements Initializable {
             orderBtn.getStyleClass().remove("active");
             productBtn.getStyleClass().remove("active");
             userBtn.getStyleClass().remove("active");
-            comboBtn.getStyleClass().remove("active");
 
             if (fxmlFile.contains("Home")) {
                 menuBtn.getStyleClass().add("active");
@@ -130,9 +127,6 @@ public class DashboardController implements Initializable {
                 productBtn.getStyleClass().add("active");
             }
             else if (fxmlFile.contains("UserManagement")) {
-                userBtn.getStyleClass().add("active");
-            }
-            else if (fxmlFile.contains("ComboManagement")) {
                 userBtn.getStyleClass().add("active");
             }
 

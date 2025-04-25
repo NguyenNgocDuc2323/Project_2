@@ -16,6 +16,7 @@
         <Insets top="30" right="30" bottom="30" left="30" />
     </padding>
 
+    <!-- Coffee Section -->
     <HBox alignment="CENTER_LEFT" styleClass="section-header">
         <Label text="Today's Coffee Selection" styleClass="section-title">
             <font>
@@ -45,13 +46,51 @@
                 </ImageView>
                 <ComboBox fx:id="categoryFilter" promptText="All Categories" styleClass="coffee-combobox" />
             </HBox>
-
         </HBox>
     </HBox>
 
     <ScrollPane fitToWidth="true" styleClass="coffee-scroll-pane">
         <FlowPane fx:id="coffeeItemsContainer" hgap="25" vgap="25" styleClass="coffee-item-container">
             <!-- Coffee items will be added here programmatically -->
+        </FlowPane>
+    </ScrollPane>
+
+    <!-- Combo Section -->
+    <HBox alignment="CENTER_LEFT" styleClass="section-header">
+        <Label text="Special Combo Deals" styleClass="section-title">
+            <font>
+                <Font name="Palatino Linotype Bold" size="32" />
+            </font>
+            <graphic>
+                <ImageView fitHeight="36" fitWidth="36" preserveRatio="true">
+                    <Image url="@../../../../assets/images/combo-icon.png" />
+                </ImageView>
+            </graphic>
+        </Label>
+
+        <Region HBox.hgrow="ALWAYS" />
+
+        <HBox spacing="8" alignment="CENTER_RIGHT" styleClass="filter-box">
+            <!-- Search Bar -->
+            <HBox alignment="CENTER" spacing="8" styleClass="search-container">
+                <ImageView fitHeight="18" fitWidth="18" preserveRatio="true">
+                    <Image url="@../../../../assets/images/CoffeeMenu/icons8-search-50s.png" />
+                </ImageView>
+                <TextField fx:id="comboSearchField" promptText="Search combos..." styleClass="search-field" />
+            </HBox>
+
+            <HBox alignment="CENTER" spacing="8" styleClass="filter-container">
+                <ImageView fitHeight="18" fitWidth="18" preserveRatio="true">
+                    <Image url="@../../../../assets/images/filter-icon.png" />
+                </ImageView>
+                <ComboBox fx:id="comboTypeFilter" promptText="All Types" styleClass="coffee-combobox" />
+            </HBox>
+        </HBox>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" styleClass="coffee-scroll-pane">
+        <FlowPane fx:id="comboItemsContainer" hgap="25" vgap="25" styleClass="coffee-item-container">
+            <!-- Combo items will be added here programmatically -->
         </FlowPane>
     </ScrollPane>
 </VBox>

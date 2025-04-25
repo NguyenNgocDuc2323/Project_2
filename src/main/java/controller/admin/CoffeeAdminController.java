@@ -19,6 +19,7 @@ import database.CategoryDAO;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -163,10 +164,12 @@ public class CoffeeAdminController implements Initializable {
                     loadCoffeeData();
                     helper.Alert.showSuccess("Coffee deleted successfully");
                 } else {
-                    helper.Alert.showAlert("Failed to delete coffee");
+                    loadCoffeeData(); // Làm mới danh sách nếu xóa không thành công
+                    helper.Alert.showAlert("Failed to delete coffee for an unknown reason.");
                 }
-            } catch (Exception e) {
-                helper.Alert.showAlert("Failed to delete coffee"+  e.getMessage());
+            } catch (SQLException e) {
+                loadCoffeeData(); // Làm mới danh sách nếu có lỗi
+                helper.Alert.showAlert(e.getMessage()); // Hiển thị thông báo lỗi cụ thể
                 e.printStackTrace();
             }
         }

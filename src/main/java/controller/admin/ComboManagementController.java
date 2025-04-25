@@ -61,11 +61,34 @@ public class ComboManagementController implements Initializable {
         comboService = new ComboService();
         decimalFormat = new DecimalFormat("#,##0.00");
 
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        // Setup columns
+        setupColumns();
 
-        originalPriceColumn.setCellValueFactory(cellData -> cellData.getValue().originalPriceProperty().asObject());
-        originalPriceColumn.setCellFactory(column -> new TableCell<ComboProduct, Double>() {
+        // Add selection listener
+        comboTableView.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldSelection, newSelection) -> {
+                    boolean hasSelection = newSelection != null;
+                    editButton.setDisable(!hasSelection);
+                    deleteButton.setDisable(!hasSelection);
+                }
+        );
+
+        // Load data
+        loadComboData();
+    }
+
+    private void setupColumns() {
+        // ID Column
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        idColumn.setStyle("-fx-alignment: CENTER;");
+
+        // Name Column
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        nameColumn.setStyle("-fx-alignment: CENTER-LEFT;");
+
+        // Original Price Column
+        originalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("originalPrice"));
+        originalPriceColumn.setCellFactory(tc -> new TableCell<>() {
             @Override
             protected void updateItem(Double price, boolean empty) {
                 super.updateItem(price, empty);
@@ -74,11 +97,13 @@ public class ComboManagementController implements Initializable {
                 } else {
                     setText("$" + decimalFormat.format(price));
                 }
+                setStyle("-fx-alignment: CENTER-RIGHT;");
             }
         });
 
-        discountPercentColumn.setCellValueFactory(cellData -> cellData.getValue().discountPercentProperty().asObject());
-        discountPercentColumn.setCellFactory(column -> new TableCell<ComboProduct, Double>() {
+        // Discount Column
+        discountPercentColumn.setCellValueFactory(new PropertyValueFactory<>("discountPercent"));
+        discountPercentColumn.setCellFactory(tc -> new TableCell<>() {
             @Override
             protected void updateItem(Double percent, boolean empty) {
                 super.updateItem(percent, empty);
@@ -87,11 +112,13 @@ public class ComboManagementController implements Initializable {
                 } else {
                     setText(decimalFormat.format(percent) + "%");
                 }
+                setStyle("-fx-alignment: CENTER;");
             }
         });
 
-        finalPriceColumn.setCellValueFactory(cellData -> cellData.getValue().finalPriceProperty().asObject());
-        finalPriceColumn.setCellFactory(column -> new TableCell<ComboProduct, Double>() {
+        // Final Price Column
+        finalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("finalPrice"));
+        finalPriceColumn.setCellFactory(tc -> new TableCell<>() {
             @Override
             protected void updateItem(Double price, boolean empty) {
                 super.updateItem(price, empty);
@@ -100,23 +127,55 @@ public class ComboManagementController implements Initializable {
                 } else {
                     setText("$" + decimalFormat.format(price));
                 }
+                setStyle("-fx-alignment: CENTER-RIGHT;");
             }
         });
 
+        // Status Column
         statusColumn.setCellValueFactory(cellData -> {
-            int status = cellData.getValue().getStatus();
-            return new SimpleStringProperty(status == 1 ? "Active" : "Inactive");
+            boolean isActive = cellData.getValue().getStatus() == 1;
+            String status = isActive ? "Active" : "Inactive";
+            return new SimpleStringProperty(status);
         });
-
-        loadComboData();
+        statusColumn.setCellFactory(tc -> new TableCell<>() {
+            @Override
+            protected void updateItem(String status, boolean empty) {
+                super.updateItem(status, empty);
+                if (empty || status == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(status);
+                    if ("Active".equals(status)) {
+                        setStyle("-fx-text-fill: green; -fx-alignment: CENTER;");
+                    } else {
+                        setStyle("-fx-text-fill: red; -fx-alignment: CENTER;");
+                    }
+                }
+            }
+        });
     }
 
     private void loadComboData() {
         try {
             ObservableList<ComboProduct> comboList = comboService.getAllCombos();
+
+            // Debug log
+            System.out.println("\nLoading combos:");
+            for (ComboProduct combo : comboList) {
+                System.out.println("Combo: " + combo.getName() +
+                        " (ID: " + combo.getId() +
+                        ", Original: $" + combo.getOriginalPrice() +
+                        ", Discount: " + combo.getDiscountPercent() + "%" +
+                        ", Final: $" + combo.getFinalPrice() +
+                        ", Status: " + (combo.getStatus() == 1 ? "Active" : "Inactive") + ")");
+            }
+
+            comboTableView.getItems().clear();
             comboTableView.setItems(comboList);
+
         } catch (Exception e) {
-            Alert.showAlert("Database Error: " + e.getMessage());
+            Alert.showAlert("Error loading combos: " + e.getMessage());
             e.printStackTrace();
         }
     }

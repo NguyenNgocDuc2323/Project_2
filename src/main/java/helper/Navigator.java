@@ -41,6 +41,7 @@ public class Navigator {
     public static final String CATEGORY_MANAGEMENT = "/com/example/manage_account/Staff/Category.fxml";
     public static final String CATEGORY_DIALOG = "/com/example/manage_account/Staff/CategoryDialog.fxml";
     public static final String PROFILE = "/com/example/manage_account/CoffeeShop/ProfileView.fxml";
+    public static final String USER_MANAGER = "/com/example/manage_account/Admin/UserManagement.fxml";
 
     private Navigator() {
     }
@@ -172,5 +173,12 @@ public class Navigator {
         dialogStage.setScene(new Scene(root));
         dialogStage.setTitle("Order Statistic");
         dialogStage.showAndWait();
+    }
+    public void gotoUserManagement() {
+        try {
+            gotoScene(Translator.translate("title.user_manager"), LOGIN_SCENE);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

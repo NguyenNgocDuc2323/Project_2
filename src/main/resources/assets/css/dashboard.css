@@ -325,3 +325,57 @@
     -fx-background-radius: 15;
     -fx-padding: 8;
 }
+
+.combo-item {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);
+    -fx-background-radius: 8;
+    -fx-min-width: 250;
+    -fx-max-width: 250;
+}
+
+.combo-type-label {
+    -fx-text-fill: #e67e22;
+    -fx-font-weight: bold;
+}
+
+.combo-name-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.combo-description-label {
+    -fx-text-alignment: center;
+    -fx-wrap-text: true;
+}
+
+.combo-price-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.add-to-cart-button {
+    -fx-background-color: #2ecc71;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 16;
+    -fx-background-radius: 4;
+}
+
+.add-to-cart-button:hover {
+    -fx-background-color: #27ae60;
+}
+
+.combo-products-label {
+    -fx-text-fill: #766B63;
+    -fx-font-size: 12px;
+    -fx-padding: 5 0;
+}
+.discount-label {
+    -fx-background-color: #FF6B6B;
+    -fx-text-fill: white;
+    -fx-padding: 5 10;
+    -fx-background-radius: 15;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}

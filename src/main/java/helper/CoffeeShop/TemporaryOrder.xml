@@ -1,2 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<cart/>
+<cart>
+    
+  <item>
+        
+    <productId>1</productId>
+        
+    <name>Espresso</name>
+        
+    <size>L</size>
+        
+    <quantity>2</quantity>
+        
+    <unitPrice>2.044</unitPrice>
+      
+  </item>
+  
+  <item>
+    <productId>6</productId>
+    <name>Black Tea</name>
+    <size>M</size>
+    <quantity>2</quantity>
+    <unitPrice>1.752</unitPrice>
+  </item>
+</cart>
