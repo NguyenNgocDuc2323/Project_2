@@ -15,7 +15,7 @@ public class MainApplication extends Application {
             Locale us = new Locale("en", "US");
             Translator.setLocale(us);
             Navigator.getInstance().setState(stage);
-            Navigator.getInstance().gotoAdminHome();
+            Navigator.getInstance().gotoMenu();
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("The error when loading FXML! Please check the path.");
