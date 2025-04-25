@@ -323,9 +323,21 @@ public class CartViewController implements Initializable {
             conn = ConnectDatabase.getConnection();
             conn.setAutoCommit(false);
 
+            // First, check if all product IDs exist in the product table
+            for (CartItem item : cartItems) {
+                try (PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM product WHERE id = ?")) {
+                    checkStmt.setInt(1, item.getProductId());
+                    ResultSet rs = checkStmt.executeQuery();
+                    if (rs.next() && rs.getInt(1) == 0) {
+                        throw new SQLException("Product with ID " + item.getProductId() + " does not exist in the database");
+                    }
+                }
+            }
+
             int orderId;
             Integer tableId = null;
 
+            // Get table ID if selected
             if (selectedTable != null && !selectedTable.equals("Takeaway")) {
                 String tableQuery = "SELECT id FROM tables WHERE table_name = ?";
                 try (PreparedStatement tableStmt = conn.prepareStatement(tableQuery)) {
@@ -337,6 +349,7 @@ public class CartViewController implements Initializable {
                 }
             }
 
+            // Insert order record
             String orderQuery = "INSERT INTO orders (user_id, table_id, status, total_price, payment_method) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement orderStmt = conn.prepareStatement(orderQuery, Statement.RETURN_GENERATED_KEYS)) {
                 orderStmt.setInt(1, 3); // Using user ID 3 as default employee
@@ -355,19 +368,20 @@ public class CartViewController implements Initializable {
                 }
             }
 
-            String detailQuery = "INSERT INTO order_detail (order_id, product_id, quantity, unit_price, is_combo) VALUES (?, ?, ?, ?, ?)";
+            // Insert order details
+            String detailQuery = "INSERT INTO order_detail (order_id, product_id, quantity, unit_price) VALUES (?, ?, ?, ?)";
             try (PreparedStatement detailStmt = conn.prepareStatement(detailQuery)) {
                 for (CartItem item : cartItems) {
                     detailStmt.setInt(1, orderId);
                     detailStmt.setInt(2, item.getProductId());
                     detailStmt.setInt(3, item.getQuantity());
                     detailStmt.setDouble(4, item.getUnitPrice());
-                    detailStmt.setBoolean(5, item.getSize().equals("COMBO"));
                     detailStmt.addBatch();
                 }
                 detailStmt.executeBatch();
             }
 
+            // Update table status if applicable
             if (tableId != null) {
                 String updateTableQuery = "UPDATE tables SET status = 'occupied' WHERE id = ?";
                 try (PreparedStatement tableUpdateStmt = conn.prepareStatement(updateTableQuery)) {
