@@ -176,7 +176,7 @@ public class Navigator {
     }
     public void gotoUserManagement() {
         try {
-            gotoScene(Translator.translate("title.user_manager"), LOGIN_SCENE);
+            gotoScene(Translator.translate("title.user_manager"), USER_MANAGER);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

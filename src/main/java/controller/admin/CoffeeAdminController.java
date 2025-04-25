@@ -168,9 +168,8 @@ public class CoffeeAdminController implements Initializable {
                     helper.Alert.showAlert("Failed to delete coffee for an unknown reason.");
                 }
             } catch (SQLException e) {
-                loadCoffeeData(); // Làm mới danh sách nếu có lỗi
-                helper.Alert.showAlert(e.getMessage()); // Hiển thị thông báo lỗi cụ thể
-                e.printStackTrace();
+                loadCoffeeData();
+                helper.Alert.showAlert(e.getMessage());
             }
         }
     }
