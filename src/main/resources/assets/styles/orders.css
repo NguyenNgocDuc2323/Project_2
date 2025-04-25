@@ -369,4 +369,14 @@
     -fx-background-color: #49281a;
 }
 
+.action-button.delete-button {
+    -fx-background-color: #d9534f;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 3px;
+}
 
+.action-button.delete-button:hover {
+    -fx-background-color: #c9302c;
+}

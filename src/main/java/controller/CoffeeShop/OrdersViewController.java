@@ -94,7 +94,15 @@ public class OrdersViewController implements Initializable {
 
         // Setup date filter
         datePicker.setValue(null);
-        datePicker.setOnAction(e -> applyFilters());
+        // Add this to your setupFilters() method
+        datePicker.setOnAction(e -> {
+            if (datePicker.getValue() == null) {
+                // If date is cleared, explicitly apply filters
+                applyFilters();
+            } else {
+                applyFilters();
+            }
+        });
     }
 
     private void setupEditableControls() {
@@ -242,7 +250,40 @@ public class OrdersViewController implements Initializable {
         centerAlignDetailColumn(itemQuantityColumn);
         centerAlignDetailColumn(itemUnitPriceColumn);
         centerAlignDetailColumn(itemSubtotalColumn);
+
+
+        // Modify your itemActionColumn cell factory in the setupOrderDetailsTableCentered method
+        TableColumn<OrderDetailMenu, Void> itemActionColumn = new TableColumn<>("Action");
+        itemActionColumn.setPrefWidth(100);
+        itemActionColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button removeBtn = new Button("Remove");
+            private final HBox container = new HBox(removeBtn); // Create container
+
+            {
+                removeBtn.getStyleClass().addAll("action-button", "delete-button");
+                removeBtn.setOnAction(event -> {
+                    OrderDetailMenu item = getTableView().getItems().get(getIndex());
+                    removeOrderItem(item);
+                });
+
+                // Center the button in the container
+                container.setAlignment(Pos.CENTER);
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(container); // Use the container instead of just the button
+                }
+            }
+        });
+
+        orderItemsTable.getColumns().add(itemActionColumn);
     }
+
 
     private <T> void centerAlignDetailColumn(TableColumn<OrderDetailMenu, T> column) {
         column.setCellFactory(col -> {
@@ -320,6 +361,9 @@ public class OrdersViewController implements Initializable {
         }
 
         ordersTable.setItems(filteredList);
+
+        // This is the key fix: refresh the table to ensure action buttons are recreated
+        ordersTable.refresh();
     }
 
     private void viewOrderDetails(OrderItem order) {
@@ -368,7 +412,7 @@ public class OrdersViewController implements Initializable {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                String productName = rs.getString("name");
+                String productName = rs.getString("product_name");
                 String size = rs.getString("size");
                 int quantity = rs.getInt("quantity");
                 double unitPrice = rs.getDouble("unit_price");
@@ -480,6 +524,104 @@ public class OrdersViewController implements Initializable {
             try (PreparedStatement stmt = conn.prepareStatement(updateNewTable)) {
                 stmt.setInt(1, newTableId);
                 stmt.executeUpdate();
+            }
+        }
+    }
+
+    private void removeOrderItem(OrderDetailMenu item) {
+        // First, find the order detail ID for this item
+        int orderDetailId = -1;
+        try (Connection conn = ConnectDatabase.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT od.id FROM order_detail od " +
+                             "JOIN product p ON od.product_id = p.id " +
+                             "WHERE od.order_id = ? AND p.name = ? AND od.quantity = ? AND od.unit_price = ?")) {
+
+            stmt.setInt(1, currentOrder.getId());
+            stmt.setString(2, item.getProductName());
+            stmt.setInt(3, item.getQuantity());
+            stmt.setDouble(4, item.getUnitPrice());
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                orderDetailId = rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Error finding order item: " + e.getMessage(), Alert.AlertType.ERROR);
+            return;
+        }
+
+        if (orderDetailId == -1) {
+            showAlert("Could not identify the order item to remove.", Alert.AlertType.ERROR);
+            return;
+        }
+
+        // Confirm removal
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Remove Item");
+        confirmAlert.setHeaderText(null);
+        confirmAlert.setContentText("Are you sure you want to remove " + item.getProductName() + " from this order?");
+
+        // Apply custom styling
+        DialogPane dialogPane = confirmAlert.getDialogPane();
+        dialogPane.getStyleClass().add("custom-alert");
+        dialogPane.getStyleClass().add("warning-dialog");
+        String cssPath = getClass().getResource("/assets/styles/orders.css").toExternalForm();
+        dialogPane.getStylesheets().add(cssPath);
+
+        if (confirmAlert.showAndWait().get() == ButtonType.OK) {
+            try (Connection conn = ConnectDatabase.getConnection()) {
+                // Begin transaction
+                conn.setAutoCommit(false);
+
+                // 1. Remove the item from order_detail
+                String deleteQuery = "DELETE FROM order_detail WHERE id = ?";
+                try (PreparedStatement stmt = conn.prepareStatement(deleteQuery)) {
+                    stmt.setInt(1, orderDetailId);
+                    stmt.executeUpdate();
+                }
+
+                // 2. Recalculate order total
+                double newTotal = 0;
+                String totalQuery = "SELECT SUM(quantity * unit_price) AS new_total FROM order_detail WHERE order_id = ?";
+                try (PreparedStatement stmt = conn.prepareStatement(totalQuery)) {
+                    stmt.setInt(1, currentOrder.getId());
+                    ResultSet rs = stmt.executeQuery();
+                    if (rs.next()) {
+                        newTotal = rs.getDouble("new_total");
+                    }
+                }
+
+                // 3. Update order total
+                String updateOrderQuery = "UPDATE orders SET total_price = ? WHERE id = ?";
+                try (PreparedStatement stmt = conn.prepareStatement(updateOrderQuery)) {
+                    stmt.setDouble(1, newTotal);
+                    stmt.setInt(2, currentOrder.getId());
+                    stmt.executeUpdate();
+                }
+
+                // Commit transaction
+                conn.commit();
+
+                // Reload the order details
+                viewOrderDetails(new OrderItem(
+                        currentOrder.getId(),
+                        currentOrder.getOrderDate(),
+                        currentOrder.getStatus(),
+                        newTotal, // Updated total
+                        currentOrder.getPaymentMethod(),
+                        currentOrder.getTableName(),
+                        currentOrder.getTableId()
+                ));
+
+                // Also refresh the main orders list
+                loadOrders();
+
+                showAlert("Item removed successfully!", Alert.AlertType.INFORMATION);
+
+            } catch (SQLException e) {
+                showAlert("Error removing item: " + e.getMessage(), Alert.AlertType.ERROR);
             }
         }
     }
