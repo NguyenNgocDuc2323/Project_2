@@ -1,18 +1,22 @@
 package controller.CoffeeShop;
 
 import helper.CoffeeShop.CartManager;
+import helper.ConnectDatabase;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import model.CoffeeShop.Coffee;
 
-import javafx.scene.shape.Rectangle;
-
-import java.sql.*;
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CoffeeItemController {
     @FXML private Label coffeeName;
@@ -20,6 +24,7 @@ public class CoffeeItemController {
     @FXML private Label coffeeDescription;
     @FXML private Label ratingLabel;
     @FXML private Label featuredBadge;
+    @FXML private HBox coffeeTagsContainer;
     @FXML private StackPane coffeeImageContainer;
 
     @FXML private ToggleButton sizeSmall;
@@ -34,7 +39,7 @@ public class CoffeeItemController {
     private Coffee coffee;
     private int quantity = 1;
     private String selectedSize = "S";
-    private double priceMultiplier = 1.0;
+    private Map<String, Double> availableSizes = new HashMap<>();
 
     @FXML
     private void initialize() {
@@ -54,44 +59,42 @@ public class CoffeeItemController {
         });
 
         // Set up size selection
-        sizeSmall.setOnAction(e -> {
-            if (sizeSmall.isSelected()) {
-                sizeMedium.setSelected(false);
-                sizeLarge.setSelected(false);
-                selectedSize = "S";
-                priceMultiplier = 1.0;
-                updatePrice();
-            } else {
-                sizeSmall.setSelected(true); // Always keep one size selected
-            }
-        });
-
-        sizeMedium.setOnAction(e -> {
-            if (sizeMedium.isSelected()) {
-                sizeSmall.setSelected(false);
-                sizeLarge.setSelected(false);
-                selectedSize = "M";
-                priceMultiplier = 1.2;
-                updatePrice();
-            } else {
-                sizeMedium.setSelected(true);
-            }
-        });
-
-        sizeLarge.setOnAction(e -> {
-            if (sizeLarge.isSelected()) {
-                sizeSmall.setSelected(false);
-                sizeMedium.setSelected(false);
-                selectedSize = "L";
-                priceMultiplier = 1.4;
-                updatePrice();
-            } else {
-                sizeLarge.setSelected(true);
-            }
-        });
+        sizeSmall.setOnAction(e -> selectSize("S"));
+        sizeMedium.setOnAction(e -> selectSize("M"));
+        sizeLarge.setOnAction(e -> selectSize("L"));
 
         // Set up add to cart button
         addToCartBtn.setOnAction(e -> addToCart());
+    }
+
+    private void selectSize(String size) {
+        // Only process if this size is available
+        if (!availableSizes.containsKey(size)) {
+            return;
+        }
+
+        // Update UI
+        switch (size) {
+            case "S":
+                sizeSmall.setSelected(true);
+                sizeMedium.setSelected(false);
+                sizeLarge.setSelected(false);
+                break;
+            case "M":
+                sizeSmall.setSelected(false);
+                sizeMedium.setSelected(true);
+                sizeLarge.setSelected(false);
+                break;
+            case "L":
+                sizeSmall.setSelected(false);
+                sizeMedium.setSelected(false);
+                sizeLarge.setSelected(true);
+                break;
+        }
+
+        // Update selected size and price
+        selectedSize = size;
+        updatePriceFromSelectedSize();
     }
 
     public void setCoffee(Coffee coffee) {
@@ -99,11 +102,13 @@ public class CoffeeItemController {
 
         // Set the coffee details in the UI
         coffeeName.setText(coffee.getName());
-        coffeePrice.setText(String.format("%.2f", coffee.getPrice()));
         coffeeDescription.setText(coffee.getDescription());
 
         // Load coffee image
         loadCoffeeImage();
+
+        // Load available sizes and prices from database
+        loadProductSizes();
 
         // Load and display category name
         loadCategoryName(coffee.getCategoryId());
@@ -112,14 +117,86 @@ public class CoffeeItemController {
         double rating = 3.5 + Math.random() * 1.5;
         ratingLabel.setText(String.format("%.1f", rating));
 
-        // Show featured badge for certain items (optional logic)
+        // Show featured badge for certain items
         featuredBadge.setVisible(rating >= 4.5);
     }
 
-    @FXML private HBox coffeeTagsContainer;
+    private void loadProductSizes() {
+        try (Connection connection = ConnectDatabase.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT ps.size_id, s.symbol, ps.price " +
+                             "FROM product_sizes ps " +
+                             "JOIN sizes s ON ps.size_id = s.id " +
+                             "WHERE ps.product_id = ? " +
+                             "ORDER BY s.id")) {
+
+            statement.setInt(1, coffee.getId());
+            ResultSet resultSet = statement.executeQuery();
+
+            // Clear previous size data
+            availableSizes.clear();
+
+            // Disable all size buttons by default
+            sizeSmall.setDisable(true);
+            sizeMedium.setDisable(true);
+            sizeLarge.setDisable(true);
+
+            boolean hasDefaultSize = false;
+
+            while (resultSet.next()) {
+                String symbol = resultSet.getString("symbol");
+                double price = resultSet.getDouble("price");
+
+                // Store size and price
+                availableSizes.put(symbol, price);
+
+                // Enable corresponding button
+                switch (symbol) {
+                    case "S":
+                        sizeSmall.setDisable(false);
+                        if (!hasDefaultSize) {
+                            sizeSmall.setSelected(true);
+                            selectedSize = "S";
+                            hasDefaultSize = true;
+                        }
+                        break;
+                    case "M":
+                        sizeMedium.setDisable(false);
+                        if (!hasDefaultSize) {
+                            sizeMedium.setSelected(true);
+                            selectedSize = "M";
+                            hasDefaultSize = true;
+                        }
+                        break;
+                    case "L":
+                        sizeLarge.setDisable(false);
+                        if (!hasDefaultSize) {
+                            sizeLarge.setSelected(true);
+                            selectedSize = "L";
+                            hasDefaultSize = true;
+                        }
+                        break;
+                }
+            }
+
+            // Update price based on selected size
+            updatePriceFromSelectedSize();
+
+        } catch (SQLException e) {
+            System.err.println("Error loading product sizes: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void updatePriceFromSelectedSize() {
+        if (availableSizes.containsKey(selectedSize)) {
+            double price = availableSizes.get(selectedSize);
+            coffeePrice.setText(String.format("%.2f", price));
+        }
+    }
 
     private void loadCategoryName(int categoryId) {
-        try (Connection connection = helper.ConnectDatabase.getConnection();
+        try (Connection connection = ConnectDatabase.getConnection();
              PreparedStatement statement = connection.prepareStatement(
                      "SELECT category_name FROM category WHERE id = ?")) {
 
@@ -138,7 +215,6 @@ public class CoffeeItemController {
 
                 // Add it to the tags container
                 coffeeTagsContainer.getChildren().add(categoryLabel);
-
             }
         } catch (SQLException e) {
             System.err.println("Error loading category name: " + e.getMessage());
@@ -175,11 +251,10 @@ public class CoffeeItemController {
             if (image != null && !image.isError()) {
                 ImageView imageView = new ImageView(image);
 
-                // Force the exact dimensions - CRITICAL CHANGE
+                // Force the exact dimensions
                 imageView.setFitWidth(TARGET_WIDTH);
                 imageView.setFitHeight(TARGET_HEIGHT);
                 imageView.setPreserveRatio(false);
-
                 imageView.setSmooth(true);
 
                 // Clip the image to ensure it doesn't overflow container
@@ -198,8 +273,6 @@ public class CoffeeItemController {
         }
     }
 
-
-
     private void decreaseQuantity() {
         if (quantity > 1) {
             quantity--;
@@ -214,26 +287,16 @@ public class CoffeeItemController {
         }
     }
 
-    private void updatePrice() {
-        if (coffee != null) {
-            double adjustedPrice = coffee.getPrice() * priceMultiplier;
-            coffeePrice.setText(String.format("%.2f", adjustedPrice));
-        }
-    }
-
-//    private void addToCart() {
-//        // Here you would implement the logic to add the item to the cart
-//        System.out.println("Added to cart: " + coffee.getName() +
-//                ", Size: " + selectedSize +
-//                ", Quantity: " + quantity);
-//        // You can create a CartManager class to handle the shopping cart functionality
-//    }
-
     private void addToCart() {
         if (coffee == null) return;
 
-        // Calculate the adjusted price based on size
-        double adjustedPrice = coffee.getPrice() * priceMultiplier;
+        // Get the actual price based on selected size
+        if (!availableSizes.containsKey(selectedSize)) {
+            showNotification("This size is not available");
+            return;
+        }
+
+        double price = availableSizes.get(selectedSize);
 
         // Add to cart using CartManager
         CartManager.getInstance().addToCart(
@@ -241,7 +304,7 @@ public class CoffeeItemController {
                 coffee.getName(),
                 selectedSize,
                 quantity,
-                adjustedPrice
+                price
         );
 
         // Show success notification
@@ -254,7 +317,7 @@ public class CoffeeItemController {
 
     private void showNotification(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Cart Updated");
+        alert.setTitle("Cart Update");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
