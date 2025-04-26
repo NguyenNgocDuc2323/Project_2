@@ -5,11 +5,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.CoffeeShop.Coffee;
 
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 
 public class CoffeeDAO {
-
+    private static final long MAX_IMAGE_SIZE = 2 * 1024 * 1024;
     // Get all coffee items
     public ObservableList<model.CoffeeShop.Coffee> getAllCoffee() {
         ObservableList<Coffee> coffeeList = FXCollections.observableArrayList();
@@ -42,6 +43,16 @@ public class CoffeeDAO {
 
     // Add new coffee
     public boolean addCoffee(Coffee coffee) {
+        if (isImageTooLarge(coffee.getImage())) {
+            System.out.println("Image is too large. Cannot add to database.");
+            return false;
+        }
+
+        if (isNameExistsInCategory(coffee.getName(), coffee.getCategoryId(), -1)) {
+            System.out.println("Coffee name already exists in the selected category. Cannot add to database.");
+            return false;
+        }
+
         String query = "INSERT INTO product (name, category_id, price, status, image, unit_id, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -63,8 +74,17 @@ public class CoffeeDAO {
         }
     }
 
-    // Update existing coffee
     public boolean updateCoffee(Coffee coffee) {
+        if (isImageTooLarge(coffee.getImage())) {
+            System.out.println("Image is too large. Cannot update in database.");
+            return false;
+        }
+
+        if (isNameExistsInCategory(coffee.getName(), coffee.getCategoryId(), coffee.getId())) {
+            System.out.println("Coffee name already exists in the selected category. Cannot update in database.");
+            return false;
+        }
+
         String query = "UPDATE product SET name = ?, category_id = ?, price = ?, status = ?, image = ?, unit_id = ?, description = ? WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -87,7 +107,40 @@ public class CoffeeDAO {
         }
     }
 
-    // Delete coffee
+    private boolean isNameExistsInCategory(String name, int categoryId, int excludeId) {
+        String query = "SELECT COUNT(*) FROM product WHERE name = ? AND category_id = ?";
+        if (excludeId != -1) {
+            query += " AND id <> ?";
+        }
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, name);
+            stmt.setInt(2, categoryId);
+            if (excludeId != -1) {
+                stmt.setInt(3, excludeId);
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private boolean isImageTooLarge(String imagePath) {
+        if (imagePath == null || imagePath.isEmpty()) {
+            return false;
+        }
+
+        File file = new File(imagePath);
+        return file.exists() && file.length() > MAX_IMAGE_SIZE;
+    }
     public boolean deleteCoffee(int coffeeId) throws SQLException {
         String checkOrderDetailQuery = "SELECT COUNT(*) FROM order_detail WHERE product_id = ?";
 

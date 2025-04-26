@@ -70,16 +70,14 @@ public class UserDialogController implements Initializable {
             fullNameField.setText(account.getName());
             emailField.setText(account.getEmail());
             passwordField.setPromptText("Leave blank to keep current password");
-            
-            // Set user type
+
             for (DisplayText item : userTypeComboBox.getItems()) {
                 if (item.getValue() == account.getType()) {
                     userTypeComboBox.getSelectionModel().select(item);
                     break;
                 }
             }
-            
-            // Set lock status
+
             int lockValue = account.isLocked() ? 1 : 0;
             for (DisplayText item : lockStatusComboBox.getItems()) {
                 if (item.getValue() == lockValue) {

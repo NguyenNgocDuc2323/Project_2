@@ -36,8 +36,12 @@ public class AccountDAO {
         return accountList;
     }
 
-    // Add new account
     public boolean addAccount(Account account) {
+        if (emailExists(account.getEmail())) {
+            System.out.println("Email đã tồn tại!");
+            return false;
+        }
+
         String query = "INSERT INTO account (full_name, email, password, type, lock_status) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectDatabase.getConnection();
@@ -48,28 +52,6 @@ public class AccountDAO {
             stmt.setString(3, account.getPassword());
             stmt.setInt(4, account.getType());
             stmt.setBoolean(5, account.isLocked());
-
-            int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // Update existing account
-    public boolean updateAccount(Account account) {
-        String query = "UPDATE account SET full_name = ?, email = ?, password = ?, type = ?, lock_status = ? WHERE id = ?";
-
-        try (Connection conn = ConnectDatabase.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-
-            stmt.setString(1, account.getName());
-            stmt.setString(2, account.getEmail());
-            stmt.setString(3, account.getPassword());
-            stmt.setInt(4, account.getType());
-            stmt.setBoolean(5, account.isLocked());
-            stmt.setInt(6, account.getId());
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -136,5 +118,70 @@ public class AccountDAO {
         }
 
         return null;
+    }
+
+    public boolean updateAccount(Account account) {
+        if (emailExistsForOtherAccount(account.getEmail(), account.getId())) {
+            System.out.println("Email đã tồn tại ở tài khoản khác!");
+            return false;
+        }
+
+        String query = "UPDATE account SET full_name = ?, email = ?, password = ?, type = ?, lock_status = ? WHERE id = ?";
+
+        try (Connection conn = ConnectDatabase.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, account.getName());
+            stmt.setString(2, account.getEmail());
+            stmt.setString(3, account.getPassword());
+            stmt.setInt(4, account.getType());
+            stmt.setBoolean(5, account.isLocked());
+            stmt.setInt(6, account.getId());
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean emailExists(String email) {
+        String query = "SELECT COUNT(*) FROM account WHERE email = ?";
+
+        try (Connection conn = ConnectDatabase.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, email);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1);
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean emailExistsForOtherAccount(String email, int id) {
+        String query = "SELECT COUNT(*) FROM account WHERE email = ? AND id != ?";
+
+        try (Connection conn = ConnectDatabase.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, email);
+            stmt.setInt(2, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1);
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

@@ -83,7 +83,7 @@
             </children>
         </HBox>
 
-        <HBox layoutX="545.0" layoutY="356.0" spacing="10" style="-fx-background-color: #EFEBE9; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D7CCC8; -fx-padding: 5 15;">
+        <HBox layoutX="524.0" layoutY="357.0" spacing="10" style="-fx-background-color: #EFEBE9; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D7CCC8; -fx-padding: 5 15;">
             <children>
                 <ComboBox fx:id="dayCombo" prefWidth="80" promptText="Day" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />
                 <ComboBox fx:id="monthCombo" prefWidth="80" promptText="Month" style="-fx-background-color: white; -fx-border-color: #A1887F; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;" />

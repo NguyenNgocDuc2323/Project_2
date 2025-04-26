@@ -88,7 +88,7 @@ public class UserManagementController {
             
             UserDialogController controller = loader.getController();
             controller.setMode("ADD");
-            controller.setAccount(null); // null for new account
+            controller.setAccount(null);
             
             controller.setOnUserSavedCallback(success -> {
                 if (success) loadUsers();
@@ -118,7 +118,7 @@ public class UserManagementController {
             
             UserDialogController controller = loader.getController();
             controller.setMode("EDIT");
-            controller.setAccount(selectedUser); // Pass the selected user for editing
+            controller.setAccount(selectedUser);
             
             controller.setOnUserSavedCallback(success -> {
                 if (success) loadUsers();

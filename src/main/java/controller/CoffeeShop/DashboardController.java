@@ -62,15 +62,12 @@ public class DashboardController implements Initializable {
         Account currentAccount = Session.getInstance().getCurrentUser();
 
         if (currentAccount != null) {
-            // Set user name and role
             userNameLabel.setText(currentAccount.getName());
             userRoleLabel.setText(currentAccount.getTypeAsString());
 
-            // Set user initials for avatar
             String initials = getInitials(currentAccount.getName());
             userInitialsLabel.setText(initials);
 
-            // Set avatar background color based on username
             Color avatarColor = getColorFromName(currentAccount.getName());
             userAvatar.setFill(avatarColor);
         } else {
@@ -85,10 +82,8 @@ public class DashboardController implements Initializable {
     @FXML
     public void handleSignOut() {
         try {
-            // Clear the current user session
             Session.getInstance().clearCurrentUser();
 
-            // Navigate back to login screen
             Navigator.getInstance().gotoLogin();
         } catch (IOException e) {
             e.printStackTrace();
@@ -114,7 +109,6 @@ public class DashboardController implements Initializable {
     }
 
     private Color getColorFromName(String name) {
-        // Return fixed color regardless of input name
         return Color.rgb(184, 92, 56);
     }
 

@@ -369,28 +369,23 @@ public class OrdersViewController implements Initializable {
     private void viewOrderDetails(OrderItem order) {
         currentOrder = order;
 
-        // Set order details
         detailsOrderId.setText(String.valueOf(order.getId()));
         detailsTableCombo.setValue(order.getTableName());
         detailsDate.setText(order.getOrderDate().replace(".0", ""));
         detailsStatusCombo.setValue(order.getStatus());
 
-        // Set payment method or "Unpaid"
         String payment = order.getPaymentMethod() != null ? order.getPaymentMethod() : "Unpaid";
         detailsPaymentCombo.setValue(payment);
 
-        // Load order items
         loadOrderItems(order.getId());
 
-        // Calculate totals
-        double subtotal = order.getTotalPrice() / 1.08; // Remove 8% tax for subtotal
+        double subtotal = order.getTotalPrice() / 1.08;
         double tax = order.getTotalPrice() - subtotal;
 
         detailsSubtotal.setText(currencyFormat.format(subtotal));
         detailsTax.setText(currencyFormat.format(tax));
         detailsTotal.setText(currencyFormat.format(order.getTotalPrice()));
 
-        // Show order details container
         orderDetailsContainer.setVisible(true);
         orderDetailsContainer.setManaged(true);
     }
@@ -452,7 +447,6 @@ public class OrdersViewController implements Initializable {
         }
 
         try (Connection conn = ConnectDatabase.getConnection()) {
-            // Get table ID from name
             Integer tableId = null;
             if (!"Takeaway".equals(selectedTable)) {
                 String tableQuery = "SELECT id FROM tables WHERE table_name = ?";
@@ -465,7 +459,6 @@ public class OrdersViewController implements Initializable {
                 }
             }
 
-            // Update order
             String updateQuery = "UPDATE orders SET table_id = ?, status = ?, payment_method = ? WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
                 if (tableId != null) {
@@ -481,16 +474,12 @@ public class OrdersViewController implements Initializable {
                 int rowsAffected = stmt.executeUpdate();
 
                 if (rowsAffected > 0) {
-                    // Update table status depending on action
                     updateTablesStatus(conn, currentOrder.getTableId(), tableId, selectedStatus);
 
-                    // Show success message
                     showAlert("Order #" + currentOrder.getId() + " updated successfully", Alert.AlertType.INFORMATION);
 
-                    // Reload orders to reflect changes
                     loadOrders();
 
-                    // Close details view
                     orderDetailsContainer.setVisible(false);
                     orderDetailsContainer.setManaged(false);
                 }
@@ -502,7 +491,6 @@ public class OrdersViewController implements Initializable {
 
     private void updateTablesStatus(Connection conn, int oldTableId, Integer newTableId, String orderStatus)
             throws SQLException {
-        // Release old table if it exists and is different from new table
         if (oldTableId > 0 && (newTableId == null || oldTableId != newTableId)) {
             String updateOldTable = "UPDATE tables SET status = 'available' WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(updateOldTable)) {
@@ -511,7 +499,6 @@ public class OrdersViewController implements Initializable {
             }
         }
 
-        // Update new table status if exists and order is not completed or cancelled
         if (newTableId != null && !("Completed".equals(orderStatus) || "Cancelled".equals(orderStatus))) {
             String updateNewTable = "UPDATE tables SET status = 'occupied' WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(updateNewTable)) {
@@ -519,7 +506,6 @@ public class OrdersViewController implements Initializable {
                 stmt.executeUpdate();
             }
         } else if (newTableId != null) {
-            // Free table if order is completed or cancelled
             String updateNewTable = "UPDATE tables SET status = 'available' WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(updateNewTable)) {
                 stmt.setInt(1, newTableId);
@@ -529,7 +515,6 @@ public class OrdersViewController implements Initializable {
     }
 
     private void removeOrderItem(OrderDetailMenu item) {
-        // First, find the order detail ID for this item
         int orderDetailId = -1;
         try (Connection conn = ConnectDatabase.getConnection();
              PreparedStatement stmt = conn.prepareStatement(
